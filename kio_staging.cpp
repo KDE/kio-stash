@@ -62,14 +62,25 @@ void Staging::listRoot()
     KIO::UDSEntry entry;
     QString fileName;
     QString filePath;
-    for (auto listIterator = m_List.begin(); m_List.begin() != m_List.end(); ++listIterator) {
+    //createRootUDSEntry(entry, )
+    /*entry.clear();
+    entry.insert(KIO::UDSEntry::UDS_NAME, QStringLiteral("GOOD"));
+    entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR);
+    entry.insert(KIO::UDSEntry::UDS_ACCESS, 0700);
+    entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, QStringLiteral("inode/directory"));*/
+    //createRootUDSEntry(entry, "/home/nic/gsoc-2016", "gsoc-2016", "gsoc-2016");
+    //listEntry(entry);
+    for (auto listIterator = m_List.begin(); listIterator != m_List.end(); ++listIterator) {
         filePath = listIterator->path();
-        fileName = QFileInfo(listIterator->url()).fileName();
+        fileName = QFileInfo(filePath).fileName();
         qDebug() << fileName;
         entry.clear();
         createRootUDSEntry(entry, filePath, fileName, fileName);
         listEntry(entry);
     }
+    entry.clear();
+    finished();
+    //qDebug()<<"it is well";
 }
 
 void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalPath, const QString &displayFileName, const QString &internalFileName) //needs a lot of changes imo
@@ -134,8 +145,8 @@ void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalP
 
 void Staging::buildList()
 {
-    m_List.append(QUrl("file:///home/nic/gsoc-2016"));
-    m_List.append(QUrl("file:///home/nic/Dropbox"));
+    m_List.append(QUrl("/home/nic/gsoc-2016"));
+    m_List.append(QUrl("/home/nic/Dropbox"));
 }
 
 void Staging::listDir(const QUrl &url)
@@ -143,9 +154,12 @@ void Staging::listDir(const QUrl &url)
     //KIO::ForwardingSlaveBase::listDir(QUrl("file:///home/nic/gsoc-2016"));
     QString tmp = url.path();
     //dirty parsing hack, will fix later
-    tmp.replace(0, QString("staging:").length(), "");
-    if (tmp.isEmpty() || tmp == QString("/")) {
+    //tmp.replace(0, QString("staging:").length(), "");
+    qDebug() << "Received url" << tmp;
+    if (tmp == QString("")) {
         listRoot();
+        qDebug() << "Rootlist";
+        return;
     } else {
         qDebug() << tmp;
     }
