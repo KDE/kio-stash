@@ -16,7 +16,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
- 
+
 #ifndef KIO_STAGING_H
 #define KIO_STAGING_H
 
@@ -38,6 +38,7 @@ protected:
     void rename(const QUrl &, const QUrl &, KIO::JobFlags flags) Q_DECL_OVERRIDE;
     bool rewriteUrl(const QUrl &url, QUrl &newUrl) Q_DECL_OVERRIDE;
     bool checkURL(const QUrl &url);
+    void buildList();
 };
 
 #endif

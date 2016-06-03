@@ -45,6 +45,7 @@ extern "C" {
 
 Staging::Staging(const QByteArray &pool, const QByteArray &app) : KIO::ForwardingSlaveBase("staging", pool, app)
 {
+    buildList();
 }
 
 bool Staging::rewriteUrl(const QUrl &url, QUrl &newUrl) //don't fuck around with this
@@ -129,6 +130,12 @@ void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalP
     entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, displayFileName);
     entry.insert(KIO::UDSEntry::UDS_NAME, internalFileName);
     entry.insert(KIO::UDSEntry::UDS_TARGET_URL, physicalPath);*/
+}
+
+void Staging::buildList()
+{
+    m_List.append(QUrl("file:///home/nic/gsoc-2016"));
+    m_List.append(QUrl("file:///home/nic/Dropbox"));
 }
 
 void Staging::listDir(const QUrl &url)
