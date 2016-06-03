@@ -1,0 +1,26 @@
+{
+    "KDE-KIO-Protocols" : {
+        "staging": {
+            "Class": ":local",
+            "X-DocPath": "kioslave5/kio_staging.html",
+            "exec": "kf5/kio/staging",
+            "input": "none",
+            "listing": [
+                "Name",
+                "Type",
+                "Size",
+                "Date",
+                "Access",
+                "Owner",
+                "Group",
+                "Link"
+            ],
+            "output": "filesystem",
+            "protocol": "staging",
+            "reading": true,
+            "writing": true,
+            "renameFromFile": true,
+            "renameToFile": true
+        }
+    }
+}
