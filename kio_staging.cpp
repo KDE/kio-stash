@@ -95,8 +95,9 @@ void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalP
     mode_t access = buff.st_mode & 07777; // extract permissions
     //access &= 07555; // make it readonly, since it's in the trashcan
     Q_ASSERT(!internalFileName.isEmpty());
-    entry.insert(KIO::UDSEntry::UDS_LOCAL_PATH, physicalPath); //this makes it work correctly!
-    entry.insert(KIO::UDSEntry::UDS_NAME, internalFileName);   // internal filename, like "0-foo"
+    //entry.insert(KIO::UDSEntry::UDS_LOCAL_PATH, "/home/nic/Dropbox"); //this makes it work correctly!
+    qDebug() << "physicalPath " << physicalPath;
+    entry.insert(KIO::UDSEntry::UDS_NAME, physicalPath);   // internal filename, like "0-foo"
     entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, displayFileName);   // user-visible filename, like "foo"
     entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, type);
     QMimeDatabase db;
@@ -107,25 +108,18 @@ void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalP
     entry.insert(KIO::UDSEntry::UDS_ACCESS, access);
     entry.insert(KIO::UDSEntry::UDS_SIZE, buff.st_size);
     entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, buff.st_mtime);
-    entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);   // ## or use it for deletion time?
-    /*QMimeDatabase db;
-    QMimeType mt = db.mimeTypeForFile(physicalPath);
-    if (mt.isValid()) {
-        entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, mt.name());
-    }
-    entry.insert(KIO::UDSEntry::UDS_LINK_DEST, physicalPath);
-    entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, displayFileName);
-    entry.insert(KIO::UDSEntry::UDS_NAME, internalFileName);
-    entry.insert(KIO::UDSEntry::UDS_TARGET_URL, physicalPath);*/
+    entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
 }
 
 void Staging::buildList()
 {
     m_List.append(QUrl("/home/nic/gsoc-2016"));
     m_List.append(QUrl("/home/nic/Dropbox"));
+    m_List.append(QUrl("/home/nic/kdesrc/kde/applications"));
 }
 
-void Staging::listDir(const QUrl &url) //think a bit about finding a file under a subdir
+void Staging::listDir(const QUrl &url) //think a bit about finding a file under a subdir and not
+                                        //allowing folders which are parents of a dir
 {
     //KIO::ForwardingSlaveBase::listDir(QUrl("file:///home/nic/gsoc-2016"));
     QString tmp = url.path();
@@ -137,9 +131,10 @@ void Staging::listDir(const QUrl &url) //think a bit about finding a file under 
         qDebug() << "Rootlist";
         return;
     } else if (true/*checkURL(url)*/) {
-        QUrl mrl = "file:///home/nic" + url.path();
-        qDebug() << "Good url" << mrl;
+        QUrl mrl = "file://" + url.path();
+        qDebug() << "Good url; FSB called" << mrl;
         KIO::ForwardingSlaveBase::listDir(mrl);
+        return;
     }
     finished();
 }

@@ -11,14 +11,16 @@
                 "Size",
                 "Date",
                 "Access",
-                "Owner",
-                "Group",
                 "Link"
             ],
+            "deleting": true,
+            "deleteRecursive": true,
+            "fileNameUsedForCopying": "DisplayName",
             "output": "filesystem",
             "protocol": "staging",
             "reading": true,
-            "writing": true,
+            "makedir": true,
+            "writing": false,
             "renameFromFile": true,
             "renameToFile": true
         }
