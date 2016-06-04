@@ -62,14 +62,6 @@ void Staging::listRoot()
     KIO::UDSEntry entry;
     QString fileName;
     QString filePath;
-    //createRootUDSEntry(entry, )
-    /*entry.clear();
-    entry.insert(KIO::UDSEntry::UDS_NAME, QStringLiteral("GOOD"));
-    entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR);
-    entry.insert(KIO::UDSEntry::UDS_ACCESS, 0700);
-    entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, QStringLiteral("inode/directory"));*/
-    //createRootUDSEntry(entry, "/home/nic/gsoc-2016", "gsoc-2016", "gsoc-2016");
-    //listEntry(entry);
     for (auto listIterator = m_List.begin(); listIterator != m_List.end(); ++listIterator) {
         filePath = listIterator->path();
         fileName = QFileInfo(filePath).fileName();
@@ -80,7 +72,6 @@ void Staging::listRoot()
     }
     entry.clear();
     finished();
-    //qDebug()<<"it is well";
 }
 
 void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalPath, const QString &displayFileName, const QString &internalFileName) //needs a lot of changes imo
@@ -97,32 +88,17 @@ void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalP
         if (n != -1) {
             buffer2[ n ] = 0;
         }
-
         entry.insert(KIO::UDSEntry::UDS_LINK_DEST, QFile::decodeName(buffer2));
-        // Follow symlink
-        // That makes sense in kio_file, but not in the trash, especially for the size
-        // #136876
-#if 0
-        if (KDE_stat(physicalPath_c, &buff) == -1) {
-            // It is a link pointing to nowhere
-            buff.st_mode = S_IFLNK | S_IRWXU | S_IRWXG | S_IRWXO;
-            buff.st_mtime = 0;
-            buff.st_atime = 0;
-            buff.st_size = 0;
-        }
-#endif
     }
 
     mode_t type = buff.st_mode & S_IFMT; // extract file type
     mode_t access = buff.st_mode & 07777; // extract permissions
     //access &= 07555; // make it readonly, since it's in the trashcan
     Q_ASSERT(!internalFileName.isEmpty());
+    entry.insert(KIO::UDSEntry::UDS_LOCAL_PATH, physicalPath); //this makes it work correctly!
     entry.insert(KIO::UDSEntry::UDS_NAME, internalFileName);   // internal filename, like "0-foo"
     entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, displayFileName);   // user-visible filename, like "foo"
     entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, type);
-    //if ( !url.isEmpty() )
-    //    entry.insert( KIO::UDSEntry::UDS_URL, url );
-
     QMimeDatabase db;
     QMimeType mt = db.mimeTypeForFile(physicalPath);
     if (mt.isValid()) {
@@ -149,7 +125,7 @@ void Staging::buildList()
     m_List.append(QUrl("/home/nic/Dropbox"));
 }
 
-void Staging::listDir(const QUrl &url)
+void Staging::listDir(const QUrl &url) //think a bit about finding a file under a subdir
 {
     //KIO::ForwardingSlaveBase::listDir(QUrl("file:///home/nic/gsoc-2016"));
     QString tmp = url.path();
@@ -160,8 +136,10 @@ void Staging::listDir(const QUrl &url)
         listRoot();
         qDebug() << "Rootlist";
         return;
-    } else {
-        qDebug() << tmp;
+    } else if (true/*checkURL(url)*/) {
+        QUrl mrl = "file:///home/nic" + url.path();
+        qDebug() << "Good url" << mrl;
+        KIO::ForwardingSlaveBase::listDir(mrl);
     }
     finished();
 }
@@ -171,13 +149,15 @@ void Staging::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
     KIO::ForwardingSlaveBase::rename(src, dest, flags);
 }
 
-bool Staging::checkURL(const QUrl &url)
+bool Staging::checkURL(const QUrl &url) //replace with a more efficient algo later
 {
+    QUrl mrl = QUrl("/home/nic" + url.path());
     for(auto listIterator = m_List.begin(); listIterator != m_List.end(); listIterator++) {
-        if(listIterator->url() == url.url()) {
+        if(listIterator->url() == mrl.url()) {
             return true;
         }
     }
+    qDebug() << "Bad Url" << mrl.path();
     return false;
 }
 
