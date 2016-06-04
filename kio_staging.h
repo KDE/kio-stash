@@ -37,7 +37,7 @@ protected:
     void createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalPath, const QString &displayFileName, const QString &internalFileName);
     void rename(const QUrl &, const QUrl &, KIO::JobFlags flags) Q_DECL_OVERRIDE;
     bool rewriteUrl(const QUrl &url, QUrl &newUrl) Q_DECL_OVERRIDE;
-    bool checkURL(const QUrl &url);
+    bool checkUrl(const QUrl &url);
     void buildList();
 };
 

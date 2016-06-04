@@ -35,7 +35,6 @@ class KIOPluginForMetaData : public QObject
 extern "C" {
     int Q_DECL_EXPORT kdemain(int argc, char **argv)
     {
-        qDebug() << "out";
         QCoreApplication app(argc, argv);
         Staging slave(argv[2], argv[3]);
         slave.dispatchLoop();
@@ -50,10 +49,12 @@ Staging::Staging(const QByteArray &pool, const QByteArray &app) : KIO::Forwardin
 
 bool Staging::rewriteUrl(const QUrl &url, QUrl &newUrl) //don't fuck around with this
 {
-    if (url.scheme() != QLatin1String("file")) {
-        return false;
+    if (url.scheme() != "file") {
+        newUrl.setScheme("file");
+        newUrl.setPath(url.path());
+    } else {
+        newUrl = url;
     }
-    newUrl = url;
     return true;
 }
 
@@ -93,9 +94,8 @@ void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalP
 
     mode_t type = buff.st_mode & S_IFMT; // extract file type
     mode_t access = buff.st_mode & 07777; // extract permissions
-    //access &= 07555; // make it readonly, since it's in the trashcan
+    //access &= 07555; // make it readonly?
     Q_ASSERT(!internalFileName.isEmpty());
-    //entry.insert(KIO::UDSEntry::UDS_LOCAL_PATH, "/home/nic/Dropbox"); //this makes it work correctly!
     qDebug() << "physicalPath " << physicalPath;
     entry.insert(KIO::UDSEntry::UDS_NAME, physicalPath);   // internal filename, like "0-foo"
     entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, displayFileName);   // user-visible filename, like "foo"
@@ -116,39 +116,37 @@ void Staging::buildList()
     m_List.append(QUrl("/home/nic/gsoc-2016"));
     m_List.append(QUrl("/home/nic/Dropbox"));
     m_List.append(QUrl("/home/nic/kdesrc/kde/applications"));
+    m_List.append(QUrl("/home/nic/appdl.sh"));
 }
 
 void Staging::listDir(const QUrl &url) //think a bit about finding a file under a subdir and not
                                         //allowing folders which are parents of a dir
 {
-    //KIO::ForwardingSlaveBase::listDir(QUrl("file:///home/nic/gsoc-2016"));
-    QString tmp = url.path();
-    //dirty parsing hack, will fix later
-    //tmp.replace(0, QString("staging:").length(), "");
-    qDebug() << "Received url" << tmp;
-    if (tmp == QString("")) {
+    if (url.path() == QString("")) {
         listRoot();
         qDebug() << "Rootlist";
         return;
-    } else if (true/*checkURL(url)*/) {
-        QUrl mrl = "file://" + url.path();
-        qDebug() << "Good url; FSB called" << mrl;
-        KIO::ForwardingSlaveBase::listDir(mrl);
+    } else if (checkUrl(url)) {
+        QUrl newUrl;
+        rewriteUrl(url, newUrl);
+        qDebug() << "Good url; FSB called" << newUrl.path();
+        KIO::ForwardingSlaveBase::listDir(newUrl);
         return;
     }
     finished();
 }
 
-void Staging::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
+void Staging::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) //why this no work >:
 {
     KIO::ForwardingSlaveBase::rename(src, dest, flags);
 }
 
-bool Staging::checkURL(const QUrl &url) //replace with a more efficient algo later
+bool Staging::checkUrl(const QUrl &url) //replace with a more efficient algo later
+                                        //use a hashing fxn?
 {
-    QUrl mrl = QUrl("/home/nic" + url.path());
-    for(auto listIterator = m_List.begin(); listIterator != m_List.end(); listIterator++) {
-        if(listIterator->url() == mrl.url()) {
+    QUrl mrl = QUrl(url.path());
+    for (auto listIterator = m_List.begin(); listIterator != m_List.end(); listIterator++) {
+        if (listIterator->url() == mrl.url() || mrl.path().startsWith(listIterator->path())) {
             return true;
         }
     }
