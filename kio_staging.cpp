@@ -132,7 +132,31 @@ void Staging::buildList()
     m_List.append(QUrl("/home/nic/gsoc-2016"));
     m_List.append(QUrl("/home/nic/Dropbox"));
     m_List.append(QUrl("/home/nic/kdesrc/kde/applications"));
-    m_List.append(QUrl("/home/nic/appdl.sh"));
+    m_List.append(QUrl("/home/nic/msg"));
+}
+
+int Staging::searchList(const QString &string) //for Staging::del fxn
+{
+    int i = 0;
+    for (auto it = m_List.begin(); it != m_List.end(); it++, i++) {
+        if (it->path() == string) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void Staging::del(const QUrl &url, bool isfile) //have some hash/tabulation fxn to serve this and checkUrl; make this more robust
+                                                //works as an inital foray into deleting
+{
+    qDebug() << url.path();
+    if (searchList(url.path()) != -1) {
+        m_List.removeAt(searchList(url.path()));
+        listRoot();
+    } else {
+        error(KIO::ERR_CANNOT_READ, url.path());
+    }
+    //finished();
 }
 
 void Staging::listDir(const QUrl &url) //think a bit about finding a file under a subdir and not

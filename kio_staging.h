@@ -39,7 +39,9 @@ protected:
     bool rewriteUrl(const QUrl &url, QUrl &newUrl) Q_DECL_OVERRIDE;
     bool checkUrl(const QUrl &url);
     void mkdir(const QUrl &url, int permissions) Q_DECL_OVERRIDE;
+    void del(const QUrl &url, bool isfile) Q_DECL_OVERRIDE;
     void buildList();
+    int searchList(const QString &string);
 };
 
 #endif

@@ -21,6 +21,7 @@
             "reading": true,
             "makedir": true,
             "writing": true,
+            "deleting": true,
             "renameFromFile": true,
             "renameToFile": true
         }
