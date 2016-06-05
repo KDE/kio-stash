@@ -15,12 +15,12 @@
             ],
             "deleting": true,
             "deleteRecursive": true,
-            "fileNameUsedForCopying": "DisplayName",
+            "fileNameUsedForCopying": "Name",
             "output": "filesystem",
             "protocol": "staging",
             "reading": true,
             "makedir": true,
-            "writing": false,
+            "writing": true,
             "renameFromFile": true,
             "renameToFile": true
         }

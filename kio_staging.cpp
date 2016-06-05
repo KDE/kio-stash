@@ -79,12 +79,24 @@ void Staging::listRoot()
     finished();
 }
 
+void Staging::mkdir(const QUrl &url, int permissions) //we don't actually need this, but it helps in testing out
+{
+    QUrl mrl = QUrl("file:///home/nic" + url.path());
+    qDebug() << "MkDir Path:";
+    qDebug() << mrl.url();
+    KIO::ForwardingSlaveBase::mkdir(mrl, permissions);
+    m_List.append(mrl);
+    //finished();
+    listRoot();
+}
+
 void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalPath, const QString &displayFileName, const QString &internalFileName) //needs a lot of changes imo
 {
     QByteArray physicalPath_c = QFile::encodeName(physicalPath);
     QT_STATBUF buff;
     if (QT_LSTAT(physicalPath_c, &buff) == -1) {
         qWarning() << "couldn't stat " << physicalPath;
+        error(KIO::ERR_COULD_NOT_READ, physicalPath); //if dir doesn't exist
         return;
     }
     if (S_ISLNK(buff.st_mode)) {
@@ -126,7 +138,7 @@ void Staging::buildList()
 void Staging::listDir(const QUrl &url) //think a bit about finding a file under a subdir and not
                                         //allowing folders which are parents of a dir
 {
-    if (url.path() == QString("")) {
+    if (url.path() == QString("") || url.path() == QString("/")) {
         listRoot();
         qDebug() << "Rootlist";
         return;
@@ -147,20 +159,19 @@ void Staging::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) //w
     QUrl _src, _dest;
     rewriteUrl(src, _src);
     rewriteUrl(dest, _dest);
-    QFile(_src).rename(_dest);
+    QFile(_src.path()).rename(_dest.path());
 }
 
 bool Staging::checkUrl(const QUrl &url) //replace with a more efficient algo later
                                         //use a hashing fxn?
 {
-    QUrl mrl = QUrl(url.path());
     for (auto listIterator = m_List.begin(); listIterator != m_List.end(); listIterator++) {
-        if (listIterator->url() == mrl.url() || mrl.path().startsWith(listIterator->path())) { //prevents dirs which are not children from being accessed
+        if (listIterator->path() == url.path() || url.path().startsWith(listIterator->path())) { //prevents dirs which are not children from being accessed
             return true;
         }
     }
-    qDebug() << "Bad Url" << mrl.path();
-    return false;*/
+    qDebug() << "Bad Url" << url.path();
+    return false;
 }
 
 #include "kio_staging.moc"
