@@ -18,6 +18,10 @@
  ***************************************************************************/
 
 #include "kio_staging.h"
+
+#include <KLocalizedString>
+#include <KConfigGroup>
+
 #include <QDebug>
 #include <QMimeType>
 #include <QMimeDatabase>
@@ -97,7 +101,7 @@ void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalP
     //access &= 07555; // make it readonly?
     Q_ASSERT(!internalFileName.isEmpty());
     qDebug() << "physicalPath " << physicalPath;
-    entry.insert(KIO::UDSEntry::UDS_NAME, physicalPath);   // internal filename, like "0-foo"
+    entry.insert(KIO::UDSEntry::UDS_NAME, physicalPath);   // internal filename, like "0-foo"; this is used by the app.
     entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, displayFileName);   // user-visible filename, like "foo"
     entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, type);
     QMimeDatabase db;
@@ -132,13 +136,57 @@ void Staging::listDir(const QUrl &url) //think a bit about finding a file under 
         qDebug() << "Good url; FSB called" << newUrl.path();
         KIO::ForwardingSlaveBase::listDir(newUrl);
         return;
+    } else {
+        error(KIO::ERR_SLAVE_DEFINED, i18n("The URL %1 either does not exist or has not been staged yet", url.path()));
     }
-    finished();
 }
 
 void Staging::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) //why this no work >:
 {
     KIO::ForwardingSlaveBase::rename(src, dest, flags);
+    /*Q_UNUSED(flags)
+
+    if (_src == _dest) {
+        finished();
+        return;
+    }
+
+    QUrl src;
+    rewriteUrl(_src, src);
+    const QString srcPath = src.toLocalFile();
+
+    QUrl dest;
+    rewriteUrl(_dest, dest);
+    const QString destPath = dest.toLocalFile();
+
+    if (KDesktopFile::isDesktopFile(srcPath)) {
+        QString friendlyName;
+
+        if (destPath.endsWith(QLatin1String(".desktop"))) {
+            const QString fileName = dest.fileName();
+            friendlyName = KIO::decodeFileName(fileName.left(fileName.length() - 8));
+        } else {
+            friendlyName = KIO::decodeFileName(dest.fileName());
+        }
+
+        // Update the value of the Name field in the file.
+        KDesktopFile file(src.toLocalFile());
+        KConfigGroup cg(file.desktopGroup());
+        cg.writeEntry("Name", friendlyName);
+        cg.writeEntry("Name", friendlyName, KConfigGroup::Persistent | KConfigGroup::Localized);
+        cg.sync();
+    }
+
+    if (QFile(srcPath).rename(destPath)) {
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 20, 0)
+        org::kde::KDirNotify::emitFileRenamedWithLocalPath(_src, _dest, destPath);
+#else
+        org::kde::KDirNotify::emitFileRenamed(_src, _dest);
+#endif
+        finished();
+    } else {
+        error(KIO::ERR_CANNOT_RENAME, srcPath);
+    }
 }
 
 bool Staging::checkUrl(const QUrl &url) //replace with a more efficient algo later
@@ -146,12 +194,12 @@ bool Staging::checkUrl(const QUrl &url) //replace with a more efficient algo lat
 {
     QUrl mrl = QUrl(url.path());
     for (auto listIterator = m_List.begin(); listIterator != m_List.end(); listIterator++) {
-        if (listIterator->url() == mrl.url() || mrl.path().startsWith(listIterator->path())) {
+        if (listIterator->url() == mrl.url() || mrl.path().startsWith(listIterator->path())) { //prevents dirs which are not children from being accessed
             return true;
         }
     }
     qDebug() << "Bad Url" << mrl.path();
-    return false;
+    return false;*/
 }
 
 #include "kio_staging.moc"
