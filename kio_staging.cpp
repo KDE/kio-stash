@@ -143,50 +143,11 @@ void Staging::listDir(const QUrl &url) //think a bit about finding a file under 
 
 void Staging::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) //why this no work >:
 {
-    KIO::ForwardingSlaveBase::rename(src, dest, flags);
-    /*Q_UNUSED(flags)
-
-    if (_src == _dest) {
-        finished();
-        return;
-    }
-
-    QUrl src;
-    rewriteUrl(_src, src);
-    const QString srcPath = src.toLocalFile();
-
-    QUrl dest;
-    rewriteUrl(_dest, dest);
-    const QString destPath = dest.toLocalFile();
-
-    if (KDesktopFile::isDesktopFile(srcPath)) {
-        QString friendlyName;
-
-        if (destPath.endsWith(QLatin1String(".desktop"))) {
-            const QString fileName = dest.fileName();
-            friendlyName = KIO::decodeFileName(fileName.left(fileName.length() - 8));
-        } else {
-            friendlyName = KIO::decodeFileName(dest.fileName());
-        }
-
-        // Update the value of the Name field in the file.
-        KDesktopFile file(src.toLocalFile());
-        KConfigGroup cg(file.desktopGroup());
-        cg.writeEntry("Name", friendlyName);
-        cg.writeEntry("Name", friendlyName, KConfigGroup::Persistent | KConfigGroup::Localized);
-        cg.sync();
-    }
-
-    if (QFile(srcPath).rename(destPath)) {
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 20, 0)
-        org::kde::KDirNotify::emitFileRenamedWithLocalPath(_src, _dest, destPath);
-#else
-        org::kde::KDirNotify::emitFileRenamed(_src, _dest);
-#endif
-        finished();
-    } else {
-        error(KIO::ERR_CANNOT_RENAME, srcPath);
-    }
+    //KIO::ForwardingSlaveBase::rename(src, dest, flags);
+    QUrl _src, _dest;
+    rewriteUrl(src, _src);
+    rewriteUrl(dest, _dest);
+    QFile(_src).rename(_dest);
 }
 
 bool Staging::checkUrl(const QUrl &url) //replace with a more efficient algo later
