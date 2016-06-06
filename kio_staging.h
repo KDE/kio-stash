@@ -35,12 +35,15 @@ protected:
     void listDir(const QUrl &url) Q_DECL_OVERRIDE;
     void listRoot();
     void createRootUDSEntry(KIO::UDSEntry &entry, const QString &physicalPath, const QString &displayFileName, const QString &internalFileName);
-    void rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) Q_DECL_OVERRIDE;
+    void put(const QUrl & url, int permissions, KIO::JobFlags flags) Q_DECL_OVERRIDE;
+    //void rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) Q_DECL_OVERRIDE;
     bool rewriteUrl(const QUrl &url, QUrl &newUrl) Q_DECL_OVERRIDE;
     bool checkUrl(const QUrl &url);
     void mkdir(const QUrl &url, int permissions) Q_DECL_OVERRIDE;
     void del(const QUrl &url, bool isfile) Q_DECL_OVERRIDE;
     void buildList();
+    void displayList();
+    void copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags) Q_DECL_OVERRIDE;
     int searchList(const QString &string);
 };
 

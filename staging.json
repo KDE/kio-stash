@@ -22,8 +22,7 @@
             "makedir": true,
             "writing": true,
             "deleting": true,
-            "renameFromFile": true,
-            "renameToFile": true
+            "copyFromFile": true
         }
     }
 }

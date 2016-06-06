@@ -81,11 +81,12 @@ void Staging::listRoot()
 
 void Staging::mkdir(const QUrl &url, int permissions) //we don't actually need this, but it helps in testing out
 {
-    QUrl mrl = QUrl("file:///home/nic" + url.path());
+    //QUrl mrl = QUrl("file:///home/nic" + url.path());
     qDebug() << "MkDir Path:";
-    qDebug() << mrl.url();
-    KIO::ForwardingSlaveBase::mkdir(mrl, permissions);
-    m_List.append(mrl);
+    qDebug() << url.path();
+    //KIO::ForwardingSlaveBase::mkdir(mrl, permissions);
+    m_List.append(url);
+    displayList();
     //finished();
     listRoot();
 }
@@ -127,7 +128,7 @@ void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalP
     entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
 }
 
-void Staging::buildList()
+void Staging::buildList() //just for testing
 {
     m_List.append(QUrl("/home/nic/gsoc-2016"));
     m_List.append(QUrl("/home/nic/Dropbox"));
@@ -177,14 +178,41 @@ void Staging::listDir(const QUrl &url) //think a bit about finding a file under 
     }
 }
 
-void Staging::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) //why this no work >:
+void Staging::displayList()
+{
+    for (auto it = m_List.begin(); it != m_List.end(); it++) {
+        qDebug() << it->path();
+    }
+}
+
+void Staging::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
+{
+    qDebug() << "COPYING HERE" << src.path();
+    if (searchList(src.path()) == -1) {
+        m_List.append(src);
+    }
+    displayList();
+    listRoot();
+}
+
+void Staging::put(const QUrl & url, int permissions, KIO::JobFlags flags)
+{
+    /*qDebug() << "LOOK HERE" << url.toLocalFile();
+    m_List.append(url);
+    displayList();
+    finished();*/
+    qDebug() << "TO BE SUPPORTED";
+    error(KIO::ERR_CANNOT_MKDIR, url.path());
+}
+
+/*void Staging::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) //why this no work >:
 {
     //KIO::ForwardingSlaveBase::rename(src, dest, flags);
     QUrl _src, _dest;
     rewriteUrl(src, _src);
     rewriteUrl(dest, _dest);
     QFile(_src.path()).rename(_dest.path());
-}
+}*/
 
 bool Staging::checkUrl(const QUrl &url) //replace with a more efficient algo later
                                         //use a hashing fxn?
