@@ -41,10 +41,11 @@ protected:
     bool checkUrl(const QUrl &url);
     void mkdir(const QUrl &url, int permissions) Q_DECL_OVERRIDE;
     void del(const QUrl &url, bool isfile) Q_DECL_OVERRIDE;
-    void buildList();
+    void buildList(const QUrl &url);
     void displayList();
     void copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags) Q_DECL_OVERRIDE;
     int searchList(const QString &string);
+    void readListFromFile();
 };
 
 #endif

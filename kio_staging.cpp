@@ -27,6 +27,7 @@
 #include <QMimeDatabase>
 #include <QDir>
 #include <QUrl>
+#include <QIODevice>
 #include <QFile>
 #include <QCoreApplication>
 
@@ -48,7 +49,24 @@ extern "C" {
 
 Staging::Staging(const QByteArray &pool, const QByteArray &app) : KIO::ForwardingSlaveBase("staging", pool, app)
 {
-    buildList();
+    readListFromFile();
+}
+
+void Staging::readListFromFile()
+{
+    QFile file("/tmp/staging-files");
+    QString filename;
+    QString url;
+    if (file.open(QIODevice::ReadOnly)) {
+        while (!file.atEnd()) {
+            url = file.readLine();
+            qDebug() << url;
+            buildList(QUrl(url));
+        }
+        //listRoot();
+    }
+    displayList();
+    file.close();
 }
 
 bool Staging::rewriteUrl(const QUrl &url, QUrl &newUrl) //don't fuck around with this
@@ -64,6 +82,7 @@ bool Staging::rewriteUrl(const QUrl &url, QUrl &newUrl) //don't fuck around with
 
 void Staging::listRoot()
 {
+    displayList();
     KIO::UDSEntry entry;
     QString fileName;
     QString filePath;
@@ -128,12 +147,13 @@ void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalP
     entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
 }
 
-void Staging::buildList() //just for testing
+void Staging::buildList(const QUrl &url) //just for testing
 {
-    m_List.append(QUrl("/home/nic/gsoc-2016"));
-    m_List.append(QUrl("/home/nic/Dropbox"));
-    m_List.append(QUrl("/home/nic/kdesrc/kde/applications"));
-    m_List.append(QUrl("/home/nic/msg"));
+    if(url.path() != "") {
+        QString processedUrl = url.path();
+        processedUrl[processedUrl.length() - 1] = '\0';
+        m_List.append(QUrl(processedUrl));
+    }
 }
 
 int Staging::searchList(const QString &string) //for Staging::del fxn
