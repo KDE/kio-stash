@@ -50,21 +50,23 @@ extern "C" {
 Staging::Staging(const QByteArray &pool, const QByteArray &app) : KIO::ForwardingSlaveBase("staging", pool, app)
 {
     readListFromFile();
+    stagefilename = "/tmp/staging-files";
 }
 
 void Staging::readListFromFile()
 {
     QFile file("/tmp/staging-files");
-    QString filename;
     QString url;
     if (file.open(QIODevice::ReadOnly)) {
         while (!file.atEnd()) {
             url = file.readLine();
             qDebug() << url;
             buildList(QUrl(url));
-        }
-        //listRoot();
+            }
+    } else {
+        qDebug() << "I/O ERROR";
     }
+        //listRoot();
     displayList();
     file.close();
 }
@@ -149,7 +151,7 @@ void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalP
 
 void Staging::buildList(const QUrl &url) //just for testing
 {
-    if(url.path() != "") {
+    if(url.path() != ".") {
         QString processedUrl = url.path();
         processedUrl[processedUrl.length() - 1] = '\0';
         m_List.append(QUrl(processedUrl));
@@ -173,11 +175,22 @@ void Staging::del(const QUrl &url, bool isfile) //have some hash/tabulation fxn 
     qDebug() << url.path();
     if (searchList(url.path()) != -1) {
         m_List.removeAt(searchList(url.path()));
+        updateFile();
         listRoot();
     } else {
         error(KIO::ERR_CANNOT_READ, url.path());
     }
     //finished();
+}
+
+void Staging::updateFile()
+{
+    QFile file("/tmp/staging-files");
+    file.open(QIODevice::WriteOnly | QFile::Text);
+    QTextStream out(&file);
+    for (auto it = m_List.begin(); it != m_List.end(); it++) {
+        out << it->path() << '\n';
+    }
 }
 
 void Staging::listDir(const QUrl &url) //think a bit about finding a file under a subdir and not

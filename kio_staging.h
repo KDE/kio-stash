@@ -28,6 +28,7 @@ class Staging : public KIO::ForwardingSlaveBase
 public:
 protected:
     QList<QUrl> m_List;
+    QString stagefilename;
 public:
     Staging(const QByteArray &pool, const QByteArray &app);
     ~Staging(){};
@@ -46,6 +47,7 @@ protected:
     void copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags) Q_DECL_OVERRIDE;
     int searchList(const QString &string);
     void readListFromFile();
+    void updateFile();
 };
 
 #endif
