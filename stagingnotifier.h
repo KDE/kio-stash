@@ -32,6 +32,12 @@
      Q_OBJECT
      Q_CLASSINFO("D-Bus Interface", "org.kde.StagingNotifier")
 
+ private:
+     KDirWatch *dirWatch;
+     QList<QUrl> m_List;
+     void updateList();
+     void loadUrlList();
+
  public:
      StagingNotifier(QObject* parent, const QList<QVariant>&);
 
@@ -39,9 +45,7 @@
      Q_SCRIPTABLE Q_NOREPLY void watchDir(const QString &path);
 
  private slots:
-     void created(const QString &path);
      void dirty(const QString &path);
- private:
-     KDirWatch *dirWatch;
-     QList<QUrl> *m_List;
  };
+
+ #endif

@@ -23,32 +23,32 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include "stagingnotifier.h"
 #include <kdirnotify.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(StagingNotifierFactory,
+/*K_PLUGIN_FACTORY_WITH_JSON(StagingNotifierFactory,
         "stagingnotifier.json",
         registerPlugin<StagingNotifier>();)
-
-StagingNotifier::StagingNotifier(QObject *parent, const QList<QVariant> &) : KDEDModule(parent)
+*/
+StagingNotifier::StagingNotifier(QObject *parent, const QList<QVariant> &var) : KDEDModule(parent)
 {
-    m_List = new QList<QUrl>(this);
     dirWatch = new KDirWatch(this);
     updateList();
     connect(dirWatch, &KDirWatch::dirty, this, &StagingNotifier::dirty);
 }
 
-void Staging::updateList() //convert to lambda fxn for C++0x swag and maintenance :P
+void StagingNotifier::updateList() //convert to lambda fxn for C++0x swag and maintenance :P
 {
     QString processedUrl;
-    for (auto it = list->begin(); it != list->end(); it++) {
-        processedUrl = it->path;
+    for (auto it = m_List.begin(); it != m_List.end(); it++) {
+        processedUrl = it->path();
         processedUrl = processedUrl.simplified();
-        if (QDir(processedUrl) {
+        if (QDir(processedUrl).exists()) {
             dirWatch->addDir(processedUrl);
             } else if (QFileInfo(QFile(processedUrl)).exists()) {
             dirWatch->addFile(processedUrl);
             } else {
-            qDebug() << "File does not exist " << url.path();
+            qDebug() << "File does not exist " << processedUrl;
             }
         }
 }
@@ -62,7 +62,7 @@ void StagingNotifier::loadUrlList()
             url = file.readLine();
             // url = url.simplified();
             qDebug() << url;
-            m_List->append(QUrl(url));
+            m_List.append(QUrl(url));
         }
     } else {
         qDebug() << "I/O ERROR";
@@ -77,6 +77,8 @@ void StagingNotifier::watchDir(const QString &path)
 
 void StagingNotifier::dirty(const QString &path)
 {
+//what is supposed to happen here?
+//send a d-bus signal?
 }
 
 #include "stagingnotifier.moc"

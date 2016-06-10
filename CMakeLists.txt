@@ -17,7 +17,6 @@ include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMSetupVersion)
 include(FeatureSummary)
-add_library(kio_staging MODULE kio_staging.cpp)
 
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED KIO)
 find_package(KF5Archive ${KF5_DEP_VERSION} REQUIRED)
@@ -29,6 +28,8 @@ find_package(KF5Service ${KF5_DEP_VERSION} REQUIRED)
 find_package(KF5DocTools ${KF5_DEP_VERSION})
 find_package(KF5Solid ${KF5_DEP_VERSION} REQUIRED)
 
+#setup kioslave
+add_library(kio_staging MODULE kio_staging.cpp)
 target_link_libraries (kio_staging
  KF5::KIOCore
  Qt5::DBus
@@ -38,4 +39,10 @@ target_link_libraries (kio_staging
 )
 set_target_properties(kio_staging PROPERTIES OUTPUT_NAME "staging")
 
-install(TARGETS kio_staging DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kio )
+install(TARGETS kio_staging DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kio)
+
+#setup kded
+add_library(stagingnotifier MODULE stagingnotifier.cpp)
+#kcoreaddons_desktop_to_json(stagingnotifier stagingnotifier.desktop) #not sure what this is for tbh
+target_link_libraries(stagingnotifier KF5::KIOCore KF5::DBusAddons)
+install(TARGETS stagingnotifier DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kded)
