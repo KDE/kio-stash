@@ -153,7 +153,7 @@ void Staging::buildList(const QUrl &url) //just for testing
 {
     if(url.path() != ".") {
         QString processedUrl = url.path();
-        processedUrl[processedUrl.length() - 1] = '\0';
+        processedUrl = processedUrl.simplified();
         m_List.append(QUrl(processedUrl));
     }
 }
