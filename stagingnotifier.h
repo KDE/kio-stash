@@ -16,3 +16,32 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
+
+ #ifndef STAGINGNOTIFIER_H
+ #define STAGINGNOTIFIER_H
+
+ #include <kdedmodule.h>
+ #include <QtDBus>
+ #include <QList>
+ #include <QUrl>
+
+ class KDirWatch;
+
+ class StagingNotifier : public KDEDModule
+ {
+     Q_OBJECT
+     Q_CLASSINFO("D-Bus Interface", "org.kde.StagingNotifier")
+
+ public:
+     StagingNotifier(QObject* parent, const QList<QVariant>&);
+
+ public slots:
+     Q_SCRIPTABLE Q_NOREPLY void watchDir(const QString &path);
+
+ private slots:
+     void created(const QString &path);
+     void dirty(const QString &path);
+ private:
+     KDirWatch *dirWatch;
+     QList<QUrl> *m_List;
+ };
