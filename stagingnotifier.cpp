@@ -26,10 +26,10 @@
 #include "stagingnotifier.h"
 #include <kdirnotify.h>
 
-/*K_PLUGIN_FACTORY_WITH_JSON(StagingNotifierFactory,
+K_PLUGIN_FACTORY_WITH_JSON(StagingNotifierFactory,
         "stagingnotifier.json",
         registerPlugin<StagingNotifier>();)
-*/
+
 StagingNotifier::StagingNotifier(QObject *parent, const QList<QVariant> &var) : KDEDModule(parent)
 {
     dirWatch = new KDirWatch(this);

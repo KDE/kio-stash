@@ -43,6 +43,6 @@ install(TARGETS kio_staging DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kio)
 
 #setup kded
 add_library(stagingnotifier MODULE stagingnotifier.cpp)
-#kcoreaddons_desktop_to_json(stagingnotifier stagingnotifier.desktop) #not sure what this is for tbh
+kcoreaddons_desktop_to_json(stagingnotifier stagingnotifier.desktop DEFAULT_SERVICE_TYPE) #not sure what this is for tbh
 target_link_libraries(stagingnotifier KF5::KIOCore KF5::DBusAddons)
 install(TARGETS stagingnotifier DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kded)
