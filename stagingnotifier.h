@@ -46,6 +46,8 @@
 
  private slots:
      void dirty(const QString &path);
+     void deleted(const QString &path);
+     void created(const QString &path);
  };
 
  #endif

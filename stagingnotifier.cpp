@@ -26,15 +26,18 @@
 #include "stagingnotifier.h"
 #include <kdirnotify.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(StagingNotifierFactory,
-        "stagingnotifier.json",
-        registerPlugin<StagingNotifier>();)
+K_PLUGIN_FACTORY_WITH_JSON(StagingNotifierFactory, "stagingnotifier.json", registerPlugin<StagingNotifier>();)
 
 StagingNotifier::StagingNotifier(QObject *parent, const QList<QVariant> &var) : KDEDModule(parent)
 {
     dirWatch = new KDirWatch(this);
-    updateList();
+    loadUrlList();
+    //updateList();
+    qDebug() << "Launching STAGING NOTIFIER DAEMON";
+    dirWatch->addFile("/tmp/staging-files");
     connect(dirWatch, &KDirWatch::dirty, this, &StagingNotifier::dirty);
+    connect(dirWatch, &KDirWatch::created, this, &StagingNotifier::created);
+    connect(dirWatch, &KDirWatch::deleted, this, &StagingNotifier::deleted);
 }
 
 void StagingNotifier::updateList() //convert to lambda fxn for C++0x swag and maintenance :P
@@ -48,7 +51,7 @@ void StagingNotifier::updateList() //convert to lambda fxn for C++0x swag and ma
             } else if (QFileInfo(QFile(processedUrl)).exists()) {
             dirWatch->addFile(processedUrl);
             } else {
-            qDebug() << "File does not exist " << processedUrl;
+            qDebug() << "File does not exist" << processedUrl;
             }
         }
 }
@@ -64,6 +67,7 @@ void StagingNotifier::loadUrlList()
             qDebug() << url;
             m_List.append(QUrl(url));
         }
+        updateList();
     } else {
         qDebug() << "I/O ERROR";
     }
@@ -77,8 +81,24 @@ void StagingNotifier::watchDir(const QString &path)
 
 void StagingNotifier::dirty(const QString &path)
 {
-//what is supposed to happen here?
-//send a d-bus signal?
+    //what is supposed to happen here?
+    //send a d-bus signal?
+    qDebug() << "SOMETHING HAS CHANGED:" << path;
+    if (path == QString("/tmp/staging-files")) {
+        loadUrlList();
+    }
+}
+
+void StagingNotifier::created(const QString &path)
+{
+    //kded should keep pinging /tmp/staging-files
+    qDebug() << "CREATED:" << path;
+}
+
+void StagingNotifier::deleted(const QString &path)
+{
+    //should ideally remove the URL from dirWatch
+    qDebug() << "REMOVED:" << path;
 }
 
 #include "stagingnotifier.moc"
