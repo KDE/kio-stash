@@ -9,6 +9,13 @@ set(
         ${ECM_MODULE_PATH}
         ${ECM_KDE_MODULE_DIR}
 )
+
+set(SOURCES
+    staging_adaptor.cpp
+    stagingnotifier.cpp
+    kio_staging.cpp
+)
+
 # set up kf5
 
 include(KDEInstallDirs)
@@ -42,7 +49,9 @@ install(TARGETS kio_staging DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kio)
 
 #setup kded
 add_library(stagingnotifier MODULE stagingnotifier.cpp)
+add_library(staging_adaptor MODULE staging_adaptor.cpp)
 kcoreaddons_desktop_to_json(stagingnotifier stagingnotifier.desktop DEFAULT_SERVICE_TYPE) #not sure what this is for tbh
-target_link_libraries(stagingnotifier KF5::KIOCore KF5::DBusAddons)
+target_link_libraries(stagingnotifier KF5::KIOCore KF5::DBusAddons Qt5::DBus)
+target_link_libraries(staging_adaptor Qt5::DBus Qt5::Core)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/org.kde.StagingNotifier.xml DESTINATION ${DBUS_INTERFACES_INSTALL_DIR})
 install(TARGETS stagingnotifier DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kded)

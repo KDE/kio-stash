@@ -36,7 +36,8 @@ StagingNotifier::StagingNotifier(QObject *parent, const QList<QVariant> &var) : 
     //updateList();
     qDebug() << "Launching STAGING NOTIFIER DAEMON";
     //dirWatch->addFile("/tmp/staging-files");
-    new StagingNotifierAdaptor(this);
+    // new StagingNotifierAdaptor(this);
+    //StagingNotifierAdaptor *adaptor = new StagingNotifierAdaptor(this);
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.registerObject("/StagingNotifier", this);
     dbus.registerService("org.kde.StagingNotifier");
