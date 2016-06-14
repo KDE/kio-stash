@@ -1,5 +1,6 @@
 QT += core
 QT -= gui
+QT += dbus
 
 TARGET = add-staging
 CONFIG += console
