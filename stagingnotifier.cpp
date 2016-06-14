@@ -44,6 +44,14 @@ StagingNotifier::StagingNotifier(QObject *parent, const QList<QVariant> &var) : 
     connect(dirWatch, &KDirWatch::dirty, this, &StagingNotifier::dirty);
     connect(dirWatch, &KDirWatch::created, this, &StagingNotifier::created);
     connect(dirWatch, &KDirWatch::deleted, this, &StagingNotifier::deleted);
+    connect(this, &StagingNotifier::listChanged, this, &StagingNotifier::displayList);
+}
+
+void StagingNotifier::displayList()
+{
+    for (auto it = m_List.begin(); it != m_List.end(); it++) {
+        qDebug() << it->path();
+    }
 }
 
 void StagingNotifier::updateList() //convert to lambda fxn for C++0x swag and maintenance :P
@@ -74,7 +82,8 @@ void StagingNotifier::loadUrlList()
     if (file.open(QIODevice::ReadOnly)) {
         while (!file.atEnd()) {
             url = file.readLine();
-            // url = url.simplified();
+            url = url.simplified();
+            //url = QUrl(url.path().simplified());
             qDebug() << url;
             m_List.append(QUrl(url));
         }
@@ -83,17 +92,20 @@ void StagingNotifier::loadUrlList()
         qDebug() << "I/O ERROR";
     }
     file.close();
+    emit listChanged();
 }
 
 void StagingNotifier::watchDir(const QString &path)
 {
     dirWatch->addDir(path);
+    m_List.append(path);
     emit listChanged();
 }
 
 void StagingNotifier::removeDir(const QString &path)
 {
     dirWatch->removeDir(path);
+    m_List.removeAll(QUrl(path));
     emit listChanged();
 }
 

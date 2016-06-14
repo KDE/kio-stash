@@ -53,6 +53,7 @@ Q_SIGNALS:
      void dirty(const QString &path);
      void deleted(const QString &path);
      void created(const QString &path);
+     void displayList(); //for internal purposes
  };
 
  #endif
