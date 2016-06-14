@@ -41,10 +41,15 @@
  public:
      StagingNotifier(QObject* parent, const QList<QVariant>&);
 
- public slots:
-     Q_SCRIPTABLE Q_NOREPLY void watchDir(const QString &path);
+Q_SIGNALS:
+    Q_SCRIPTABLE void listChanged();
 
- private slots:
+ public Q_SLOTS:
+     Q_SCRIPTABLE void watchDir(const QString &path);
+     Q_SCRIPTABLE void removeDir(const QString &path);
+     Q_SCRIPTABLE void sendList();
+
+ protected Q_SLOTS:
      void dirty(const QString &path);
      void deleted(const QString &path);
      void created(const QString &path);

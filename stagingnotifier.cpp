@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include "stagingnotifier.h"
+#include "staging_adaptor.h"
 #include <kdirnotify.h>
 //D-Bus to be implemented
 K_PLUGIN_FACTORY_WITH_JSON(StagingNotifierFactory, "stagingnotifier.json", registerPlugin<StagingNotifier>();)
@@ -34,7 +35,11 @@ StagingNotifier::StagingNotifier(QObject *parent, const QList<QVariant> &var) : 
     loadUrlList();
     //updateList();
     qDebug() << "Launching STAGING NOTIFIER DAEMON";
-    dirWatch->addFile("/tmp/staging-files");
+    //dirWatch->addFile("/tmp/staging-files");
+    new StagingNotifierAdaptor(this);
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    dbus.registerObject("/StagingNotifier", this);
+    dbus.registerService("org.kde.StagingNotifier");
     connect(dirWatch, &KDirWatch::dirty, this, &StagingNotifier::dirty);
     connect(dirWatch, &KDirWatch::created, this, &StagingNotifier::created);
     connect(dirWatch, &KDirWatch::deleted, this, &StagingNotifier::deleted);
@@ -54,6 +59,11 @@ void StagingNotifier::updateList() //convert to lambda fxn for C++0x swag and ma
             qDebug() << "File does not exist" << processedUrl;
             }
         }
+}
+
+void StagingNotifier::sendList()
+{
+//needs custom types iirc; to be coded later
 }
 
 void StagingNotifier::loadUrlList()
@@ -77,6 +87,13 @@ void StagingNotifier::loadUrlList()
 void StagingNotifier::watchDir(const QString &path)
 {
     dirWatch->addDir(path);
+    emit listChanged();
+}
+
+void StagingNotifier::removeDir(const QString &path)
+{
+    dirWatch->removeDir(path);
+    emit listChanged();
 }
 
 void StagingNotifier::dirty(const QString &path)
