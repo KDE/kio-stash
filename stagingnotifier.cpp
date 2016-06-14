@@ -32,12 +32,8 @@ K_PLUGIN_FACTORY_WITH_JSON(StagingNotifierFactory, "stagingnotifier.json", regis
 StagingNotifier::StagingNotifier(QObject *parent, const QList<QVariant> &var) : KDEDModule(parent)
 {
     dirWatch = new KDirWatch(this);
-    loadUrlList();
-    //updateList();
     qDebug() << "Launching STAGING NOTIFIER DAEMON";
-    //dirWatch->addFile("/tmp/staging-files");
     new StagingNotifierAdaptor(this);
-    //StagingNotifierAdaptor *adaptor = new StagingNotifierAdaptor(this);
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.registerObject("/StagingNotifier", this);
     dbus.registerService("org.kde.StagingNotifier");
@@ -54,57 +50,29 @@ void StagingNotifier::displayList()
     }
 }
 
-void StagingNotifier::updateList() //convert to lambda fxn for C++0x swag and maintenance :P
-{
-    QString processedUrl;
-    for (auto it = m_List.begin(); it != m_List.end(); it++) {
-        processedUrl = it->path();
-        processedUrl = processedUrl.simplified();
-        if (QDir(processedUrl).exists()) {
-            dirWatch->addDir(processedUrl);
-            } else if (QFileInfo(QFile(processedUrl)).exists()) {
-            dirWatch->addFile(processedUrl);
-            } else {
-            qDebug() << "File does not exist" << processedUrl;
-            }
-        }
-}
-
 void StagingNotifier::sendList()
 {
 //needs custom types iirc; to be coded later
 }
 
-void StagingNotifier::loadUrlList()
-{
-    QFile file("/tmp/staging-files");
-    QString url;
-    if (file.open(QIODevice::ReadOnly)) {
-        while (!file.atEnd()) {
-            url = file.readLine();
-            url = url.simplified();
-            //url = QUrl(url.path().simplified());
-            qDebug() << url;
-            m_List.append(QUrl(url));
-        }
-        updateList();
-    } else {
-        qDebug() << "I/O ERROR";
-    }
-    file.close();
-    emit listChanged();
-}
-
 void StagingNotifier::watchDir(const QString &path)
 {
-    dirWatch->addDir(path);
+    if (QDir(path).exists()) {
+        dirWatch->addDir(path);
+    } else if (QFile(path).exists()) {
+        dirWatch->addFile(path);
+    }
     m_List.append(path);
     emit listChanged();
 }
 
 void StagingNotifier::removeDir(const QString &path)
 {
-    dirWatch->removeDir(path);
+    if (QDir(path).exists()) {
+        dirWatch->removeDir(path);
+    } else if (QFile(path).exists()) {
+        dirWatch->removeFile(path);
+    }
     m_List.removeAll(QUrl(path));
     emit listChanged();
 }
@@ -114,9 +82,6 @@ void StagingNotifier::dirty(const QString &path)
     //what is supposed to happen here?
     //send a d-bus signal?
     qDebug() << "SOMETHING HAS CHANGED:" << path;
-    if (path == QString("/tmp/staging-files")) {
-        loadUrlList();
-    }
 }
 
 void StagingNotifier::created(const QString &path)

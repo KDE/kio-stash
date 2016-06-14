@@ -35,8 +35,6 @@
  private:
      KDirWatch *dirWatch;
      QList<QUrl> m_List;
-     void updateList();
-     void loadUrlList();
 
  public:
      StagingNotifier(QObject* parent, const QList<QVariant>&);
