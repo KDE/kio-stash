@@ -50,4 +50,3 @@ void StagingNotifierAdaptor::watchDir(const QString &path)
     // handle method call org.kde.StagingNotifier.watchDir
     QMetaObject::invokeMethod(parent(), "watchDir", Q_ARG(QString, path));
 }
-
