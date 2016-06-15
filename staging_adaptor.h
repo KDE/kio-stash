@@ -39,7 +39,9 @@ class StagingNotifierAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"removeDir\">\n"
 "      <arg direction=\"in\" type=\"s\" name=\"path\"/>\n"
 "    </method>\n"
-"    <method name=\"sendList\"/>\n"
+"    <method name=\"sendList\">\n"
+"      <arg direction=\"out\" type=\"as\"/>\n"
+"    </method>\n"
 "  </interface>\n"
         "")
 public:
@@ -49,7 +51,7 @@ public:
 public: // PROPERTIES
 public Q_SLOTS: // METHODS
     void removeDir(const QString &path);
-    void sendList();
+    QStringList sendList();
     void watchDir(const QString &path);
 Q_SIGNALS: // SIGNALS
     void listChanged();

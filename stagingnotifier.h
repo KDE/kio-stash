@@ -34,7 +34,7 @@
 
  private:
      KDirWatch *dirWatch;
-     QList<QUrl> m_List;
+     QStringList m_List;
 
  public:
      StagingNotifier(QObject* parent, const QList<QVariant>&);
@@ -45,7 +45,7 @@ Q_SIGNALS:
  public Q_SLOTS:
      Q_SCRIPTABLE void watchDir(const QString &path);
      Q_SCRIPTABLE void removeDir(const QString &path);
-     Q_SCRIPTABLE void sendList();
+     Q_SCRIPTABLE QStringList sendList();
 
  protected Q_SLOTS:
      void dirty(const QString &path);

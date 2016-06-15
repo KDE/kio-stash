@@ -39,10 +39,12 @@ void StagingNotifierAdaptor::removeDir(const QString &path)
     QMetaObject::invokeMethod(parent(), "removeDir", Q_ARG(QString, path));
 }
 
-void StagingNotifierAdaptor::sendList()
+QStringList StagingNotifierAdaptor::sendList()
 {
     // handle method call org.kde.StagingNotifier.sendList
-    QMetaObject::invokeMethod(parent(), "sendList");
+    QStringList out0;
+    QMetaObject::invokeMethod(parent(), "sendList", Q_RETURN_ARG(QStringList, out0));
+    return out0;
 }
 
 void StagingNotifierAdaptor::watchDir(const QString &path)
@@ -50,3 +52,4 @@ void StagingNotifierAdaptor::watchDir(const QString &path)
     // handle method call org.kde.StagingNotifier.watchDir
     QMetaObject::invokeMethod(parent(), "watchDir", Q_ARG(QString, path));
 }
+

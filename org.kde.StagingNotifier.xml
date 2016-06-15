@@ -10,6 +10,7 @@
       <arg name="path" type="s" direction="in"/>
     </method>
     <method name="sendList">
+      <arg type="as" direction="out"/>
     </method>
   </interface>
 </node>

@@ -46,13 +46,14 @@ StagingNotifier::StagingNotifier(QObject *parent, const QList<QVariant> &var) : 
 void StagingNotifier::displayList()
 {
     for (auto it = m_List.begin(); it != m_List.end(); it++) {
-        qDebug() << it->path();
+        qDebug() << *it;
     }
 }
 
-void StagingNotifier::sendList()
+QStringList StagingNotifier::sendList()
 {
 //needs custom types iirc; to be coded later
+    return m_List;
 }
 
 void StagingNotifier::watchDir(const QString &path)
@@ -73,7 +74,7 @@ void StagingNotifier::removeDir(const QString &path)
     } else if (QFile(path).exists()) {
         dirWatch->removeFile(path);
     }
-    m_List.removeAll(QUrl(path));
+    m_List.removeAll(path);
     emit listChanged();
 }
 
