@@ -27,8 +27,7 @@ class Staging : public KIO::ForwardingSlaveBase
     Q_OBJECT
 public:
 protected:
-    QList<QUrl> m_List;
-    QString stagefilename;
+    QStringList m_List;
 public:
     Staging(const QByteArray &pool, const QByteArray &app);
     ~Staging(){};
@@ -36,18 +35,11 @@ protected:
     void listDir(const QUrl &url) Q_DECL_OVERRIDE;
     void listRoot();
     void createRootUDSEntry(KIO::UDSEntry &entry, const QString &physicalPath, const QString &displayFileName, const QString &internalFileName);
-    void put(const QUrl & url, int permissions, KIO::JobFlags flags) Q_DECL_OVERRIDE;
     //void rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) Q_DECL_OVERRIDE;
     bool rewriteUrl(const QUrl &url, QUrl &newUrl) Q_DECL_OVERRIDE;
     bool checkUrl(const QUrl &url);
-    void mkdir(const QUrl &url, int permissions) Q_DECL_OVERRIDE;
-    void del(const QUrl &url, bool isfile) Q_DECL_OVERRIDE;
-    void buildList(const QUrl &url);
+    void updateList();
     void displayList();
-    void copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags) Q_DECL_OVERRIDE;
-    int searchList(const QString &string);
-    void readListFromFile();
-    void updateFile();
 };
 
 #endif

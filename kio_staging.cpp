@@ -30,6 +30,7 @@
 #include <QIODevice>
 #include <QFile>
 #include <QCoreApplication>
+#include <QtDBus/QtDBus>
 
 class KIOPluginForMetaData : public QObject
 {
@@ -49,26 +50,17 @@ extern "C" {
 
 Staging::Staging(const QByteArray &pool, const QByteArray &app) : KIO::ForwardingSlaveBase("staging", pool, app)
 {
-    readListFromFile();
-    stagefilename = "/tmp/staging-files";
+    //m_List << "/home/nic/Pictures" <<"/home/nic/Music";
+    updateList();
 }
 
-void Staging::readListFromFile()
+void Staging::updateList()
 {
-    QFile file("/tmp/staging-files");
-    QString url;
-    if (file.open(QIODevice::ReadOnly)) {
-        while (!file.atEnd()) {
-            url = file.readLine();
-            qDebug() << url;
-            buildList(QUrl(url));
-            }
-    } else {
-        qDebug() << "I/O ERROR";
+    QDBusMessage msg = QDBusMessage::createMethodCall("org.kde.StagingNotifier", "/StagingNotifier","","sendList");
+    QDBusReply<QStringList> received = QDBusConnection::sessionBus().call(msg);
+    if (received.isValid()) {
+        m_List = received.value();
     }
-        //listRoot();
-    displayList();
-    file.close();
 }
 
 bool Staging::rewriteUrl(const QUrl &url, QUrl &newUrl) //don't fuck around with this
@@ -89,7 +81,7 @@ void Staging::listRoot()
     QString fileName;
     QString filePath;
     for (auto listIterator = m_List.begin(); listIterator != m_List.end(); ++listIterator) {
-        filePath = listIterator->path();
+        filePath = *listIterator;
         fileName = QFileInfo(filePath).fileName();
         qDebug() << fileName;
         entry.clear();
@@ -100,19 +92,7 @@ void Staging::listRoot()
     finished();
 }
 
-void Staging::mkdir(const QUrl &url, int permissions) //we don't actually need this, but it helps in testing out
-{
-    //QUrl mrl = QUrl("file:///home/nic" + url.path());
-    qDebug() << "MkDir Path:";
-    qDebug() << url.path();
-    //KIO::ForwardingSlaveBase::mkdir(mrl, permissions);
-    m_List.append(url);
-    displayList();
-    //finished();
-    listRoot();
-}
-
-void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalPath, const QString &displayFileName, const QString &internalFileName) //needs a lot of changes imo
+void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalPath, const QString &displayFileName, const QString &internalFileName) //needs to be changed to bool imo
 {
     QByteArray physicalPath_c = QFile::encodeName(physicalPath);
     QT_STATBUF buff;
@@ -149,53 +129,10 @@ void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalP
     entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
 }
 
-void Staging::buildList(const QUrl &url) //just for testing
-{
-    if(url.path() != ".") {
-        QString processedUrl = url.path();
-        processedUrl = processedUrl.simplified();
-        m_List.append(QUrl(processedUrl));
-    }
-}
-
-int Staging::searchList(const QString &string) //for Staging::del fxn
-{
-    int i = 0;
-    for (auto it = m_List.begin(); it != m_List.end(); it++, i++) {
-        if (it->path() == string) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-void Staging::del(const QUrl &url, bool isfile) //have some hash/tabulation fxn to serve this and checkUrl; make this more robust
-                                                //works as an inital foray into deleting
-{
-    qDebug() << url.path();
-    if (searchList(url.path()) != -1) {
-        m_List.removeAt(searchList(url.path()));
-        updateFile();
-        listRoot();
-    } else {
-        error(KIO::ERR_CANNOT_READ, url.path());
-    }
-    //finished();
-}
-
-void Staging::updateFile()
-{
-    QFile file("/tmp/staging-files");
-    file.open(QIODevice::WriteOnly | QFile::Text);
-    QTextStream out(&file);
-    for (auto it = m_List.begin(); it != m_List.end(); it++) {
-        out << it->path() << '\n';
-    }
-}
-
 void Staging::listDir(const QUrl &url) //think a bit about finding a file under a subdir and not
                                         //allowing folders which are parents of a dir
 {
+    updateList();
     if (url.path() == QString("") || url.path() == QString("/")) {
         listRoot();
         qDebug() << "Rootlist";
@@ -211,47 +148,18 @@ void Staging::listDir(const QUrl &url) //think a bit about finding a file under 
     }
 }
 
-void Staging::displayList()
+void Staging::displayList() //actually print list :P
 {
     for (auto it = m_List.begin(); it != m_List.end(); it++) {
-        qDebug() << it->path();
+        qDebug() << *it;
     }
 }
-
-void Staging::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
-{
-    qDebug() << "COPYING HERE" << src.path();
-    if (searchList(src.path()) == -1) {
-        m_List.append(src);
-    }
-    displayList();
-    listRoot();
-}
-
-void Staging::put(const QUrl & url, int permissions, KIO::JobFlags flags)
-{
-    /*qDebug() << "LOOK HERE" << url.toLocalFile();
-    m_List.append(url);
-    displayList();
-    finished();*/
-    qDebug() << "TO BE SUPPORTED";
-    error(KIO::ERR_CANNOT_MKDIR, url.path());
-}
-
-/*void Staging::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) //why this no work >:
-{
-    //KIO::ForwardingSlaveBase::rename(src, dest, flags);
-    QUrl _src, _dest;
-    rewriteUrl(src, _src);
-    rewriteUrl(dest, _dest);
-    QFile(_src.path()).rename(_dest.path());
-}*/
 
 bool Staging::checkUrl(const QUrl &url) //replace with a more efficient algo later
                                         //use a hashing fxn?
 {
     for (auto listIterator = m_List.begin(); listIterator != m_List.end(); listIterator++) {
-        if (listIterator->path() == url.path() || url.path().startsWith(listIterator->path())) { //prevents dirs which are not children from being accessed
+        if (*listIterator == url.path() || url.path().startsWith(*listIterator)) { //prevents dirs which are not children from being accessed
             return true;
         }
     }

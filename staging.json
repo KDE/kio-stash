@@ -13,16 +13,10 @@
                 "Access",
                 "Link"
             ],
-            "deleting": true,
-            "deleteRecursive": true,
             "fileNameUsedForCopying": "Name",
             "output": "filesystem",
             "protocol": "staging",
             "reading": true,
-            "makedir": true,
-            "writing": true,
-            "deleting": true,
-            "copyFromFile": true
         }
     }
 }
