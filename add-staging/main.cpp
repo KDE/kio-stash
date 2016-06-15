@@ -1,3 +1,23 @@
+/***************************************************************************
+*   Copyright (C) 2016 by Arnav Dhamija <arnav.dhamija@gmail.com>         *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+*   This program is distributed in the hope that it will be useful,       *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+*   GNU General Public License for more details.                          *
+*                                                                         *
+*   You should have received a copy of the GNU General Public License     *
+*   along with this program; if not, write to the                         *
+*   Free Software Foundation, Inc.,                                       *
+*   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
+***************************************************************************/
+
+//Driver application for KDED of the GSoC 2016 File Staging project for Dolphin
 #include <QCoreApplication>
 #include <QtDBus/QtDBus>
 
@@ -15,26 +35,3 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-/*
-#include <QTextStream>
-#include <QDebug>
-#include <string>
-#include <QIODevice>
-#include <QFileInfo>
-#include <QFile>
-QString filename("/tmp/staging-files");
-QFile file(filename);
-if (!file.open(QFile::WriteOnly | QFile::Text| QIODevice::Append)) {
-    qDebug() << "I/O error";
-    return -1;
-}
-QTextStream url(&file);
-if (QFileInfo(QFile(argv[1])).exists()) {
-    url << argv[1] << "\n";
-    qDebug() << argv[1];
-} else {
-    qDebug() << argv[1] << " does not exist.";
-}
-file.flush();
-file.close();
-*/
