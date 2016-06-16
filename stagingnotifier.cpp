@@ -26,20 +26,22 @@
 #include "stagingnotifier.h"
 #include "staging_adaptor.h"
 #include <kdirnotify.h>
-//D-Bus to be implemented
+
 K_PLUGIN_FACTORY_WITH_JSON(StagingNotifierFactory, "stagingnotifier.json", registerPlugin<StagingNotifier>();)
 
 StagingNotifier::StagingNotifier(QObject *parent, const QList<QVariant> &var) : KDEDModule(parent)
 {
     dirWatch = new KDirWatch(this);
     qDebug() << "Launching STAGING NOTIFIER DAEMON";
+
     new StagingNotifierAdaptor(this);
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.registerObject("/StagingNotifier", this);
     dbus.registerService("org.kde.StagingNotifier");
+
     connect(dirWatch, &KDirWatch::dirty, this, &StagingNotifier::dirty);
     connect(dirWatch, &KDirWatch::created, this, &StagingNotifier::created);
-    connect(dirWatch, &KDirWatch::deleted, this, &StagingNotifier::deleted);
+    connect(dirWatch, &KDirWatch::deleted, this, &StagingNotifier::removeDir);
     connect(this, &StagingNotifier::listChanged, this, &StagingNotifier::displayList);
 }
 
@@ -50,9 +52,8 @@ void StagingNotifier::displayList()
     }
 }
 
-QStringList StagingNotifier::sendList()
+QStringList StagingNotifier::sendList() //forwards list over QDBus to the KIO slave
 {
-//needs custom types iirc; to be coded later
     return m_List;
 }
 
@@ -67,7 +68,7 @@ void StagingNotifier::watchDir(const QString &path)
     emit listChanged();
 }
 
-void StagingNotifier::removeDir(const QString &path)
+void StagingNotifier::removeDir(const QString &path) //handles KDirWatch and QDBus signals
 {
     if (QDir(path).exists()) {
         dirWatch->removeDir(path);
@@ -81,20 +82,12 @@ void StagingNotifier::removeDir(const QString &path)
 void StagingNotifier::dirty(const QString &path)
 {
     //what is supposed to happen here?
-    //send a d-bus signal?
     qDebug() << "SOMETHING HAS CHANGED:" << path;
 }
 
 void StagingNotifier::created(const QString &path)
 {
-    //kded should keep pinging /tmp/staging-files
     qDebug() << "CREATED:" << path;
-}
-
-void StagingNotifier::deleted(const QString &path)
-{
-    //should ideally remove the URL from dirWatch
-    qDebug() << "REMOVED:" << path;
 }
 
 #include "stagingnotifier.moc"

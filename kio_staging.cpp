@@ -50,7 +50,6 @@ extern "C" {
 
 Staging::Staging(const QByteArray &pool, const QByteArray &app) : KIO::ForwardingSlaveBase("staging", pool, app)
 {
-    //m_List << "/home/nic/Pictures" <<"/home/nic/Music";
     updateList();
 }
 
@@ -85,37 +84,38 @@ void Staging::listRoot()
         fileName = QFileInfo(filePath).fileName();
         qDebug() << fileName;
         entry.clear();
-        createRootUDSEntry(entry, filePath, fileName, fileName);
-        listEntry(entry);
+        if (createRootUDSEntry(entry, filePath, fileName, fileName)) {
+            listEntry(entry);
+        } else {
+            return;
+        }
     }
     entry.clear();
     finished();
 }
 
-void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalPath, const QString &displayFileName, const QString &internalFileName) //needs to be changed to bool imo
+bool Staging::createRootUDSEntry(KIO::UDSEntry &entry, const QString &physicalPath, const QString &displayFileName, const QString &internalFileName)
 {
     QByteArray physicalPath_c = QFile::encodeName(physicalPath);
     QT_STATBUF buff;
     if (QT_LSTAT(physicalPath_c, &buff) == -1) {
-        qWarning() << "couldn't stat " << physicalPath;
         error(KIO::ERR_COULD_NOT_READ, physicalPath); //if dir doesn't exist
-        return;
+        return false;
     }
     if (S_ISLNK(buff.st_mode)) {
-        char buffer2[ 1000 ];
+        char buffer2[1000];
         int n = readlink(physicalPath_c, buffer2, 999);
         if (n != -1) {
             buffer2[ n ] = 0;
         }
         entry.insert(KIO::UDSEntry::UDS_LINK_DEST, QFile::decodeName(buffer2));
     }
-
     mode_t type = buff.st_mode & S_IFMT; // extract file type
     mode_t access = buff.st_mode & 07777; // extract permissions
     //access &= 07555; // make it readonly?
     Q_ASSERT(!internalFileName.isEmpty());
     qDebug() << "physicalPath " << physicalPath;
-    entry.insert(KIO::UDSEntry::UDS_NAME, physicalPath);   // internal filename, like "0-foo"; this is used by the app.
+    entry.insert(KIO::UDSEntry::UDS_NAME, physicalPath);   // internal filename, like "0-foo"; this is used by the app. Used for path.
     entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, displayFileName);   // user-visible filename, like "foo"
     entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, type);
     QMimeDatabase db;
@@ -127,10 +127,10 @@ void Staging::createRootUDSEntry( KIO::UDSEntry &entry, const QString &physicalP
     entry.insert(KIO::UDSEntry::UDS_SIZE, buff.st_size);
     entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, buff.st_mtime);
     entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
+    return true;
 }
 
-void Staging::listDir(const QUrl &url) //think a bit about finding a file under a subdir and not
-                                        //allowing folders which are parents of a dir
+void Staging::listDir(const QUrl &url)
 {
     updateList();
     if (url.path() == QString("") || url.path() == QString("/")) {
@@ -156,7 +156,6 @@ void Staging::displayList() //actually print list :P
 }
 
 bool Staging::checkUrl(const QUrl &url) //replace with a more efficient algo later
-                                        //use a hashing fxn?
 {
     for (auto listIterator = m_List.begin(); listIterator != m_List.end(); listIterator++) {
         if (*listIterator == url.path() || url.path().startsWith(*listIterator)) { //prevents dirs which are not children from being accessed

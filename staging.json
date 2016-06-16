@@ -16,7 +16,7 @@
             "fileNameUsedForCopying": "Name",
             "output": "filesystem",
             "protocol": "staging",
-            "reading": true,
+            "reading": true
         }
     }
 }

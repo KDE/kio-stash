@@ -49,7 +49,6 @@ Q_SIGNALS:
 
  protected Q_SLOTS:
      void dirty(const QString &path);
-     void deleted(const QString &path);
      void created(const QString &path);
      void displayList(); //for internal purposes
  };
