@@ -18,3 +18,10 @@ make
 sudo make install
 kdeinit5
 ```
+
+Adaptor classes for D-Bus were generated using:
+
+```
+qdbuscpp2xml -a stagingnotifier.h -o org.kde.StagingNotifier.xml
+qdbusxml2cpp -c StagingNotifierAdaptor -a staging_adaptor.h:staging_adaptor.cpp org.kde.StagingNotifier.xml
+```
