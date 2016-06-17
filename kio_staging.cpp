@@ -18,10 +18,8 @@
  ***************************************************************************/
 
 #include "kio_staging.h"
-
 #include <KLocalizedString>
 #include <KConfigGroup>
-
 #include <QDebug>
 #include <QMimeType>
 #include <QMimeDatabase>
@@ -55,7 +53,7 @@ Staging::Staging(const QByteArray &pool, const QByteArray &app) : KIO::Forwardin
 
 void Staging::updateList()
 {
-    QDBusMessage msg = QDBusMessage::createMethodCall("org.kde.StagingNotifier", "/StagingNotifier","","sendList");
+    QDBusMessage msg = QDBusMessage::createMethodCall("org.kde.StagingNotifier", "/StagingNotifier", "", "sendList");
     QDBusReply<QStringList> received = QDBusConnection::sessionBus().call(msg);
     if (received.isValid()) {
         m_List = received.value();
@@ -98,35 +96,45 @@ bool Staging::createRootUDSEntry(KIO::UDSEntry &entry, const QString &physicalPa
 {
     QByteArray physicalPath_c = QFile::encodeName(physicalPath);
     QT_STATBUF buff;
-    if (QT_LSTAT(physicalPath_c, &buff) == -1) {
-        error(KIO::ERR_COULD_NOT_READ, physicalPath); //if dir doesn't exist
+
+    if (QT_LSTAT(physicalPath_c, &buff) == -1) { //if dir doesn't exist;
+        error(KIO::ERR_COULD_NOT_READ, physicalPath);
+        QDBusMessage msg = QDBusMessage::createMethodCall("org.kde.StagingNotifier", "/StagingNotifier", "", "removeDir");
+        msg << physicalPath;
+        QDBusConnection::sessionBus().send(msg); //tells the KDED that this path doesn't exist
         return false;
     }
+
     if (S_ISLNK(buff.st_mode)) {
         char buffer2[1000];
         int n = readlink(physicalPath_c, buffer2, 999);
         if (n != -1) {
-            buffer2[ n ] = 0;
+            buffer2[n] = 0;
         }
         entry.insert(KIO::UDSEntry::UDS_LINK_DEST, QFile::decodeName(buffer2));
     }
+
     mode_t type = buff.st_mode & S_IFMT; // extract file type
     mode_t access = buff.st_mode & 07777; // extract permissions
     //access &= 07555; // make it readonly?
+
     Q_ASSERT(!internalFileName.isEmpty());
     qDebug() << "physicalPath " << physicalPath;
-    entry.insert(KIO::UDSEntry::UDS_NAME, physicalPath);   // internal filename, like "0-foo"; this is used by the app. Used for path.
-    entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, displayFileName);   // user-visible filename, like "foo"
-    entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, type);
-    QMimeDatabase db;
+
+    QMimeDatabase db; //required for finding the mimeType
     QMimeType mt = db.mimeTypeForFile(physicalPath);
     if (mt.isValid()) {
         entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, mt.name());
     }
+
+    entry.insert(KIO::UDSEntry::UDS_NAME, physicalPath);   //internal filename, like ~/foo used for path.
+    entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, displayFileName);   //user-visible filename, like "foo"
+    entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, type);
     entry.insert(KIO::UDSEntry::UDS_ACCESS, access);
     entry.insert(KIO::UDSEntry::UDS_SIZE, buff.st_size);
     entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, buff.st_mtime);
     entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
+
     return true;
 }
 

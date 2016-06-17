@@ -17,40 +17,40 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
- #ifndef STAGINGNOTIFIER_H
- #define STAGINGNOTIFIER_H
+#ifndef STAGINGNOTIFIER_H
+#define STAGINGNOTIFIER_H
 
- #include <kdedmodule.h>
- #include <QtDBus>
- #include <QStringList>
+#include <kdedmodule.h>
+#include <QtDBus>
+#include <QStringList>
 
- class KDirWatch;
+class KDirWatch;
 
- class StagingNotifier : public KDEDModule
- {
-     Q_OBJECT
-     Q_CLASSINFO("D-Bus Interface", "org.kde.StagingNotifier")
+class StagingNotifier : public KDEDModule
+{
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.kde.StagingNotifier")
 
- private:
-     KDirWatch *dirWatch;
-     QStringList m_List;
-     QString processString(const QString &path);
+private:
+    KDirWatch *dirWatch;
+    QStringList m_List;
+    QString processString(const QString &path);
 
- public:
-     StagingNotifier(QObject* parent, const QList<QVariant>&);
+public:
+    StagingNotifier(QObject* parent, const QList<QVariant>&);
 
- Q_SIGNALS:
+Q_SIGNALS:
     Q_SCRIPTABLE void listChanged();
 
- public Q_SLOTS:
-     Q_SCRIPTABLE void watchDir(const QString &path);
-     Q_SCRIPTABLE void removeDir(const QString &path);
-     Q_SCRIPTABLE QStringList sendList();
+public Q_SLOTS:
+    Q_SCRIPTABLE void watchDir(const QString &path);
+    Q_SCRIPTABLE void removeDir(const QString &path);
+    Q_SCRIPTABLE QStringList sendList();
 
- protected Q_SLOTS:
-     void dirty(const QString &path);
-     void created(const QString &path);
-     void displayList(); //for internal purposes
- };
+protected Q_SLOTS:
+    void dirty(const QString &path);
+    void created(const QString &path);
+    void displayList(); //for internal purposes
+};
 
- #endif
+#endif

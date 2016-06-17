@@ -30,7 +30,7 @@ protected:
     QStringList m_List;
 public:
     Staging(const QByteArray &pool, const QByteArray &app);
-    ~Staging(){};
+    ~Staging() {};
 protected:
     void listDir(const QUrl &url) Q_DECL_OVERRIDE;
     void listRoot();

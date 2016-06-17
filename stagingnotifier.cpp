@@ -22,7 +22,6 @@
 #include <KPluginLoader>
 #include <QDir>
 #include <QFile>
-#include <QFileInfo>
 #include "stagingnotifier.h"
 #include "staging_adaptor.h"
 #include <kdirnotify.h>
