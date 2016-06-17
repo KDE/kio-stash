@@ -1,4 +1,4 @@
-# GSoC 2016 File Staging project for KDE
+#GSoC 2016 File Staging project for KDE
 
 ##Introduction
 
