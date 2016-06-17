@@ -19,16 +19,15 @@
 
 #include "kio_staging.h"
 #include <KLocalizedString>
-#include <KConfigGroup>
+
 #include <QDebug>
 #include <QMimeType>
 #include <QMimeDatabase>
 #include <QDir>
 #include <QUrl>
-#include <QIODevice>
 #include <QFile>
 #include <QCoreApplication>
-#include <QtDBus/QtDBus>
+#include <QtDBus>
 
 class KIOPluginForMetaData : public QObject
 {
