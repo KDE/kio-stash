@@ -38,6 +38,7 @@ private:
 
 public:
     StagingNotifier(QObject* parent, const QList<QVariant>&);
+    ~StagingNotifier();
 
 Q_SIGNALS:
     Q_SCRIPTABLE void listChanged();

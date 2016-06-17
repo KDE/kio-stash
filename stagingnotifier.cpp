@@ -44,6 +44,10 @@ StagingNotifier::StagingNotifier(QObject *parent, const QList<QVariant> &var) : 
     connect(this, &StagingNotifier::listChanged, this, &StagingNotifier::displayList);
 }
 
+StagingNotifier::~StagingNotifier()
+{
+}
+
 void StagingNotifier::displayList()
 {
     for (auto it = m_List.begin(); it != m_List.end(); it++) {

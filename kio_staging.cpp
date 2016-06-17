@@ -50,6 +50,10 @@ Staging::Staging(const QByteArray &pool, const QByteArray &app) : KIO::Forwardin
     updateList();
 }
 
+Staging::~Staging()
+{
+}
+
 void Staging::updateList()
 {
     QDBusMessage msg = QDBusMessage::createMethodCall("org.kde.StagingNotifier", "/StagingNotifier", "", "sendList");
