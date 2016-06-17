@@ -22,8 +22,7 @@
 
  #include <kdedmodule.h>
  #include <QtDBus>
- #include <QList>
- #include <QUrl>
+ #include <QStringList>
 
  class KDirWatch;
 
@@ -35,11 +34,12 @@
  private:
      KDirWatch *dirWatch;
      QStringList m_List;
+     QString processString(const QString &path);
 
  public:
      StagingNotifier(QObject* parent, const QList<QVariant>&);
 
-Q_SIGNALS:
+ Q_SIGNALS:
     Q_SCRIPTABLE void listChanged();
 
  public Q_SLOTS:

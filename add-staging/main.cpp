@@ -18,6 +18,7 @@
 ***************************************************************************/
 
 //Driver application for KDED of the GSoC 2016 File Staging project for Dolphin
+
 #include <QCoreApplication>
 #include <QtDBus/QtDBus>
 
@@ -34,12 +35,3 @@ int main(int argc, char *argv[])
     bool queued = QDBusConnection::sessionBus().send(m);
     return 0;
 }
-//helper code for checking QStringList
-/*QDBusMessage x = QDBusMessage::createMethodCall("org.kde.StagingNotifier", "/StagingNotifier","","sendList");
-QDBusReply<QStringList> r = QDBusConnection::sessionBus().call(x);
-QStringList u = r.value();
-for(auto it = u.begin(); it != u.end(); it++) {
-    qDebug() << *it;
-}*/
-
-

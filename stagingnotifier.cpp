@@ -59,23 +59,34 @@ QStringList StagingNotifier::sendList() //forwards list over QDBus to the KIO sl
 
 void StagingNotifier::watchDir(const QString &path)
 {
-    if (QDir(path).exists()) {
-        dirWatch->addDir(path);
-    } else if (QFile(path).exists()) {
-        dirWatch->addFile(path);
+    QString processedPath = processString(path);
+    if (QDir(processedPath).exists()) {
+        dirWatch->addDir(processedPath);
+    } else if (QFile(processedPath).exists()) {
+        dirWatch->addFile(processedPath);
     }
-    m_List.append(path);
+    m_List.append(processedPath);
     emit listChanged();
+}
+
+QString StagingNotifier::processString(const QString &path) //removes trailing slash and strips newline character
+{
+    QString processedPath = path.simplified();
+    if (processedPath.at(processedPath.size() - 1) == '/') {
+        processedPath.chop(1);
+    }
+    return processedPath;
 }
 
 void StagingNotifier::removeDir(const QString &path) //handles KDirWatch and QDBus signals
 {
-    if (QDir(path).exists()) {
-        dirWatch->removeDir(path);
-    } else if (QFile(path).exists()) {
-        dirWatch->removeFile(path);
+    QString processedPath = processString(path);
+    if (QDir(processedPath).exists()) {
+        dirWatch->removeDir(processedPath);
+    } else if (QFile(processedPath).exists()) {
+        dirWatch->removeFile(processedPath);
     }
-    m_List.removeAll(path);
+    m_List.removeAll(processedPath);
     emit listChanged();
 }
 
