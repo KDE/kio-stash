@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.5)
-set(QT_MIN_VERSION     "5.4.0")
-set(KF5_MIN_VERSION    "5.16.0")
+cmake_minimum_required(VERSION 2.8.12)
+set(QT5_MIN_VERSION "5.4.0")
+set(KF5_MIN_VERSION "5.22.0")
 
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 set(
@@ -10,29 +10,24 @@ set(
         ${ECM_KDE_MODULE_DIR}
 )
 
-#set(SOURCES
-#    kio_staging.cpp
-#    stagingnotifier.cpp
-#    staging_adaptor.cpp
-#)
-
-# set up kf5
-
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMSetupVersion)
 include(FeatureSummary)
 
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED KIO)
-find_package(KF5Archive ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5Config ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5CoreAddons ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5DBusAddons ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5I18n ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5Service ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5DocTools ${KF5_DEP_VERSION})
-find_package(KF5Solid ${KF5_DEP_VERSION} REQUIRED)
+find_package(Qt5 ${QT5_MIN_VERSION} REQUIRED COMPONENTS
+    Core
+    DBus
+)
+
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
+    Config
+    KIO
+    DBusAddons
+    I18n
+)
+
 #qt5_add_dbus_adaptor(STAGING_SRCS org.kde.StagingNotifier.xml stagingnotifier.h stagingnotifier)
 #setup kioslave
 add_library(kio_staging MODULE kio_staging.cpp)
