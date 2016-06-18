@@ -1,3 +1,4 @@
+project(KIOFileStash)
 cmake_minimum_required(VERSION 2.8.12)
 set(QT5_MIN_VERSION "5.4.0")
 set(KF5_MIN_VERSION "5.22.0")
@@ -51,3 +52,5 @@ target_link_libraries(stagingnotifier staging_adaptor KF5::KIOCore KF5::DBusAddo
 
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/org.kde.StagingNotifier.xml DESTINATION ${DBUS_INTERFACES_INSTALL_DIR})
 install(TARGETS stagingnotifier DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kded)
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
