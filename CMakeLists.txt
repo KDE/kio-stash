@@ -29,6 +29,8 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
     I18n
 )
 
+add_subdirectory(dbus)
+
 #qt5_add_dbus_adaptor(STAGING_SRCS org.kde.StagingNotifier.xml stagingnotifier.h stagingnotifier)
 #setup kioslave
 add_library(kio_staging MODULE kio_staging.cpp)
@@ -49,8 +51,6 @@ add_library(staging_adaptor STATIC staging_adaptor.cpp)
 kcoreaddons_desktop_to_json(stagingnotifier stagingnotifier.desktop DEFAULT_SERVICE_TYPE) #not sure what this is for tbh
 target_link_libraries(staging_adaptor Qt5::DBus Qt5::Core)
 target_link_libraries(stagingnotifier staging_adaptor KF5::KIOCore KF5::DBusAddons Qt5::DBus Qt5::Core)
-
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/org.kde.StagingNotifier.xml DESTINATION ${DBUS_INTERFACES_INSTALL_DIR})
 install(TARGETS stagingnotifier DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kded)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
