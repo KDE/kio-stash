@@ -48,14 +48,15 @@ FileStash::~FileStash()
 
 void FileStash::updateList()
 {
-    QDBusMessage msg = QDBusMessage::createMethodCall("org.kde.StagingNotifier", "/StagingNotifier", "", "sendList");
+    QDBusMessage msg = QDBusMessage::createMethodCall(
+        "org.kde.StagingNotifier", "/StagingNotifier", "", "sendList");
     QDBusReply<QStringList> received = QDBusConnection::sessionBus().call(msg);
     if (received.isValid()) {
         m_List = received.value();
     }
 }
 
-bool FileStash::rewriteUrl(const QUrl &url, QUrl &newUrl) //don't fuck around with this
+bool FileStash::rewriteUrl(const QUrl &url, QUrl &newUrl)
 {
     if (url.scheme() != "file") {
         newUrl.setScheme("file");
@@ -72,7 +73,8 @@ void FileStash::listRoot()
     KIO::UDSEntry entry;
     QString fileName;
     QString filePath;
-    for (auto listIterator = m_List.begin(); listIterator != m_List.end(); ++listIterator) {
+    for (auto listIterator = m_List.begin(); listIterator != m_List.end();
+         ++listIterator) {
         filePath = *listIterator;
         fileName = QFileInfo(filePath).fileName();
         qDebug() << fileName;
@@ -87,16 +89,19 @@ void FileStash::listRoot()
     finished();
 }
 
-bool FileStash::createRootUDSEntry(KIO::UDSEntry &entry, const QString &physicalPath, const QString &displayFileName, const QString &internalFileName)
+bool FileStash::createRootUDSEntry(
+    KIO::UDSEntry &entry, const QString &physicalPath,
+    const QString &displayFileName, const QString &internalFileName)
 {
     QByteArray physicalPath_c = QFile::encodeName(physicalPath);
     QT_STATBUF buff;
 
-    if (QT_LSTAT(physicalPath_c, &buff) == -1) { //if dir doesn't exist;
+    if (QT_LSTAT(physicalPath_c, &buff) == -1) { // if the dir doesn't exist
         error(KIO::ERR_COULD_NOT_READ, physicalPath);
-        QDBusMessage msg = QDBusMessage::createMethodCall("org.kde.StagingNotifier", "/StagingNotifier", "", "removeDir");
+        QDBusMessage msg = QDBusMessage::createMethodCall(
+            "org.kde.StagingNotifier", "/StagingNotifier", "", "removeDir");
         msg << physicalPath;
-        QDBusConnection::sessionBus().send(msg); //tells the KDED that this path doesn't exist
+        QDBusConnection::sessionBus().send(msg); // remove it from the kded
         return false;
     }
 
@@ -122,8 +127,8 @@ bool FileStash::createRootUDSEntry(KIO::UDSEntry &entry, const QString &physical
         entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, mt.name());
     }
 
-    entry.insert(KIO::UDSEntry::UDS_NAME, physicalPath);   //internal filename, like ~/foo used for path.
-    entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, displayFileName);   //user-visible filename, like "foo"
+    entry.insert(KIO::UDSEntry::UDS_NAME, physicalPath);
+    entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, displayFileName);
     entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, type);
     entry.insert(KIO::UDSEntry::UDS_ACCESS, access);
     entry.insert(KIO::UDSEntry::UDS_SIZE, buff.st_size);
@@ -147,7 +152,9 @@ void FileStash::listDir(const QUrl &url)
         KIO::ForwardingSlaveBase::listDir(newUrl);
         return;
     } else {
-        error(KIO::ERR_SLAVE_DEFINED, i18n("The URL %1 either does not exist or has not been staged yet", url.path()));
+        error(KIO::ERR_SLAVE_DEFINED,
+            i18n("The URL %1 either does not exist or has not been staged yet",
+            url.path()));
     }
 }
 
@@ -158,10 +165,12 @@ void FileStash::displayList() //actually print list :P
     }
 }
 
-bool FileStash::checkUrl(const QUrl &url) //replace with a more efficient algo later
+bool FileStash::checkUrl(const QUrl &url) // FIXME: more efficient algo
 {
-    for (auto listIterator = m_List.begin(); listIterator != m_List.end(); listIterator++) {
-        if (*listIterator == url.path() || url.path().startsWith(*listIterator)) { //prevents dirs which are not children from being accessed
+    for (auto listIterator = m_List.begin(); listIterator != m_List.end();
+         listIterator++) {
+        if (*listIterator == url.path() ||
+            url.path().startsWith(*listIterator)) {
             return true;
         }
     }
