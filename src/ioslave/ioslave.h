@@ -20,9 +20,9 @@
 #ifndef KIO_STAGING_H
 #define KIO_STAGING_H
 
-#include <kio/forwardingslavebase.h>
+#include <KIO/ForwardingSlaveBase>
 
-class Staging : public KIO::ForwardingSlaveBase
+class FileStash : public KIO::ForwardingSlaveBase
 {
     Q_OBJECT
 
@@ -30,8 +30,8 @@ protected:
     QStringList m_List;
 
 public:
-    Staging(const QByteArray &pool, const QByteArray &app);
-    ~Staging();
+    FileStash(const QByteArray &pool, const QByteArray &app);
+    ~FileStash();
 
 protected:
     void listDir(const QUrl &url) Q_DECL_OVERRIDE;

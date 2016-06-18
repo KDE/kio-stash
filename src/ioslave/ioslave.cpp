@@ -17,8 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "kio_staging.h"
-#include <KLocalizedString>
+#include "ioslave.h"
 
 #include <QDebug>
 #include <QMimeType>
@@ -26,35 +25,28 @@
 #include <QDir>
 #include <QUrl>
 #include <QFile>
-#include <QCoreApplication>
-#include <QtDBus>
+#include <QDBusConnection>
+#include <QDBusMessage>
+#include <QDBusReply>
+
+#include <KLocalizedString>
 
 class KIOPluginForMetaData : public QObject
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.kde.kio.slave.staging" FILE "staging.json")
+    Q_PLUGIN_METADATA(IID "org.kde.kio.slave.staging" FILE "ioslave.json")
 };
 
-extern "C" {
-    int Q_DECL_EXPORT kdemain(int argc, char **argv)
-    {
-        QCoreApplication app(argc, argv);
-        Staging slave(argv[2], argv[3]);
-        slave.dispatchLoop();
-        return 0;
-    }
-}
-
-Staging::Staging(const QByteArray &pool, const QByteArray &app) : KIO::ForwardingSlaveBase("staging", pool, app)
+FileStash::FileStash(const QByteArray &pool, const QByteArray &app) :
+    KIO::ForwardingSlaveBase("staging", pool, app)
 {
     updateList();
 }
 
-Staging::~Staging()
-{
-}
+FileStash::~FileStash()
+{}
 
-void Staging::updateList()
+void FileStash::updateList()
 {
     QDBusMessage msg = QDBusMessage::createMethodCall("org.kde.StagingNotifier", "/StagingNotifier", "", "sendList");
     QDBusReply<QStringList> received = QDBusConnection::sessionBus().call(msg);
@@ -63,7 +55,7 @@ void Staging::updateList()
     }
 }
 
-bool Staging::rewriteUrl(const QUrl &url, QUrl &newUrl) //don't fuck around with this
+bool FileStash::rewriteUrl(const QUrl &url, QUrl &newUrl) //don't fuck around with this
 {
     if (url.scheme() != "file") {
         newUrl.setScheme("file");
@@ -74,7 +66,7 @@ bool Staging::rewriteUrl(const QUrl &url, QUrl &newUrl) //don't fuck around with
     return true;
 }
 
-void Staging::listRoot()
+void FileStash::listRoot()
 {
     displayList();
     KIO::UDSEntry entry;
@@ -95,7 +87,7 @@ void Staging::listRoot()
     finished();
 }
 
-bool Staging::createRootUDSEntry(KIO::UDSEntry &entry, const QString &physicalPath, const QString &displayFileName, const QString &internalFileName)
+bool FileStash::createRootUDSEntry(KIO::UDSEntry &entry, const QString &physicalPath, const QString &displayFileName, const QString &internalFileName)
 {
     QByteArray physicalPath_c = QFile::encodeName(physicalPath);
     QT_STATBUF buff;
@@ -141,7 +133,7 @@ bool Staging::createRootUDSEntry(KIO::UDSEntry &entry, const QString &physicalPa
     return true;
 }
 
-void Staging::listDir(const QUrl &url)
+void FileStash::listDir(const QUrl &url)
 {
     updateList();
     if (url.path() == QString("") || url.path() == QString("/")) {
@@ -159,14 +151,14 @@ void Staging::listDir(const QUrl &url)
     }
 }
 
-void Staging::displayList() //actually print list :P
+void FileStash::displayList() //actually print list :P
 {
     for (auto it = m_List.begin(); it != m_List.end(); it++) {
         qDebug() << *it;
     }
 }
 
-bool Staging::checkUrl(const QUrl &url) //replace with a more efficient algo later
+bool FileStash::checkUrl(const QUrl &url) //replace with a more efficient algo later
 {
     for (auto listIterator = m_List.begin(); listIterator != m_List.end(); listIterator++) {
         if (*listIterator == url.path() || url.path().startsWith(*listIterator)) { //prevents dirs which are not children from being accessed
@@ -177,4 +169,4 @@ bool Staging::checkUrl(const QUrl &url) //replace with a more efficient algo lat
     return false;
 }
 
-#include "kio_staging.moc"
+#include "ioslave.moc"

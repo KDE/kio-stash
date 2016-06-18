@@ -30,20 +30,10 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 )
 
 add_subdirectory(dbus)
+add_subdirectory(src)
 
 #qt5_add_dbus_adaptor(STAGING_SRCS org.kde.StagingNotifier.xml stagingnotifier.h stagingnotifier)
 #setup kioslave
-add_library(kio_staging MODULE kio_staging.cpp)
-target_link_libraries (kio_staging
- KF5::KIOCore
- Qt5::DBus
- KF5::I18n
- KF5::ConfigCore
- KF5::ConfigGui
-)
-set_target_properties(kio_staging PROPERTIES OUTPUT_NAME "staging")
-
-install(TARGETS kio_staging DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kio)
 
 #setup kded
 add_library(stagingnotifier MODULE stagingnotifier.cpp)
