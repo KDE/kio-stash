@@ -73,9 +73,7 @@ void FileStash::listRoot()
     KIO::UDSEntry entry;
     QString fileName;
     QString filePath;
-    for (auto listIterator = m_List.begin(); listIterator != m_List.end();
-         ++listIterator) {
-        filePath = *listIterator;
+    Q_FOREACH(auto filePath, m_List) {
         fileName = QFileInfo(filePath).fileName();
         qDebug() << fileName;
         entry.clear();
@@ -167,10 +165,8 @@ void FileStash::displayList() //actually print list :P
 
 bool FileStash::checkUrl(const QUrl &url) // FIXME: more efficient algo
 {
-    for (auto listIterator = m_List.begin(); listIterator != m_List.end();
-         listIterator++) {
-        if (*listIterator == url.path() ||
-            url.path().startsWith(*listIterator)) {
+    Q_FOREACH(auto path, m_List) {
+        if (path == url.path() || url.path().startsWith(path)) {
             return true;
         }
     }
