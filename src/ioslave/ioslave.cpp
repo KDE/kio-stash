@@ -49,7 +49,7 @@ extern "C" {
 }
 
 FileStash::FileStash(const QByteArray &pool, const QByteArray &app) :
-    KIO::ForwardingSlaveBase("filestash", pool, app)
+    KIO::ForwardingSlaveBase("stash", pool, app) // FIXME: filestash
 {
     updateList();
 }

@@ -1,6 +1,6 @@
 {
     "KDE-KIO-Protocols" : {
-        "staging": {
+        "stash": {
             "Class": ":local",
             "X-DocPath": "kioslave5/kio_filestash.html",
 
@@ -17,7 +17,7 @@
             "input": "none",
             "fileNameUsedForCopying": "Name",
             "output": "filesystem",
-            "protocol": "staging",
+            "protocol": "stash",
             "reading": true
         }
     }
