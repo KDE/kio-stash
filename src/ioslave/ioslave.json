@@ -2,7 +2,7 @@
     "KDE-KIO-Protocols" : {
         "staging": {
             "Class": ":local",
-            "X-DocPath": "kioslave5/kio_staging.html",
+            "X-DocPath": "kioslave5/kio_filestash.html",
 
             "listing": [
                 "Name",
@@ -13,7 +13,7 @@
                 "Link"
             ],
 
-            "exec": "kf5/kio/staging",
+            "exec": "kf5/kio/filestash",
             "input": "none",
             "fileNameUsedForCopying": "Name",
             "output": "filesystem",
