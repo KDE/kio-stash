@@ -49,22 +49,18 @@ extern "C" {
 }
 
 FileStash::FileStash(const QByteArray &pool, const QByteArray &app) :
-    KIO::ForwardingSlaveBase("stash", pool, app) // FIXME: filestash
-{
-    updateList();
-}
+    KIO::ForwardingSlaveBase("stash", pool, app)
+{}
 
 FileStash::~FileStash()
 {}
 
-void FileStash::updateList()
+QStringList FileStash::getList()
 {
     QDBusMessage msg = QDBusMessage::createMethodCall(
         "org.kde.StagingNotifier", "/StagingNotifier", "", "sendList");
     QDBusReply<QStringList> received = QDBusConnection::sessionBus().call(msg);
-    if (received.isValid()) {
-        m_List = received.value();
-    }
+    return received.value();
 }
 
 bool FileStash::rewriteUrl(const QUrl &url, QUrl &newUrl)
@@ -84,7 +80,8 @@ void FileStash::listRoot()
     KIO::UDSEntry entry;
     QString fileName;
     QString filePath;
-    Q_FOREACH(auto filePath, m_List) {
+    QStringList urlList = getList();
+    Q_FOREACH(auto filePath, urlList) {
         fileName = QFileInfo(filePath).fileName();
         qDebug() << fileName;
         entry.clear();
@@ -125,7 +122,7 @@ bool FileStash::createRootUDSEntry(
 
     mode_t type = buff.st_mode & S_IFMT; // extract file type
     mode_t access = buff.st_mode & 07777; // extract permissions
-    //access &= 07555; // make it readonly?
+    // FIXME: access &= 07555; make it readonly?
 
     Q_ASSERT(!internalFileName.isEmpty());
     qDebug() << "physicalPath " << physicalPath;
@@ -149,7 +146,6 @@ bool FileStash::createRootUDSEntry(
 
 void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
 {
-    updateList();
     if (url.path() == QString("") || url.path() == QString("/")) {
         listRoot();
         qDebug() << "Rootlist";
@@ -167,16 +163,18 @@ void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
     }
 }
 
-void FileStash::displayList() //actually print list :P
+void FileStash::displayList() // FIXME: remove
 {
-    for (auto it = m_List.begin(); it != m_List.end(); it++) {
+    QStringList urlList = getList();
+    for (auto it = urlList.begin(); it != urlList.end(); it++) {
         qDebug() << *it;
     }
 }
 
 bool FileStash::checkUrl(const QUrl &url) // FIXME: more efficient algo
 {
-    Q_FOREACH(auto path, m_List) {
+    QStringList urlList = getList();
+    Q_FOREACH(auto path, urlList) {
         if (path == url.path() || url.path().startsWith(path)) {
             return true;
         }

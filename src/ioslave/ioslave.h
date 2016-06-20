@@ -17,17 +17,14 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef KIO_STAGING_H
-#define KIO_STAGING_H
+#ifndef KIO_FILESTASH_H
+#define KIO_FILESTASH_H
 
 #include <KIO/ForwardingSlaveBase>
 
 class FileStash : public KIO::ForwardingSlaveBase
 {
     Q_OBJECT
-
-protected:
-    QStringList m_List;
 
 public:
     FileStash(const QByteArray &pool, const QByteArray &app);
@@ -36,11 +33,11 @@ public:
 protected:
     void listDir(const QUrl &url) Q_DECL_OVERRIDE;
     void listRoot();
+    void displayList();
     bool createRootUDSEntry(KIO::UDSEntry &entry, const QString &physicalPath, const QString &displayFileName, const QString &internalFileName);
     bool rewriteUrl(const QUrl &url, QUrl &newUrl) Q_DECL_OVERRIDE;
     bool checkUrl(const QUrl &url);
-    void updateList();
-    void displayList();
+    QStringList getList();
 };
 
 #endif
