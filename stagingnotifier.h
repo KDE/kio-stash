@@ -20,9 +20,10 @@
 #ifndef STAGINGNOTIFIER_H
 #define STAGINGNOTIFIER_H
 
-#include <kdedmodule.h>
 #include <QtDBus>
 #include <QStringList>
+
+#include <kdedmodule.h>
 
 class KDirWatch;
 

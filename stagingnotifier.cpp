@@ -17,13 +17,15 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
 ***************************************************************************/
 
+#include "stagingnotifier.h"
+#include "staging_adaptor.h"
+
+#include <QDir>
+#include <QFile>
+
 #include <KDirWatch>
 #include <KPluginFactory>
 #include <KPluginLoader>
-#include <QDir>
-#include <QFile>
-#include "stagingnotifier.h"
-#include "staging_adaptor.h"
 #include <kdirnotify.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(StagingNotifierFactory, "stagingnotifier.json", registerPlugin<StagingNotifier>();)

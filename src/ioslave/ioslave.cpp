@@ -127,7 +127,7 @@ bool FileStash::createRootUDSEntry(
     Q_ASSERT(!internalFileName.isEmpty());
     qDebug() << "physicalPath " << physicalPath;
 
-    QMimeDatabase db; //required for finding the mimeType
+    QMimeDatabase db; // required for finding the mimeType
     QMimeType mt = db.mimeTypeForFile(physicalPath);
     if (mt.isValid()) {
         entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, mt.name());
