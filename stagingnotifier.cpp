@@ -65,13 +65,15 @@ QStringList StagingNotifier::sendList() //forwards list over QDBus to the KIO sl
 void StagingNotifier::watchDir(const QString &path)
 {
     QString processedPath = processString(path);
-    if (QDir(processedPath).exists()) {
-        dirWatch->addDir(processedPath);
-    } else if (QFile(processedPath).exists()) {
-        dirWatch->addFile(processedPath);
+    if (!m_List.contains(processedPath)) {
+        if (QDir(processedPath).exists()) {
+            dirWatch->addDir(processedPath);
+        } else if (QFile(processedPath).exists()) {
+            dirWatch->addFile(processedPath);
+        }
+        m_List.append(processedPath);
+        emit listChanged();
     }
-    m_List.append(processedPath);
-    emit listChanged();
 }
 
 QString StagingNotifier::processString(const QString &path) //removes trailing slash and strips newline character
