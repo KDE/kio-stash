@@ -34,6 +34,7 @@ protected:
     void listDir(const QUrl &url) Q_DECL_OVERRIDE;
     void listRoot();
     void displayList();
+    void del(const QUrl &url, bool isFile) Q_DECL_OVERRIDE;
     bool createRootUDSEntry(KIO::UDSEntry &entry, const QString &physicalPath, const QString &displayFileName, const QString &internalFileName);
     bool rewriteUrl(const QUrl &url, QUrl &newUrl) Q_DECL_OVERRIDE;
     bool checkUrl(const QUrl &url);

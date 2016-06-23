@@ -107,7 +107,7 @@ bool FileStash::createRootUDSEntry(
         QDBusMessage msg = QDBusMessage::createMethodCall(
             "org.kde.StagingNotifier", "/StagingNotifier", "", "removeDir");
         msg << physicalPath;
-        QDBusConnection::sessionBus().send(msg); // remove it from the kded
+        bool queued = QDBusConnection::sessionBus().send(msg); // remove it from the kded
         return false;
     }
 
@@ -181,6 +181,19 @@ bool FileStash::checkUrl(const QUrl &url) // FIXME: more efficient algo
     }
     qDebug() << "Bad Url" << url.path();
     return false;
+}
+
+void FileStash::del(const QUrl &url, bool isFile)
+{
+    QDBusMessage msg = QDBusMessage::createMethodCall(
+        "org.kde.StagingNotifier", "/StagingNotifier", "", "removeDir");
+    msg << url.path();
+    bool queued = QDBusConnection::sessionBus().send(msg);
+    if (queued) {
+        finished();
+    } else {
+        error(KIO::ERR_CANNOT_DELETE, url.path());
+    }
 }
 
 #include "ioslave.moc"

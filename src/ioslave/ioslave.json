@@ -18,7 +18,9 @@
             "fileNameUsedForCopying": "Name",
             "output": "filesystem",
             "protocol": "stash",
-            "reading": true
+            "reading": true,
+            "deleting": true,
+            "deleteRecursive": true
         }
     }
 }
