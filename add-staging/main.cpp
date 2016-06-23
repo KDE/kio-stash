@@ -27,9 +27,9 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
     QDBusMessage m;
     if (QString(argv[1]) == "-a") {
-        m = QDBusMessage::createMethodCall("org.kde.StagingNotifier", "/StagingNotifier","","watchDir");
+        m = QDBusMessage::createMethodCall("org.kde.kio.StashNotifier", "/StashNotifier","","watchDir");
     } else if (QString(argv[1]) == "-d") {
-        m = QDBusMessage::createMethodCall("org.kde.StagingNotifier", "/StagingNotifier","","removeDir");
+        m = QDBusMessage::createMethodCall("org.kde.kio.StashNotifier", "/StashNotifier","","removeDir");
     }
     m << argv[2];
     bool queued = QDBusConnection::sessionBus().send(m);

@@ -1,4 +1,4 @@
-#GSoC 2016 File Staging project for KDE
+#GSoC 2016 File Stash project for KDE
 
 ##Introduction
 
@@ -22,6 +22,6 @@ kdeinit5
 Adaptor classes for D-Bus were generated using:
 
 ```
-qdbuscpp2xml -a stagingnotifier.h -o org.kde.StagingNotifier.xml
-qdbusxml2cpp -c StagingNotifierAdaptor -a staging_adaptor.h:staging_adaptor.cpp org.kde.StagingNotifier.xml
+qdbuscpp2xml -a stashnotifier.h -o dbus/org.kde.kio.StashNotifier.xml
+qdbusxml2cpp -c StashNotifierAdaptor -a stash_adaptor.h:stash_adaptor.cpp dbus/org.kde.kio.StashNotifier.xml
 ```

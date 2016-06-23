@@ -58,7 +58,7 @@ FileStash::~FileStash()
 QStringList FileStash::getList()
 {
     QDBusMessage msg = QDBusMessage::createMethodCall(
-        "org.kde.StagingNotifier", "/StagingNotifier", "", "sendList");
+        "org.kde.kio.StashNotifier", "/StashNotifier", "", "sendList");
     QDBusReply<QStringList> received = QDBusConnection::sessionBus().call(msg);
     return received.value();
 }
@@ -105,7 +105,7 @@ bool FileStash::createRootUDSEntry(
     if (QT_LSTAT(physicalPath_c, &buff) == -1) { // if the dir doesn't exist
         error(KIO::ERR_COULD_NOT_READ, physicalPath);
         QDBusMessage msg = QDBusMessage::createMethodCall(
-            "org.kde.StagingNotifier", "/StagingNotifier", "", "removeDir");
+            "org.kde.kio.StashNotifier", "/StashNotifier", "", "removeDir");
         msg << physicalPath;
         bool queued = QDBusConnection::sessionBus().send(msg); // remove it from the kded
         return false;
@@ -186,7 +186,7 @@ bool FileStash::checkUrl(const QUrl &url) // FIXME: more efficient algo
 void FileStash::del(const QUrl &url, bool isFile)
 {
     QDBusMessage msg = QDBusMessage::createMethodCall(
-        "org.kde.StagingNotifier", "/StagingNotifier", "", "removeDir");
+        "org.kde.kio.StashNotifier", "/StashNotifier", "", "removeDir");
     msg << url.path();
     bool queued = QDBusConnection::sessionBus().send(msg);
     if (queued) {

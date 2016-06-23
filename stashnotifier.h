@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef STAGINGNOTIFIER_H
-#define STAGINGNOTIFIER_H
+#ifndef STASHNOTIFIER_H
+#define STASHNOTIFIER_H
 
 #include <QtDBus>
 #include <QStringList>
@@ -27,10 +27,10 @@
 
 class KDirWatch;
 
-class StagingNotifier : public KDEDModule
+class StashNotifier : public KDEDModule
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.StagingNotifier")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.kio.StashNotifier")
 
 private:
     KDirWatch *dirWatch;
@@ -38,8 +38,8 @@ private:
     QString processString(const QString &path);
 
 public:
-    StagingNotifier(QObject* parent, const QList<QVariant>&);
-    ~StagingNotifier();
+    StashNotifier(QObject* parent, const QList<QVariant>&);
+    ~StashNotifier();
 
 Q_SIGNALS:
     Q_SCRIPTABLE void listChanged();

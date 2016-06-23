@@ -17,8 +17,8 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
 ***************************************************************************/
 
-#include "stagingnotifier.h"
-#include "staging_adaptor.h"
+#include "stashnotifier.h"
+#include "stash_adaptor.h"
 
 #include <QDir>
 #include <QFile>
@@ -28,41 +28,41 @@
 #include <KPluginLoader>
 #include <kdirnotify.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(StagingNotifierFactory, "stagingnotifier.json", registerPlugin<StagingNotifier>();)
+K_PLUGIN_FACTORY_WITH_JSON(StashNotifierFactory, "stashnotifier.json", registerPlugin<StashNotifier>();)
 
-StagingNotifier::StagingNotifier(QObject *parent, const QList<QVariant> &var) : KDEDModule(parent)
+StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDEDModule(parent)
 {
     dirWatch = new KDirWatch(this);
-    qDebug() << "Launching STAGING NOTIFIER DAEMON";
+    qDebug() << "Launching STASH NOTIFIER DAEMON";
 
-    new StagingNotifierAdaptor(this);
+    new StashNotifierAdaptor(this);
     QDBusConnection dbus = QDBusConnection::sessionBus();
-    dbus.registerObject("/StagingNotifier", this);
-    dbus.registerService("org.kde.StagingNotifier");
+    dbus.registerObject("/StashNotifier", this);
+    dbus.registerService("org.kde.kio.StashNotifier");
 
-    connect(dirWatch, &KDirWatch::dirty, this, &StagingNotifier::dirty);
-    connect(dirWatch, &KDirWatch::created, this, &StagingNotifier::created);
-    connect(dirWatch, &KDirWatch::deleted, this, &StagingNotifier::removeDir);
-    connect(this, &StagingNotifier::listChanged, this, &StagingNotifier::displayList);
+    connect(dirWatch, &KDirWatch::dirty, this, &StashNotifier::dirty);
+    connect(dirWatch, &KDirWatch::created, this, &StashNotifier::created);
+    connect(dirWatch, &KDirWatch::deleted, this, &StashNotifier::removeDir);
+    connect(this, &StashNotifier::listChanged, this, &StashNotifier::displayList);
 }
 
-StagingNotifier::~StagingNotifier()
+StashNotifier::~StashNotifier()
 {
 }
 
-void StagingNotifier::displayList()
+void StashNotifier::displayList()
 {
     for (auto it = m_List.begin(); it != m_List.end(); it++) {
         qDebug() << *it;
     }
 }
 
-QStringList StagingNotifier::sendList() //forwards list over QDBus to the KIO slave
+QStringList StashNotifier::sendList() //forwards list over QDBus to the KIO slave
 {
     return m_List;
 }
 
-void StagingNotifier::watchDir(const QString &path)
+void StashNotifier::watchDir(const QString &path)
 {
     QString processedPath = processString(path);
     if (!m_List.contains(processedPath)) {
@@ -76,7 +76,7 @@ void StagingNotifier::watchDir(const QString &path)
     }
 }
 
-QString StagingNotifier::processString(const QString &path) //removes trailing slash and strips newline character
+QString StashNotifier::processString(const QString &path) //removes trailing slash and strips newline character
 {
     QString processedPath = path.simplified();
     if (processedPath.at(processedPath.size() - 1) == '/') {
@@ -85,7 +85,7 @@ QString StagingNotifier::processString(const QString &path) //removes trailing s
     return processedPath;
 }
 
-void StagingNotifier::removeDir(const QString &path) //handles KDirWatch and QDBus signals
+void StashNotifier::removeDir(const QString &path) //handles KDirWatch and QDBus signals
 {
     QString processedPath = processString(path);
     if (QDir(processedPath).exists()) {
@@ -97,15 +97,15 @@ void StagingNotifier::removeDir(const QString &path) //handles KDirWatch and QDB
     emit listChanged();
 }
 
-void StagingNotifier::dirty(const QString &path)
+void StashNotifier::dirty(const QString &path)
 {
     //what is supposed to happen here?
     qDebug() << "SOMETHING HAS CHANGED:" << path;
 }
 
-void StagingNotifier::created(const QString &path)
+void StashNotifier::created(const QString &path)
 {
     qDebug() << "CREATED:" << path;
 }
 
-#include "stagingnotifier.moc"
+#include "stashnotifier.moc"
