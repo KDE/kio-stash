@@ -36,7 +36,7 @@ add_subdirectory(src)
 #setup kioslave
 
 #setup kded
-add_library(stashnotifier MODULE stashnotifier.cpp)
+add_library(stashnotifier MODULE stashnotifier.cpp fs.cpp)
 add_library(stash_adaptor STATIC stash_adaptor.cpp)
 kcoreaddons_desktop_to_json(stashnotifier stashnotifier.desktop DEFAULT_SERVICE_TYPE) #not sure what this is for tbh
 target_link_libraries(stash_adaptor Qt5::DBus Qt5::Core)
