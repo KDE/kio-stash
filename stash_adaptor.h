@@ -33,13 +33,13 @@ class StashNotifierAdaptor: public QDBusAbstractAdaptor
     Q_CLASSINFO("D-Bus Introspection", ""
 "  <interface name=\"org.kde.kio.StashNotifier\">\n"
 "    <signal name=\"listChanged\"/>\n"
-"    <method name=\"watchDir\">\n"
+"    <method name=\"addPath\">\n"
 "      <arg direction=\"in\" type=\"s\" name=\"path\"/>\n"
 "    </method>\n"
-"    <method name=\"removeDir\">\n"
+"    <method name=\"removePath\">\n"
 "      <arg direction=\"in\" type=\"s\" name=\"path\"/>\n"
 "    </method>\n"
-"    <method name=\"sendList\">\n"
+"    <method name=\"fileList\">\n"
 "      <arg direction=\"out\" type=\"as\"/>\n"
 "    </method>\n"
 "  </interface>\n"
@@ -50,9 +50,9 @@ public:
 
 public: // PROPERTIES
 public Q_SLOTS: // METHODS
-    void removeDir(const QString &path);
-    QStringList sendList();
-    void watchDir(const QString &path);
+    void addPath(const QString &path);
+    QStringList fileList();
+    void removePath(const QString &path);
 Q_SIGNALS: // SIGNALS
     void listChanged();
 };

@@ -33,23 +33,23 @@ StashNotifierAdaptor::~StashNotifierAdaptor()
     // destructor
 }
 
-void StashNotifierAdaptor::removeDir(const QString &path)
+void StashNotifierAdaptor::addPath(const QString &path)
 {
-    // handle method call org.kde.kio.StashNotifier.removeDir
-    QMetaObject::invokeMethod(parent(), "removeDir", Q_ARG(QString, path));
+    // handle method call org.kde.kio.StashNotifier.addPath
+    QMetaObject::invokeMethod(parent(), "addPath", Q_ARG(QString, path));
 }
 
-QStringList StashNotifierAdaptor::sendList()
+QStringList StashNotifierAdaptor::fileList()
 {
-    // handle method call org.kde.kio.StashNotifier.sendList
+    // handle method call org.kde.kio.StashNotifier.fileList
     QStringList out0;
-    QMetaObject::invokeMethod(parent(), "sendList", Q_RETURN_ARG(QStringList, out0));
+    QMetaObject::invokeMethod(parent(), "fileList", Q_RETURN_ARG(QStringList, out0));
     return out0;
 }
 
-void StashNotifierAdaptor::watchDir(const QString &path)
+void StashNotifierAdaptor::removePath(const QString &path)
 {
-    // handle method call org.kde.kio.StashNotifier.watchDir
-    QMetaObject::invokeMethod(parent(), "watchDir", Q_ARG(QString, path));
+    // handle method call org.kde.kio.StashNotifier.removePath
+    QMetaObject::invokeMethod(parent(), "removePath", Q_ARG(QString, path));
 }
 

@@ -45,11 +45,11 @@ Q_SIGNALS:
     Q_SCRIPTABLE void listChanged();
 
 public Q_SLOTS:
-    Q_SCRIPTABLE void watchDir(const QString &path);
-    Q_SCRIPTABLE void removeDir(const QString &path);
-    Q_SCRIPTABLE QStringList sendList();
+    Q_SCRIPTABLE void addPath(const QString &path);
+    Q_SCRIPTABLE void removePath(const QString &path);
+    Q_SCRIPTABLE QStringList fileList();
 
-protected Q_SLOTS:
+private Q_SLOTS:
     void dirty(const QString &path);
     void created(const QString &path);
     void displayList(); //for internal purposes

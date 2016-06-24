@@ -22,6 +22,7 @@
 
 #include <QDir>
 #include <QFile>
+#include <QFileInfo>
 
 #include <KDirWatch>
 #include <KPluginFactory>
@@ -42,7 +43,7 @@ StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDED
 
     connect(dirWatch, &KDirWatch::dirty, this, &StashNotifier::dirty);
     connect(dirWatch, &KDirWatch::created, this, &StashNotifier::created);
-    connect(dirWatch, &KDirWatch::deleted, this, &StashNotifier::removeDir);
+    connect(dirWatch, &KDirWatch::deleted, this, &StashNotifier::removePath);
     connect(this, &StashNotifier::listChanged, this, &StashNotifier::displayList);
 }
 
@@ -57,18 +58,18 @@ void StashNotifier::displayList()
     }
 }
 
-QStringList StashNotifier::sendList() //forwards list over QDBus to the KIO slave
+QStringList StashNotifier::fileList() //forwards list over QDBus to the KIO slave
 {
     return m_List;
 }
 
-void StashNotifier::watchDir(const QString &path)
+void StashNotifier::addPath(const QString &path)
 {
     QString processedPath = processString(path);
     if (!m_List.contains(processedPath)) {
-        if (QDir(processedPath).exists()) {
+        if (QFileInfo(processedPath).isDir()) {
             dirWatch->addDir(processedPath);
-        } else if (QFile(processedPath).exists()) {
+        } else if (QFileInfo(processedPath).isFile()) {
             dirWatch->addFile(processedPath);
         }
         m_List.append(processedPath);
@@ -85,12 +86,12 @@ QString StashNotifier::processString(const QString &path) //removes trailing sla
     return processedPath;
 }
 
-void StashNotifier::removeDir(const QString &path) //handles KDirWatch and QDBus signals
+void StashNotifier::removePath(const QString &path) //handles KDirWatch and QDBus signals
 {
     QString processedPath = processString(path);
-    if (QDir(processedPath).exists()) {
+    if (QFileInfo(processedPath).isDir()) {
         dirWatch->removeDir(processedPath);
-    } else if (QFile(processedPath).exists()) {
+    } else if (QFileInfo(processedPath).isFile()) {
         dirWatch->removeFile(processedPath);
     }
     m_List.removeAll(processedPath);

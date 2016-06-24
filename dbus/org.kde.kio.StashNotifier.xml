@@ -3,13 +3,13 @@
   <interface name="org.kde.kio.StashNotifier">
     <signal name="listChanged">
     </signal>
-    <method name="watchDir">
+    <method name="addPath">
       <arg name="path" type="s" direction="in"/>
     </method>
-    <method name="removeDir">
+    <method name="removePath">
       <arg name="path" type="s" direction="in"/>
     </method>
-    <method name="sendList">
+    <method name="fileList">
       <arg type="as" direction="out"/>
     </method>
   </interface>
