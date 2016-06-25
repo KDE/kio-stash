@@ -2,8 +2,8 @@
 
 struct StashFileSystem::StashNodeData
 {
-    StashNodeData(NodeType ntype) :
-        type(ntype),
+    StashNodeData(NodeType ntype) : //ctr for SND
+        type(ntype),                //can be dir/file/symlink
         children(nullptr)
     {}
 
@@ -16,7 +16,7 @@ StashFileSystem::StashFileSystem(QObject *parent) :
     QObject(parent),
     root(new StashNodeData(DirectoryNode))
 {
-    root->children = new StashNode();
+    root->children = new StashNode(); //hashmap w/path and type
 }
 
 StashFileSystem::~StashFileSystem()
@@ -36,7 +36,7 @@ void StashFileSystem::deleteChildren(StashNodeData nodeData)
     }
 }
 
-QStringList StashFileSystem::splitPath(QString path)
+QStringList StashFileSystem::splitPath(QString path) //split into names
 {
     if (path.startsWith('/')) {
         path = path.right(path.size() - 1);

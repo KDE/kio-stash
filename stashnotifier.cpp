@@ -19,6 +19,7 @@
 
 #include "stashnotifier.h"
 #include "stash_adaptor.h"
+#include "fs.h"
 
 #include <QDir>
 #include <QFile>
