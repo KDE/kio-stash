@@ -196,4 +196,20 @@ void FileStash::del(const QUrl &url, bool isFile)
     }
 }
 
+void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
+{
+    qDebug() << "src" << src << "dest" << dest;
+/*    if (src.scheme() == QString("stash") && dest.scheme() == QString("stash")) {
+        error(KIO::ERR_UNSUPPORTED_ACTION, i18n("This file is already stashed"));
+        return;
+    } else if (src.scheme() == QString("stash") && dest.scheme() != QString("stash")) {
+        KIO::ForwardingSlaveBase::copy(src, dest, permissions, flags);
+    } else if (src.scheme() != QString("stash") && dest.scheme() == QString("stash")) {*/
+        qDebug() << "NOT GOOD";
+        error(KIO::ERR_UNSUPPORTED_ACTION, i18n("NOTF"));
+//    }
+}
+
+//void FileStash::copyFromStash
+
 #include "ioslave.moc"

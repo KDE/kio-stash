@@ -18,6 +18,10 @@
             "fileNameUsedForCopying": "Name",
             "output": "filesystem",
             "protocol": "stash",
+            "copyFromFile": true,
+            "makedir": true,
+            "copyToFile": true,
+            "writing": true,
             "reading": true,
             "deleting": true,
             "deleteRecursive": true
