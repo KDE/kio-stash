@@ -101,6 +101,9 @@ bool FileStash::createRootUDSEntry(
     const QString &displayFileName, const QString &internalFileName)
 {
     QFileInfo entryInfo = physicalPath;
+    QDateTime epoch;
+
+    epoch.setMSecsSinceEpoch(0);
 
     if (!entryInfo.exists()) {
         error(KIO::ERR_COULD_NOT_READ, physicalPath);
@@ -128,8 +131,9 @@ bool FileStash::createRootUDSEntry(
     entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, displayFileName);
     entry.insert(KIO::UDSEntry::UDS_ACCESS, entryInfo.permissions());
     entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
-    entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, entryInfo.lastModified().toString("z"));
-    entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, entryInfo.lastRead().toString("z"));
+    qDebug() << "QTIME" << epoch.secsTo(entryInfo.lastModified());
+    entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, QString::number(epoch.secsTo(entryInfo.lastModified())));
+    entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, QString::number(epoch.secsTo(entryInfo.lastRead())));
 
     return true;
 }
