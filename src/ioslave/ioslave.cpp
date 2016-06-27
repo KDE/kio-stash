@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QMimeType>
 #include <QMimeDatabase>
+#include <QDateTime>
 #include <QDir>
 #include <QUrl>
 #include <QFile>
@@ -99,10 +100,9 @@ bool FileStash::createRootUDSEntry(
     KIO::UDSEntry &entry, const QString &physicalPath,
     const QString &displayFileName, const QString &internalFileName)
 {
-    QByteArray physicalPath_c = QFile::encodeName(physicalPath);
-    QT_STATBUF buff;
+    QFileInfo entryInfo = physicalPath;
 
-    if (QT_LSTAT(physicalPath_c, &buff) == -1) { // if the dir doesn't exist
+    if (!entryInfo.exists()) {
         error(KIO::ERR_COULD_NOT_READ, physicalPath);
         QDBusMessage msg = QDBusMessage::createMethodCall(
             "org.kde.kio.StashNotifier", "/StashNotifier", "", "removePath");
@@ -111,18 +111,9 @@ bool FileStash::createRootUDSEntry(
         return false;
     }
 
-    if (S_ISLNK(buff.st_mode)) {
-        char buffer2[1000];
-        int n = readlink(physicalPath_c, buffer2, 999);
-        if (n != -1) {
-            buffer2[n] = 0;
-        }
-        entry.insert(KIO::UDSEntry::UDS_LINK_DEST, QFile::decodeName(buffer2));
+    if (entryInfo.isSymLink()) {
+        entry.insert(KIO::UDSEntry::UDS_LINK_DEST, entryInfo.symLinkTarget());
     }
-
-    mode_t type = buff.st_mode & S_IFMT; // extract file type
-    mode_t access = buff.st_mode & 07777; // extract permissions
-    // FIXME: access &= 07555; make it readonly?
 
     Q_ASSERT(!internalFileName.isEmpty());
     qDebug() << "physicalPath " << physicalPath;
@@ -135,11 +126,10 @@ bool FileStash::createRootUDSEntry(
 
     entry.insert(KIO::UDSEntry::UDS_NAME, physicalPath);
     entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, displayFileName);
-    entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, type);
-    entry.insert(KIO::UDSEntry::UDS_ACCESS, access);
-    entry.insert(KIO::UDSEntry::UDS_SIZE, buff.st_size);
-    entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, buff.st_mtime);
-    entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
+    entry.insert(KIO::UDSEntry::UDS_ACCESS, entryInfo.permissions());
+    entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
+    entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, entryInfo.lastModified().toString("z"));
+    entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, entryInfo.lastRead().toString("z"));
 
     return true;
 }
