@@ -100,6 +100,9 @@ bool FileStash::createRootUDSEntry(
     KIO::UDSEntry &entry, const QString &physicalPath,
     const QString &displayFileName, const QString &internalFileName)
 {
+    QByteArray physicalPath_c = QFile::encodeName(physicalPath);
+    QT_STATBUF buff;
+
     QFileInfo entryInfo = physicalPath;
     QDateTime epoch;
 
@@ -127,12 +130,15 @@ bool FileStash::createRootUDSEntry(
         entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, mt.name());
     }
 
+    mode_t type = buff.st_mode & S_IFMT; // extract file type; have to find a way around this
+
     entry.insert(KIO::UDSEntry::UDS_NAME, physicalPath);
     entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, displayFileName);
+    entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, type);
     entry.insert(KIO::UDSEntry::UDS_ACCESS, entryInfo.permissions());
     entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
-    qDebug() << "QTIME" << epoch.secsTo(entryInfo.lastModified());
-    entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, QString::number(epoch.secsTo(entryInfo.lastModified())));
+    qDebug() << "QtypeOfFile" << type;
+    entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, QString::number(epoch.secsTo(entryInfo.lastModified()))); // FIXME: Broken af
     entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, QString::number(epoch.secsTo(entryInfo.lastRead())));
 
     return true;
