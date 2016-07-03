@@ -19,6 +19,7 @@
 
 #include "stashnotifier.h"
 #include "stash_adaptor.h"
+#include "fs.h"
 
 #include <QDir>
 #include <QFile>
@@ -41,40 +42,35 @@ StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDED
     dbus.registerObject("/StashNotifier", this);
     dbus.registerService("org.kde.kio.StashNotifier");
 
+    fileSystem = new StashFileSystem(parent);
+
     connect(dirWatch, &KDirWatch::dirty, this, &StashNotifier::dirty);
     connect(dirWatch, &KDirWatch::created, this, &StashNotifier::created);
     connect(dirWatch, &KDirWatch::deleted, this, &StashNotifier::removePath);
-    connect(this, &StashNotifier::listChanged, this, &StashNotifier::displayList);
 }
 
 StashNotifier::~StashNotifier()
 {
 }
 
-void StashNotifier::displayList()
-{
-    for (auto it = m_List.begin(); it != m_List.end(); it++) {
-        qDebug() << *it;
-    }
-}
-
 QStringList StashNotifier::fileList() //forwards list over QDBus to the KIO slave
 {
-    return m_List;
+    return m_List; // TODO
 }
 
-void StashNotifier::addPath(const QString &path)
+void StashNotifier::addPath(const QString &path, const QString &currentDir)
 {
     QString processedPath = processString(path);
-    if (!m_List.contains(processedPath)) {
+    //if (fileSystem->findNode(path) == StashNodeData(InvalidNode)) { // TODO Figure it out
         if (QFileInfo(processedPath).isDir()) {
             dirWatch->addDir(processedPath);
+            fileSystem->addFolder(processedPath);
         } else if (QFileInfo(processedPath).isFile()) {
             dirWatch->addFile(processedPath);
+            fileSystem->addFile(processedPath, "/" + currentDir);
         }
-        m_List.append(processedPath);
         emit listChanged();
-    }
+    //}
 }
 
 QString StashNotifier::processString(const QString &path) //removes trailing slash and strips newline character
@@ -86,7 +82,7 @@ QString StashNotifier::processString(const QString &path) //removes trailing sla
     return processedPath;
 }
 
-void StashNotifier::removePath(const QString &path) //handles KDirWatch and QDBus signals
+void StashNotifier::removePath(const QString &path)
 {
     QString processedPath = processString(path);
     if (QFileInfo(processedPath).isDir()) {
@@ -94,6 +90,7 @@ void StashNotifier::removePath(const QString &path) //handles KDirWatch and QDBu
     } else if (QFileInfo(processedPath).isFile()) {
         dirWatch->removeFile(processedPath);
     }
+    fileSystem->delEntry(path);
     m_List.removeAll(processedPath);
     emit listChanged();
 }

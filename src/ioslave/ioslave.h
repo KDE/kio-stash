@@ -41,6 +41,7 @@ private:
 
 protected:
     void listDir(const QUrl &url) Q_DECL_OVERRIDE;
+    void mkdir(const QUrl &url, int permissions) Q_DECL_OVERRIDE;
     void del(const QUrl &url, bool isFile) Q_DECL_OVERRIDE;
     bool rewriteUrl(const QUrl &url, QUrl &newUrl) Q_DECL_OVERRIDE;
 };

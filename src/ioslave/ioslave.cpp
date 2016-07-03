@@ -179,8 +179,14 @@ bool FileStash::checkUrl(const QUrl &url) // FIXME: more efficient algo
             return true;
         }
     }
-    qDebug() << "Bad Url" << url.path();
+    //qDebug() << "Bad Url" << url.path();
     return false;
+}
+
+void FileStash::mkdir(const QUrl &url, int permissions)
+{
+    qDebug() << "mkdirOut" << url;
+    finished();
 }
 
 void FileStash::del(const QUrl &url, bool isFile)
