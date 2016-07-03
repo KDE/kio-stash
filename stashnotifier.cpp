@@ -32,6 +32,12 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(StashNotifierFactory, "stashnotifier.json", registerPlugin<StashNotifier>();)
 
+struct StashFileSystem::dirList
+{
+    QString path;
+    int type;
+};
+
 StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDEDModule(parent)
 {
     dirWatch = new KDirWatch(this);

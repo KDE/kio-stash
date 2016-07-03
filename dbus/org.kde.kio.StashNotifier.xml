@@ -5,6 +5,7 @@
     </signal>
     <method name="addPath">
       <arg name="path" type="s" direction="in"/>
+      <arg name="currentDir" type="s" direction="in"/>
     </method>
     <method name="removePath">
       <arg name="path" type="s" direction="in"/>
