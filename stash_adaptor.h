@@ -40,6 +40,7 @@ class StashNotifierAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"removePath\">\n"
 "      <arg direction=\"in\" type=\"s\" name=\"path\"/>\n"
 "    </method>\n"
+"    <method name=\"fileList\"/>\n"
 "  </interface>\n"
         "")
 public:
@@ -49,6 +50,7 @@ public:
 public: // PROPERTIES
 public Q_SLOTS: // METHODS
     void addPath(const QString &path, const QString &currentDir);
+    void fileList();
     void removePath(const QString &path);
 Q_SIGNALS: // SIGNALS
     void listChanged();

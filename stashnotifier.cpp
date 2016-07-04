@@ -88,7 +88,7 @@ QList<StashNotifier::dirList> StashNotifier::fileList(const QString &path) //for
 void StashNotifier::addPath(const QString &path, const QString &currentDir)
 {
     QString processedPath = processString(path);
-    //if (fileSystem->findNode(path) == StashNodeData(InvalidNode)) { // TODO Figure it out
+//    if (fileSystem->findNode(path) == StashFileSystem::StashNodeData(StashFileSystem::NodeType::InvalidNode)) { // TODO Figure it out
         if (QFileInfo(processedPath).isDir()) {
             dirWatch->addDir(processedPath);
             fileSystem->addFolder(processedPath);
@@ -97,7 +97,7 @@ void StashNotifier::addPath(const QString &path, const QString &currentDir)
             fileSystem->addFile(processedPath, "/" + currentDir);
         }
         emit listChanged();
-    //}
+//    }
 }
 
 QString StashNotifier::processString(const QString &path) //removes trailing slash and strips newline character

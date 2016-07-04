@@ -20,7 +20,7 @@ public:
     };
 
     struct StashNodeData;
-    
+
     typedef QHash<QString, StashNodeData> StashNode;
 
     struct StashNodeData

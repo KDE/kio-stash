@@ -39,6 +39,12 @@ void StashNotifierAdaptor::addPath(const QString &path, const QString &currentDi
     QMetaObject::invokeMethod(parent(), "addPath", Q_ARG(QString, path), Q_ARG(QString, currentDir));
 }
 
+void StashNotifierAdaptor::fileList()
+{
+    // handle method call org.kde.kio.StashNotifier.fileList
+    QMetaObject::invokeMethod(parent(), "fileList");
+}
+
 void StashNotifierAdaptor::removePath(const QString &path)
 {
     // handle method call org.kde.kio.StashNotifier.removePath
