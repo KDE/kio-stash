@@ -43,7 +43,13 @@ private:
 public:
     StashNotifier(QObject* parent, const QList<QVariant>&);
     ~StashNotifier();
-    struct dirList;
+
+    struct dirList
+    {
+        QString fileName;
+        QString source;
+        int type;
+    };
     //QDBusArgument &operator<<(QDBusArgument &argument, const dirList &object);
     //QDBusArgument &operator>>(QDBusArgument &argument, const dirList &object);
 
@@ -53,7 +59,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     Q_SCRIPTABLE void addPath(const QString &path, const QString &currentDir);
     Q_SCRIPTABLE void removePath(const QString &path);
-//    Q_SCRIPTABLE QList<dirList> fileList();
+    Q_SCRIPTABLE QList<StashNotifier::dirList> fileList(const QString &path);
 
 private Q_SLOTS:
     void dirty(const QString &path);

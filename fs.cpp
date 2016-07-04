@@ -1,17 +1,5 @@
 #include "fs.h"
 
-struct StashFileSystem::StashNodeData
-{
-    StashNodeData(NodeType ntype) :
-        type(ntype),
-        children(nullptr)
-    {}
-
-    NodeType type;
-    QString source;
-    StashFileSystem::StashNode *children;
-};
-
 StashFileSystem::StashFileSystem(QObject *parent) :
     QObject(parent),
     root(new StashNodeData(DirectoryNode))

@@ -20,7 +20,20 @@ public:
     };
 
     struct StashNodeData;
+    
     typedef QHash<QString, StashNodeData> StashNode;
+
+    struct StashNodeData
+    {
+        StashNodeData(NodeType ntype) :
+            type(ntype),
+            children(nullptr)
+        {}
+
+        NodeType type;
+        QString source;
+        StashFileSystem::StashNode *children;
+    };
 
     explicit StashFileSystem(QObject *parent = 0);
     virtual ~StashFileSystem();
