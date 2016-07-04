@@ -10,8 +10,5 @@
     <method name="removePath">
       <arg name="path" type="s" direction="in"/>
     </method>
-    <method name="fileList">
-      <arg type="as" direction="out"/>
-    </method>
   </interface>
 </node>

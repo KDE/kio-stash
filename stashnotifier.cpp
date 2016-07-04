@@ -32,11 +32,29 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(StashNotifierFactory, "stashnotifier.json", registerPlugin<StashNotifier>();)
 
-struct StashFileSystem::dirList
+struct StashNotifier::dirList
 {
     QString path;
     int type;
 };
+
+Q_DECLARE_METATYPE(StashNotifier::dirList)
+
+QDBusArgument &operator<<(QDBusArgument &argument, StashNotifier::dirList &object)
+{
+    argument.beginStructure();
+    argument << object.path << object.type;
+    argument.endStructure();
+    return argument;
+}
+
+QDBusArgument &operator>>(QDBusArgument &argument, StashNotifier::dirList &object)
+{
+    argument.beginStructure();
+    argument >> object.path >> object.type;
+    argument.endStructure();
+    return argument;
+}
 
 StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDEDModule(parent)
 {
@@ -59,10 +77,10 @@ StashNotifier::~StashNotifier()
 {
 }
 
-QStringList StashNotifier::fileList() //forwards list over QDBus to the KIO slave
+/*QList<dirList> StashNotifier::fileList(const QString &path) //forwards list over QDBus to the KIO slave
 {
-    return m_List; // TODO
-}
+    StashNodeData node = fileSystem->findNode(path);
+}*/
 
 void StashNotifier::addPath(const QString &path, const QString &currentDir)
 {
