@@ -11,7 +11,7 @@
       <arg name="path" type="s" direction="in"/>
     </method>
     <method name="fileList">
-      <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList<StashNotifier::dirList>"/>
+      <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList<dirList>"/>
       <arg name="path" type="s" direction="in"/>
       <arg name="contents" type="a(ssi)" direction="out"/>
     </method>

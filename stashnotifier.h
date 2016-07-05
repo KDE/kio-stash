@@ -49,6 +49,18 @@ public:
         QString fileName;
         QString source;
         int type;
+        dirList()
+        {
+        }
+        ~dirList()
+        {
+        }
+        dirList(const dirList &obj)
+        {
+            fileName = obj.fileName;
+            source = obj.source;
+            type = obj.type;
+        }
     };
     //QDBusArgument &operator<<(QDBusArgument &argument, const dirList &object);
     //QDBusArgument &operator>>(QDBusArgument &argument, const dirList &object);

@@ -24,6 +24,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QDBusMetaType>
 
 #include <KDirWatch>
 #include <KPluginFactory>
@@ -52,6 +53,8 @@ QDBusArgument &operator>>(QDBusArgument &argument, StashNotifier::dirList &objec
 
 StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDEDModule(parent)
 {
+    //qDBusRegisterMetaType<StashNotifier::dirList>("StashNotifier::dirList"); // FIXME: how do I use this?
+
     dirWatch = new KDirWatch(this);
     qDebug() << "Launching STASH NOTIFIER DAEMON";
 
