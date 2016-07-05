@@ -76,7 +76,7 @@ StashNotifier::~StashNotifier()
 
 QList<StashNotifier::dirList> StashNotifier::fileList(const QString &path) //forwards list over QDBus to the KIO slave
 {
-    QList<dirList> contents;
+    QList<StashNotifier::dirList> contents;
     dirList item;
     StashFileSystem::StashNodeData node = fileSystem->findNode(path);
     for (auto it = node.children->begin(); it != node.children->end(); it++) {
