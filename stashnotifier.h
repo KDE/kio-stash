@@ -37,8 +37,9 @@ class StashNotifier : public KDEDModule
 private:
     KDirWatch *dirWatch;
     QStringList m_List;
-    QString processString(const QString &path);
     StashFileSystem *fileSystem;
+    QString processString(const QString &path);
+    void registerMetaType();
 
 public:
     StashNotifier(QObject* parent, const QList<QVariant>&);
@@ -62,8 +63,6 @@ public:
             type = obj.type;
         }
     };
-    //QDBusArgument &operator<<(QDBusArgument &argument, const dirList &object);
-    //QDBusArgument &operator>>(QDBusArgument &argument, const dirList &object);
 
 Q_SIGNALS:
     Q_SCRIPTABLE void listChanged();

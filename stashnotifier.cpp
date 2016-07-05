@@ -24,6 +24,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QMetaType>
 #include <QDBusMetaType>
 
 #include <KDirWatch>
@@ -35,7 +36,7 @@ K_PLUGIN_FACTORY_WITH_JSON(StashNotifierFactory, "stashnotifier.json", registerP
 
 Q_DECLARE_METATYPE(StashNotifier::dirList)
 
-QDBusArgument &operator<<(QDBusArgument &argument, StashNotifier::dirList &object)
+QDBusArgument &operator<<(QDBusArgument &argument, const StashNotifier::dirList &object)
 {
     argument.beginStructure();
     argument << object.fileName << object.source << object.type;
@@ -43,7 +44,7 @@ QDBusArgument &operator<<(QDBusArgument &argument, StashNotifier::dirList &objec
     return argument;
 }
 
-QDBusArgument &operator>>(QDBusArgument &argument, StashNotifier::dirList &object)
+const QDBusArgument &operator>>(const QDBusArgument &argument, StashNotifier::dirList &object)
 {
     argument.beginStructure();
     argument >> object.fileName >> object.source >> object.type;
@@ -51,9 +52,16 @@ QDBusArgument &operator>>(QDBusArgument &argument, StashNotifier::dirList &objec
     return argument;
 }
 
+void StashNotifier::registerMetaType()
+{
+    qRegisterMetaType<StashNotifier::dirList>("dirList");
+    qDBusRegisterMetaType<StashNotifier::dirList>();
+}
+
 StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDEDModule(parent)
 {
     //qDBusRegisterMetaType<StashNotifier::dirList>("StashNotifier::dirList"); // FIXME: how do I use this?
+    registerMetaType();
 
     dirWatch = new KDirWatch(this);
     qDebug() << "Launching STASH NOTIFIER DAEMON";
