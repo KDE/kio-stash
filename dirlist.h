@@ -3,7 +3,7 @@
 
 #include <QtCore>
 #include <QDBusArgument>
-
+//Convert to class idk?
 namespace dirListDBus { // FIXME: add the streaming operators here
     struct dirList
     {

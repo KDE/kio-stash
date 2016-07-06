@@ -32,12 +32,18 @@ public:
     FileStash(const QByteArray &pool, const QByteArray &app);
     ~FileStash();
 
+    enum NodeType {
+        DirectoryNode,
+        SymlinkNode,
+        FileNode,
+        InvalidNode
+    };
+
 private:
     void registerMetaType();
     void displayList(const QUrl &url);
     bool createUDSEntry(
-        KIO::UDSEntry &entry, const QString &physicalPath,
-        const QString &displayFileName, const QString &internalFileName);
+        KIO::UDSEntry &entry, const dirListDBus::dirList &fileItem);
     QList<dirListDBus::dirList> setFileList(const QUrl &url);
 
 protected:
