@@ -19,7 +19,6 @@
 
 #include "stashnotifier.h"
 #include "stash_adaptor.h"
-#include "fs.h"
 
 #include <QDir>
 #include <QFile>
@@ -34,9 +33,9 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(StashNotifierFactory, "stashnotifier.json", registerPlugin<StashNotifier>();)
 
-Q_DECLARE_METATYPE(StashNotifier::dirList)
+Q_DECLARE_METATYPE(dirListDBus::dirList)
 
-QDBusArgument &operator<<(QDBusArgument &argument, const StashNotifier::dirList &object)
+QDBusArgument &operator<<(QDBusArgument &argument, const dirListDBus::dirList &object)
 {
     argument.beginStructure();
     argument << object.fileName << object.source << object.type;
@@ -44,7 +43,7 @@ QDBusArgument &operator<<(QDBusArgument &argument, const StashNotifier::dirList 
     return argument;
 }
 
-const QDBusArgument &operator>>(const QDBusArgument &argument, StashNotifier::dirList &object)
+const QDBusArgument &operator>>(const QDBusArgument &argument, dirListDBus::dirList &object)
 {
     argument.beginStructure();
     argument >> object.fileName >> object.source >> object.type;
@@ -54,13 +53,12 @@ const QDBusArgument &operator>>(const QDBusArgument &argument, StashNotifier::di
 
 void StashNotifier::registerMetaType()
 {
-    qRegisterMetaType<StashNotifier::dirList>("dirList");
-    qDBusRegisterMetaType<StashNotifier::dirList>();
+    qRegisterMetaType<dirListDBus::dirList>("dirList");
+    qDBusRegisterMetaType<dirListDBus::dirList>();
 }
 
 StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDEDModule(parent)
 {
-    //qDBusRegisterMetaType<StashNotifier::dirList>("StashNotifier::dirList"); // FIXME: how do I use this?
     registerMetaType();
 
     dirWatch = new KDirWatch(this);
@@ -82,10 +80,10 @@ StashNotifier::~StashNotifier()
 {
 }
 
-QList<StashNotifier::dirList> StashNotifier::fileList(const QString &path) //forwards list over QDBus to the KIO slave
+QList<dirListDBus::dirList> StashNotifier::fileList(const QString &path) //forwards list over QDBus to the KIO slave
 {
-    QList<StashNotifier::dirList> contents;
-    dirList item;
+    QList<dirListDBus::dirList> contents;
+    dirListDBus::dirList item;
     StashFileSystem::StashNodeData node = fileSystem->findNode(path);
     for (auto it = node.children->begin(); it != node.children->end(); it++) {
         item.fileName = it.key();

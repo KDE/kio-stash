@@ -32,11 +32,8 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 add_subdirectory(dbus)
 add_subdirectory(src)
 
-#qt5_add_dbus_adaptor(STAGING_SRCS org.kde.StagingNotifier.xml stashnotifier.h stashnotifier)
-#setup kioslave
-
 #setup kded
-add_library(stashnotifier MODULE stashnotifier.cpp fs.cpp)
+add_library(stashnotifier MODULE stashnotifier.cpp fs.cpp dirlist.h)
 add_library(stash_adaptor STATIC stash_adaptor.cpp)
 kcoreaddons_desktop_to_json(stashnotifier stashnotifier.desktop DEFAULT_SERVICE_TYPE) #not sure what this is for tbh
 target_link_libraries(stash_adaptor Qt5::DBus Qt5::Core)

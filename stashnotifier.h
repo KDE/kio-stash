@@ -21,6 +21,7 @@
 #define STASHNOTIFIER_H
 
 #include "fs.h"
+#include "dirlist.h"
 
 #include <QtDBus>
 #include <QStringList>
@@ -45,32 +46,13 @@ public:
     StashNotifier(QObject* parent, const QList<QVariant>&);
     ~StashNotifier();
 
-    struct dirList
-    {
-        QString fileName;
-        QString source;
-        int type;
-        dirList()
-        {
-        }
-        ~dirList()
-        {
-        }
-        dirList(const dirList &obj)
-        {
-            fileName = obj.fileName;
-            source = obj.source;
-            type = obj.type;
-        }
-    };
-
 Q_SIGNALS:
     Q_SCRIPTABLE void listChanged();
 
 public Q_SLOTS:
     Q_SCRIPTABLE void addPath(const QString &path, const QString &currentDir);
     Q_SCRIPTABLE void removePath(const QString &path);
-    Q_SCRIPTABLE QList<StashNotifier::dirList> fileList(const QString &path);
+    Q_SCRIPTABLE QList<dirListDBus::dirList> fileList(const QString &path);
 
 private Q_SLOTS:
     void dirty(const QString &path);

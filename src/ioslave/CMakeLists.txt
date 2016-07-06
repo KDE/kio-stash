@@ -1,6 +1,6 @@
 # build and install the staging ioslave
 
-add_library(kio_filestash MODULE ioslave.cpp)
+add_library(kio_filestash MODULE ioslave.cpp ../../dirlist.h)
 target_link_libraries (kio_filestash
     Qt5::DBus
     KF5::KIOCore

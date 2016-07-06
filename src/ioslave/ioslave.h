@@ -20,6 +20,8 @@
 #ifndef KIO_FILESTASH_H
 #define KIO_FILESTASH_H
 
+#include "../../dirlist.h"
+
 #include <KIO/ForwardingSlaveBase>
 
 class FileStash : public KIO::ForwardingSlaveBase
@@ -37,6 +39,7 @@ private:
         KIO::UDSEntry &entry, const QString &physicalPath,
         const QString &displayFileName, const QString &internalFileName);
     bool checkUrl(const QUrl &url);
+    dirListDBus::dirList x;
     QStringList setFileList();
 
 protected:
