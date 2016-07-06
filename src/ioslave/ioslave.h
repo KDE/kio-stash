@@ -34,7 +34,6 @@ public:
 
 private:
     void registerMetaType();
-    void listRoot();
     void displayList(const QUrl &url);
     bool createUDSEntry(
         KIO::UDSEntry &entry, const QString &physicalPath,

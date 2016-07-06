@@ -102,11 +102,6 @@ bool FileStash::rewriteUrl(const QUrl &url, QUrl &newUrl)
     return true;
 }
 
-void FileStash::listRoot()
-{
-
-}
-
 bool FileStash::createUDSEntry(
     KIO::UDSEntry &entry, const QString &physicalPath,
     const QString &displayFileName, const QString &internalFileName)
