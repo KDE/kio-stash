@@ -7,7 +7,7 @@
 namespace dirListDBus { // FIXME: add the streaming operators here
     struct dirList
     {
-        QString fileName;
+        QString filePath;
         QString source;
         int type;
         dirList()
@@ -18,7 +18,7 @@ namespace dirListDBus { // FIXME: add the streaming operators here
         }
         dirList(const dirList &obj)
         {
-            fileName = obj.fileName;
+            filePath = obj.filePath;
             source = obj.source;
             type = obj.type;
         }

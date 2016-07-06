@@ -38,7 +38,7 @@ Q_DECLARE_METATYPE(dirListDBus::dirList)
 QDBusArgument &operator<<(QDBusArgument &argument, const dirListDBus::dirList &object)
 {
     argument.beginStructure();
-    argument << object.fileName << object.source << object.type;
+    argument << object.filePath << object.source << object.type;
     argument.endStructure();
     return argument;
 }
@@ -46,7 +46,7 @@ QDBusArgument &operator<<(QDBusArgument &argument, const dirListDBus::dirList &o
 const QDBusArgument &operator>>(const QDBusArgument &argument, dirListDBus::dirList &object)
 {
     argument.beginStructure();
-    argument >> object.fileName >> object.source >> object.type;
+    argument >> object.filePath >> object.source >> object.type;
     argument.endStructure();
     return argument;
 }
@@ -86,7 +86,7 @@ QList<dirListDBus::dirList> StashNotifier::fileList(const QString &path) //forwa
     dirListDBus::dirList item;
     StashFileSystem::StashNodeData node = fileSystem->findNode(path);
     for (auto it = node.children->begin(); it != node.children->end(); it++) {
-        item.fileName = it.key();
+        item.filePath = it.key();
         item.source = it.value().source;
         item.type = (int) it.value().type;
         contents.append(item);

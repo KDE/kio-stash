@@ -35,11 +35,11 @@ public:
 private:
     void registerMetaType();
     void listRoot();
-    void displayList();
-    bool createRootUDSEntry(
+    void displayList(const QUrl &url);
+    bool createUDSEntry(
         KIO::UDSEntry &entry, const QString &physicalPath,
         const QString &displayFileName, const QString &internalFileName);
-    QList<dirListDBus::dirList> setFileList();
+    QList<dirListDBus::dirList> setFileList(const QUrl &url);
 
 protected:
     void listDir(const QUrl &url) Q_DECL_OVERRIDE;

@@ -56,7 +56,7 @@ Q_DECLARE_METATYPE(dirListDBus::dirList)
 QDBusArgument &operator<<(QDBusArgument &argument, const dirListDBus::dirList &object)
 {
     argument.beginStructure();
-    argument << object.fileName << object.source << object.type;
+    argument << object.filePath << object.source << object.type;
     argument.endStructure();
     return argument;
 }
@@ -64,7 +64,7 @@ QDBusArgument &operator<<(QDBusArgument &argument, const dirListDBus::dirList &o
 const QDBusArgument &operator>>(const QDBusArgument &argument, dirListDBus::dirList &object)
 {
     argument.beginStructure();
-    argument >> object.fileName >> object.source >> object.type;
+    argument >> object.filePath >> object.source >> object.type;
     argument.endStructure();
     return argument;
 }
@@ -82,10 +82,11 @@ FileStash::FileStash(const QByteArray &pool, const QByteArray &app) :
 FileStash::~FileStash()
 {}
 
-QList<dirListDBus::dirList> FileStash::setFileList()
+QList<dirListDBus::dirList> FileStash::setFileList(const QUrl &url)
 {
     QDBusMessage msg = QDBusMessage::createMethodCall(
         "org.kde.kio.StashNotifier", "/StashNotifier", "", "fileList");
+    msg << url.path();
     QDBusReply<QList<dirListDBus::dirList>> received = QDBusConnection::sessionBus().call(msg);
     return received.value();
 }
@@ -103,26 +104,10 @@ bool FileStash::rewriteUrl(const QUrl &url, QUrl &newUrl)
 
 void FileStash::listRoot()
 {
-    displayList();
-    KIO::UDSEntry entry;
-    QString fileName;
-    QString filePath;
-    auto urlList = setFileList();
-    Q_FOREACH(auto filePath, urlList) {
-        fileName = QFileInfo(filePath).fileName();
-        qDebug() << fileName;
-        entry.clear();
-        if (createRootUDSEntry(entry, filePath, fileName, fileName)) {
-            listEntry(entry);
-        } else {
-            return;
-        }
-    }
-    entry.clear();
-    finished();
+
 }
 
-bool FileStash::createRootUDSEntry(
+bool FileStash::createUDSEntry(
     KIO::UDSEntry &entry, const QString &physicalPath,
     const QString &displayFileName, const QString &internalFileName)
 {
@@ -176,22 +161,18 @@ bool FileStash::createRootUDSEntry(
 
 void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
 {
-    if (url.path() == QString("") || url.path() == QString("/")) {
-        listRoot();
-        qDebug() << "Rootlist";
-        return;
-    } else {
-        error(KIO::ERR_SLAVE_DEFINED,
-            i18n("The URL %1 either does not exist or has not been staged yet",
-            url.path()));
+    auto fileList = setFileList(url);
+    KIO::UDSEntry entry;
+    for (auto it = fileList.begin(); it != fileList.end(); it++) {
+        //createUDSEntry(entry, it->source, it->)
     }
 }
 
-void FileStash::displayList() // FIXME: remove
+void FileStash::displayList(const QUrl &url) // FIXME: remove
 {
-    auto urlList = setFileList();
+    auto urlList = setFileList(url);
     for (auto it = urlList.begin(); it != urlList.end(); it++) {
-        qDebug() << it->fileName << it->source << it->type;
+        qDebug() << it->filePath << it->source << it->type;
     }
 }
 
