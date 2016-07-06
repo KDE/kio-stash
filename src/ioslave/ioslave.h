@@ -33,14 +33,13 @@ public:
     ~FileStash();
 
 private:
+    void registerMetaType();
     void listRoot();
     void displayList();
     bool createRootUDSEntry(
         KIO::UDSEntry &entry, const QString &physicalPath,
         const QString &displayFileName, const QString &internalFileName);
-    bool checkUrl(const QUrl &url);
-    dirListDBus::dirList x;
-    QStringList setFileList();
+    QList<dirListDBus::dirList> setFileList();
 
 protected:
     void listDir(const QUrl &url) Q_DECL_OVERRIDE;

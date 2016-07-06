@@ -24,6 +24,8 @@
 #include <QMimeDatabase>
 #include <QDateTime>
 #include <QDir>
+#include <QMetaType>
+#include <QDBusMetaType>
 #include <QUrl>
 #include <QFile>
 #include <QDBusConnection>
@@ -49,6 +51,30 @@ extern "C" {
     }
 }
 
+Q_DECLARE_METATYPE(dirListDBus::dirList)
+
+QDBusArgument &operator<<(QDBusArgument &argument, const dirListDBus::dirList &object)
+{
+    argument.beginStructure();
+    argument << object.fileName << object.source << object.type;
+    argument.endStructure();
+    return argument;
+}
+
+const QDBusArgument &operator>>(const QDBusArgument &argument, dirListDBus::dirList &object)
+{
+    argument.beginStructure();
+    argument >> object.fileName >> object.source >> object.type;
+    argument.endStructure();
+    return argument;
+}
+
+void FileStash::registerMetaType()
+{
+    qRegisterMetaType<dirListDBus::dirList>("dirList");
+    qDBusRegisterMetaType<dirListDBus::dirList>();
+}
+
 FileStash::FileStash(const QByteArray &pool, const QByteArray &app) :
     KIO::ForwardingSlaveBase("stash", pool, app)
 {}
@@ -56,11 +82,11 @@ FileStash::FileStash(const QByteArray &pool, const QByteArray &app) :
 FileStash::~FileStash()
 {}
 
-QStringList FileStash::setFileList()
+QList<dirListDBus::dirList> FileStash::setFileList()
 {
     QDBusMessage msg = QDBusMessage::createMethodCall(
         "org.kde.kio.StashNotifier", "/StashNotifier", "", "fileList");
-    QDBusReply<QStringList> received = QDBusConnection::sessionBus().call(msg);
+    QDBusReply<QList<dirListDBus::dirList>> received = QDBusConnection::sessionBus().call(msg);
     return received.value();
 }
 
@@ -81,7 +107,7 @@ void FileStash::listRoot()
     KIO::UDSEntry entry;
     QString fileName;
     QString filePath;
-    QStringList urlList = setFileList();
+    auto urlList = setFileList();
     Q_FOREACH(auto filePath, urlList) {
         fileName = QFileInfo(filePath).fileName();
         qDebug() << fileName;
@@ -154,12 +180,6 @@ void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
         listRoot();
         qDebug() << "Rootlist";
         return;
-    } else if (checkUrl(url)) {
-        QUrl newUrl;
-        rewriteUrl(url, newUrl);
-        qDebug() << "Good url; FSB called" << newUrl.path();
-        KIO::ForwardingSlaveBase::listDir(newUrl);
-        return;
     } else {
         error(KIO::ERR_SLAVE_DEFINED,
             i18n("The URL %1 either does not exist or has not been staged yet",
@@ -169,22 +189,10 @@ void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
 
 void FileStash::displayList() // FIXME: remove
 {
-    QStringList urlList = setFileList();
+    auto urlList = setFileList();
     for (auto it = urlList.begin(); it != urlList.end(); it++) {
-        qDebug() << *it;
+        qDebug() << it->fileName << it->source << it->type;
     }
-}
-
-bool FileStash::checkUrl(const QUrl &url) // FIXME: more efficient algo
-{
-    QStringList urlList = setFileList();
-    Q_FOREACH(auto path, urlList) {
-        if (path == url.path() || url.path().startsWith(path)) {
-            return true;
-        }
-    }
-    //qDebug() << "Bad Url" << url.path();
-    return false;
 }
 
 void FileStash::mkdir(const QUrl &url, int permissions)
