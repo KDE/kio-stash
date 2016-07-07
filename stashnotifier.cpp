@@ -123,7 +123,7 @@ void StashNotifier::removePath(const QString &path)
     QString processedPath = processString(path);
     if (QFileInfo(processedPath).isDir()) {
         dirWatch->removeDir(processedPath);
-    } else if (QFileInfo(processedPath).isFile()) {
+    } else if (QFileInfo(processedPath).isFile()) { //change file logic, remove folder logic
         dirWatch->removeFile(processedPath);
     }
     fileSystem->delEntry(path);

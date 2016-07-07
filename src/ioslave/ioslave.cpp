@@ -34,6 +34,7 @@
 #include <QCoreApplication>
 
 #include <KLocalizedString>
+#include <KConfigGroup>
 
 class KIOPluginForMetaData : public QObject
 {
@@ -137,7 +138,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const dirListDBus::dirList 
             break;
         }
         case NodeType::InvalidNode: {
-            entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.filePath);
+            entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.filePath); //find a generic mimetype
         }
     }
     return true;
@@ -148,8 +149,12 @@ void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
     auto fileList = setFileList(url);
     KIO::UDSEntry entry;
     for (auto it = fileList.begin(); it != fileList.end(); it++) {
-        //createUDSEntry(entry, it->source, it->)
+        entry.clear();
+        createUDSEntry(entry, *it);
+        listEntry(entry);
     }
+    entry.clear();
+    finished();
 }
 
 void FileStash::displayList(const QUrl &url) // FIXME: remove
@@ -164,6 +169,19 @@ void FileStash::mkdir(const QUrl &url, int permissions)
 {
     qDebug() << "mkdirOut" << url;
     finished();
+}
+
+void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
+{
+    QDBusMessage msg = QDBusMessage::createMethodCall(
+        "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
+    msg << src.path() << dest.path();
+    bool queued = QDBusConnection::sessionBus().send(msg);
+    if (queued) {
+        finished();
+    } else {
+        error(KIO::ERR_SLAVE_DEFINED, QString("Cannot reach the stash daemon."));
+    }
 }
 
 void FileStash::del(const QUrl &url, bool isFile)
