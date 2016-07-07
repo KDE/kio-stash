@@ -127,7 +127,6 @@ void StashNotifier::removePath(const QString &path)
         dirWatch->removeFile(processedPath);
     }
     fileSystem->delEntry(path);
-    m_List.removeAll(processedPath);
     emit listChanged();
 }
 

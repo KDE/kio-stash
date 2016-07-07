@@ -87,6 +87,7 @@ bool StashFileSystem::addSymlink(QString src, QString dest)
 bool StashFileSystem::addFolder(QString dest)
 {
     StashNodeData fileData = StashNodeData(DirectoryNode);
+    fileData.source = QStringLiteral("");
     fileData.children = new StashNode();
     return addNode(dest, fileData);
 }

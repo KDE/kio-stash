@@ -37,7 +37,6 @@ class StashNotifier : public KDEDModule
 
 private:
     KDirWatch *dirWatch;
-    QStringList m_List;
     StashFileSystem *fileSystem;
     QString processString(const QString &path);
     void registerMetaType();
