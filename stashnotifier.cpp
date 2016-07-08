@@ -94,17 +94,18 @@ QList<dirListDBus::dirList> StashNotifier::fileList(const QString &path) //forwa
     return contents;
 }
 
-void StashNotifier::addPath(const QString &path, const QString &currentDir)
+void StashNotifier::addPath(const QString &source, const QString &stashPath, const int &fileType)
 {
-    QString processedPath = processString(path);
+    QString processedPath = processString(stashPath);
 //    if (fileSystem->findNode(path) == StashFileSystem::StashNodeData(StashFileSystem::NodeType::InvalidNode)) { // TODO Figure it out
-        if (QFileInfo(processedPath).isDir()) {
+        if (fileType == StashFileSystem::NodeType::DirectoryNode) {
             dirWatch->addDir(processedPath);
             fileSystem->addFolder(processedPath);
-        } else if (QFileInfo(processedPath).isFile()) {
+        } else if (fileType == StashFileSystem::NodeType::FileNode) {
             dirWatch->addFile(processedPath);
-            fileSystem->addFile(processedPath, "/" + currentDir);
+            fileSystem->addFile(processString(source), stashPath);
         }
+        // TODO: add symlink logic
         emit listChanged();
 //    }
 }
@@ -121,7 +122,7 @@ QString StashNotifier::processString(const QString &path) //removes trailing sla
 void StashNotifier::removePath(const QString &path)
 {
     QString processedPath = processString(path);
-    if (QFileInfo(processedPath).isDir()) {
+    if (QFileInfo(processedPath).isDir()) { //would this even work?
         dirWatch->removeDir(processedPath);
     } else if (QFileInfo(processedPath).isFile()) { //change file logic, remove folder logic
         dirWatch->removeFile(processedPath);

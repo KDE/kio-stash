@@ -175,7 +175,18 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
 {
     QDBusMessage msg = QDBusMessage::createMethodCall(
         "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
-    msg << src.path() << dest.path();
+    NodeType fileType;
+    if (QFileInfo(src.path()).isFile()) {
+        fileType = NodeType::FileNode;
+    } else if (QFileInfo(src.path()).isSymLink()) {
+        fileType = NodeType::SymlinkNode;
+    } else if (QFileInfo(src.path()).isDir()) { // if I'm not wrong, this can never happen, but we should handle it anyway
+        fileType = NodeType::DirectoryNode;
+        qDebug() << "DirectoryNode...created?";
+    } else {
+        error(KIO::ERR_SLAVE_DEFINED, QString("Could not determine file type."));
+    }
+    msg << src.path() << dest.path() << (int) fileType;
     bool queued = QDBusConnection::sessionBus().send(msg);
     if (queued) {
         finished();
