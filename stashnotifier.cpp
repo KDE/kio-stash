@@ -97,7 +97,7 @@ QList<dirListDBus::dirList> StashNotifier::fileList(const QString &path) //forwa
 void StashNotifier::addPath(const QString &source, const QString &stashPath, const int &fileType)
 {
     QString processedPath = processString(stashPath);
-//    if (fileSystem->findNode(path) == StashFileSystem::StashNodeData(StashFileSystem::NodeType::InvalidNode)) { // TODO Figure it out
+    if (fileSystem->findNode(stashPath).type == StashFileSystem::NodeType::InvalidNode) { //only folders not already exisiting are added
         if (fileType == StashFileSystem::NodeType::DirectoryNode) {
             dirWatch->addDir(processedPath);
             fileSystem->addFolder(processedPath);
@@ -107,7 +107,7 @@ void StashNotifier::addPath(const QString &source, const QString &stashPath, con
         }
         // TODO: add symlink logic
         emit listChanged();
-//    }
+    }
 }
 
 QString StashNotifier::processString(const QString &path) //removes trailing slash and strips newline character
