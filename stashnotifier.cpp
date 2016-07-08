@@ -104,8 +104,10 @@ void StashNotifier::addPath(const QString &source, const QString &stashPath, con
         } else if (fileType == StashFileSystem::NodeType::FileNode) {
             dirWatch->addFile(processedPath);
             fileSystem->addFile(processString(source), stashPath);
+        } else if (fileType == StashFileSystem::NodeType::SymlinkNode) {
+            dirWatch->addFile(processedPath);
+            fileSystem->addSymlink(processString(source), stashPath);
         }
-        // TODO: add symlink logic
         emit listChanged();
     }
 }
