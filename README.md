@@ -23,7 +23,7 @@ Adaptor classes for D-Bus were generated using:
 
 ```
 qdbuscpp2xml -a stashnotifier.h -o dbus/org.kde.kio.StashNotifier.xml
-qdbusxml2cpp -c StashNotifierAdaptor -i dirlist.h -a stash_adaptor.h:stash_adaptor.cpp dbus/org.kde.kio.StashNotifier.xml
+qdbusxml2cpp -c StashNotifierAdaptor -a stash_adaptor.h:stash_adaptor.cpp dbus/org.kde.kio.StashNotifier.xml
 ```
 
 The annotation for custom types are:
