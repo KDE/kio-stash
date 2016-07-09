@@ -62,7 +62,7 @@ StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDED
     registerMetaType();
 
     dirWatch = new KDirWatch(this);
-    qDebug() << "Launching STASH NOTIFIER DAEMON";
+    qDebug() << "Launching STASH DEMON";
 
     new StashNotifierAdaptor(this);
     QDBusConnection dbus = QDBusConnection::sessionBus();
@@ -80,17 +80,12 @@ StashNotifier::~StashNotifier()
 {
 }
 
-QList<dirListDBus::dirList> StashNotifier::fileList(const QString &path) //forwards list over QDBus to the KIO slave
+dirListDBus::dirList StashNotifier::fileList(const QString &path) //forwards list over QDBus to the KIO slave
 {
-    QList<dirListDBus::dirList> contents;
-    dirListDBus::dirList item;
-    StashFileSystem::StashNodeData node = fileSystem->findNode(path);
-    for (auto it = node.children->begin(); it != node.children->end(); it++) {
-        item.filePath = it.key();
-        item.source = it.value().source;
-        item.type = (int) it.value().type;
-        contents.append(item);
-    }
+    dirListDBus::dirList contents;
+    contents.filePath = "safa";
+    contents.source = "asdf";
+    contents.type = 12312;
     return contents;
 }
 

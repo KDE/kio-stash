@@ -42,16 +42,6 @@ class KIOPluginForMetaData : public QObject
     Q_PLUGIN_METADATA(IID "org.kde.kio.slave.filestash" FILE "ioslave.json")
 };
 
-extern "C" {
-    int Q_DECL_EXPORT kdemain(int argc, char **argv)
-    {
-        QCoreApplication app(argc, argv);
-        FileStash slave(argv[2], argv[3]);
-        slave.dispatchLoop();
-        return 0;
-    }
-}
-
 Q_DECLARE_METATYPE(dirListDBus::dirList)
 
 QDBusArgument &operator<<(QDBusArgument &argument, const dirListDBus::dirList &object)
@@ -76,6 +66,17 @@ void FileStash::registerMetaType()
     qDBusRegisterMetaType<dirListDBus::dirList>();
 }
 
+extern "C" {
+    int Q_DECL_EXPORT kdemain(int argc, char **argv)
+    {
+        QCoreApplication app(argc, argv);
+        FileStash slave(argv[2], argv[3]);
+        slave.registerMetaType();
+        slave.dispatchLoop();
+        return 0;
+    }
+}
+
 FileStash::FileStash(const QByteArray &pool, const QByteArray &app) :
     KIO::ForwardingSlaveBase("stash", pool, app)
 {}
@@ -83,12 +84,12 @@ FileStash::FileStash(const QByteArray &pool, const QByteArray &app) :
 FileStash::~FileStash()
 {}
 
-QList<dirListDBus::dirList> FileStash::setFileList(const QUrl &url)
+dirListDBus::dirList FileStash::setFileList(const QUrl &url)
 {
     QDBusMessage msg = QDBusMessage::createMethodCall(
         "org.kde.kio.StashNotifier", "/StashNotifier", "", "fileList");
     msg << url.path();
-    QDBusReply<QList<dirListDBus::dirList>> received = QDBusConnection::sessionBus().call(msg);
+    QDBusReply<dirListDBus::dirList> received = QDBusConnection::sessionBus().call(msg);
     return received.value();
 }
 
@@ -147,22 +148,16 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const dirListDBus::dirList 
 void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
 {
     auto fileList = setFileList(url);
-    KIO::UDSEntry entry;
-    for (auto it = fileList.begin(); it != fileList.end(); it++) {
-        entry.clear();
-        createUDSEntry(entry, *it);
-        listEntry(entry);
-    }
-    entry.clear();
+    qDebug() << fileList.filePath << fileList.source << fileList.type;
     finished();
 }
 
 void FileStash::displayList(const QUrl &url) // FIXME: remove
 {
-    auto urlList = setFileList(url);
+/*    auto urlList = setFileList(url);
     for (auto it = urlList.begin(); it != urlList.end(); it++) {
         qDebug() << it->filePath << it->source << it->type;
-    }
+    }*/
 }
 
 void FileStash::mkdir(const QUrl &url, int permissions)

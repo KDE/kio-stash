@@ -31,6 +31,7 @@ class FileStash : public KIO::ForwardingSlaveBase
 public:
     FileStash(const QByteArray &pool, const QByteArray &app);
     ~FileStash();
+    void registerMetaType();
 
     enum NodeType {
         DirectoryNode,
@@ -40,11 +41,10 @@ public:
     };
 
 private:
-    void registerMetaType();
     void displayList(const QUrl &url);
     bool createUDSEntry(
         KIO::UDSEntry &entry, const dirListDBus::dirList &fileItem);
-    QList<dirListDBus::dirList> setFileList(const QUrl &url);
+    dirListDBus::dirList setFileList(const QUrl &url);
 
 protected:
     void listDir(const QUrl &url) Q_DECL_OVERRIDE;
