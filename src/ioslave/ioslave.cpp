@@ -42,15 +42,6 @@ class KIOPluginForMetaData : public QObject
     Q_PLUGIN_METADATA(IID "org.kde.kio.slave.filestash" FILE "ioslave.json")
 };
 
-extern "C" {
-    int Q_DECL_EXPORT kdemain(int argc, char **argv)
-    {
-        QCoreApplication app(argc, argv);
-        FileStash slave(argv[2], argv[3]);
-        slave.dispatchLoop();
-        return 0;
-    }
-}
 
 Q_DECLARE_METATYPE(dirListDBus::dirList)
 
@@ -74,6 +65,17 @@ void FileStash::registerMetaType()
 {
     qRegisterMetaType<dirListDBus::dirList>("dirList");
     qDBusRegisterMetaType<dirListDBus::dirList>();
+}
+
+extern "C" {
+    int Q_DECL_EXPORT kdemain(int argc, char **argv)
+    {
+        QCoreApplication app(argc, argv);
+        FileStash slave(argv[2], argv[3]);
+        slave.registerMetaType(); // TODO: move to ctr
+        slave.dispatchLoop();
+        return 0;
+    }
 }
 
 FileStash::FileStash(const QByteArray &pool, const QByteArray &app) :

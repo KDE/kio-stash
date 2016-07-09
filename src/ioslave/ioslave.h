@@ -31,6 +31,7 @@ class FileStash : public KIO::ForwardingSlaveBase
 public:
     FileStash(const QByteArray &pool, const QByteArray &app);
     ~FileStash();
+    void registerMetaType();
 
     enum NodeType {
         DirectoryNode,
@@ -40,7 +41,6 @@ public:
     };
 
 private:
-    void registerMetaType();
     void displayList(const QUrl &url);
     bool createUDSEntry(
         KIO::UDSEntry &entry, const dirListDBus::dirList &fileItem);
