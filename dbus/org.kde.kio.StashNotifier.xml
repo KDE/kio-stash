@@ -12,9 +12,8 @@
       <arg name="path" type="s" direction="in"/>
     </method>
     <method name="fileList">
-      <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;dirListDBus::dirList&gt;"/>
+      <arg type="as" direction="out"/>
       <arg name="path" type="s" direction="in"/>
-      <arg name="contents" type="a(ssi)" direction="out"/>
     </method>
   </interface>
 </node>

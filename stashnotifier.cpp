@@ -33,34 +33,8 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(StashNotifierFactory, "stashnotifier.json", registerPlugin<StashNotifier>();)
 
-Q_DECLARE_METATYPE(dirListDBus::dirList)
-
-QDBusArgument &operator<<(QDBusArgument &argument, const dirListDBus::dirList &object)
-{
-    argument.beginStructure();
-    argument << object.filePath << object.source << object.type;
-    argument.endStructure();
-    return argument;
-}
-
-const QDBusArgument &operator>>(const QDBusArgument &argument, dirListDBus::dirList &object)
-{
-    argument.beginStructure();
-    argument >> object.filePath >> object.source >> object.type;
-    argument.endStructure();
-    return argument;
-}
-
-void StashNotifier::registerMetaType()
-{
-    qRegisterMetaType<dirListDBus::dirList>("dirList");
-    qDBusRegisterMetaType<dirListDBus::dirList>();
-}
-
 StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDEDModule(parent)
 {
-    registerMetaType();
-
     dirWatch = new KDirWatch(this);
     qDebug() << "Launching STASH NOTIFIER DAEMON";
 
@@ -80,17 +54,9 @@ StashNotifier::~StashNotifier()
 {
 }
 
-QList<dirListDBus::dirList> StashNotifier::fileList(const QString &path) //forwards list over QDBus to the KIO slave
+QStringList StashNotifier::fileList(const QString &path) //forwards list over QDBus to the KIO slave
 {
-    QList<dirListDBus::dirList> contents;
-    dirListDBus::dirList item;
-    StashFileSystem::StashNodeData node = fileSystem->findNode(path);
-    for (auto it = node.children->begin(); it != node.children->end(); it++) {
-        item.filePath = it.key();
-        item.source = it.value().source;
-        item.type = (int) it.value().type;
-        contents.append(item);
-    }
+    QStringList contents;
     return contents;
 }
 

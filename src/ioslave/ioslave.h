@@ -20,8 +20,6 @@
 #ifndef KIO_FILESTASH_H
 #define KIO_FILESTASH_H
 
-#include "../../dirlist.h"
-
 #include <KIO/ForwardingSlaveBase>
 
 class FileStash : public KIO::ForwardingSlaveBase
@@ -31,7 +29,25 @@ class FileStash : public KIO::ForwardingSlaveBase
 public:
     FileStash(const QByteArray &pool, const QByteArray &app);
     ~FileStash();
-    void registerMetaType();
+
+    struct dirList
+    {
+        QString filePath;
+        QString source;
+        int type;
+        dirList()
+        {
+        }
+        ~dirList()
+        {
+        }
+        dirList(const dirList &obj)
+        {
+            filePath = obj.filePath;
+            source = obj.source;
+            type = obj.type;
+        }
+    };
 
     enum NodeType {
         DirectoryNode,
@@ -43,8 +59,8 @@ public:
 private:
     void displayList(const QUrl &url);
     bool createUDSEntry(
-        KIO::UDSEntry &entry, const dirListDBus::dirList &fileItem);
-    QList<dirListDBus::dirList> setFileList(const QUrl &url);
+        KIO::UDSEntry &entry, const FileStash::dirList &fileItem);
+    QStringList setFileList(const QUrl &url);
 
 protected:
     void listDir(const QUrl &url) Q_DECL_OVERRIDE;

@@ -42,37 +42,11 @@ class KIOPluginForMetaData : public QObject
     Q_PLUGIN_METADATA(IID "org.kde.kio.slave.filestash" FILE "ioslave.json")
 };
 
-
-Q_DECLARE_METATYPE(dirListDBus::dirList)
-
-QDBusArgument &operator<<(QDBusArgument &argument, const dirListDBus::dirList &object)
-{
-    argument.beginStructure();
-    argument << object.filePath << object.source << object.type;
-    argument.endStructure();
-    return argument;
-}
-
-const QDBusArgument &operator>>(const QDBusArgument &argument, dirListDBus::dirList &object)
-{
-    argument.beginStructure();
-    argument >> object.filePath >> object.source >> object.type;
-    argument.endStructure();
-    return argument;
-}
-
-void FileStash::registerMetaType()
-{
-    qRegisterMetaType<dirListDBus::dirList>("dirList");
-    qDBusRegisterMetaType<dirListDBus::dirList>();
-}
-
 extern "C" {
     int Q_DECL_EXPORT kdemain(int argc, char **argv)
     {
         QCoreApplication app(argc, argv);
         FileStash slave(argv[2], argv[3]);
-        slave.registerMetaType(); // TODO: move to ctr
         slave.dispatchLoop();
         return 0;
     }
@@ -85,12 +59,12 @@ FileStash::FileStash(const QByteArray &pool, const QByteArray &app) :
 FileStash::~FileStash()
 {}
 
-QList<dirListDBus::dirList> FileStash::setFileList(const QUrl &url)
+QStringList FileStash::setFileList(const QUrl &url)
 {
     QDBusMessage msg = QDBusMessage::createMethodCall(
         "org.kde.kio.StashNotifier", "/StashNotifier", "", "fileList");
     msg << url.path();
-    QDBusReply<QList<dirListDBus::dirList>> received = QDBusConnection::sessionBus().call(msg);
+    QDBusReply<QStringList> received = QDBusConnection::sessionBus().call(msg);
     return received.value();
 }
 
@@ -105,7 +79,7 @@ bool FileStash::rewriteUrl(const QUrl &url, QUrl &newUrl)
     return true;
 }
 
-bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const dirListDBus::dirList &fileItem)
+bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &fileItem)
 {
     QDateTime epoch;
     epoch.setMSecsSinceEpoch(0);
@@ -152,7 +126,7 @@ void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
     KIO::UDSEntry entry;
     for (auto it = fileList.begin(); it != fileList.end(); it++) {
         entry.clear();
-        createUDSEntry(entry, *it);
+        //createUDSEntry(entry, *it);
         listEntry(entry);
     }
     entry.clear();
@@ -161,10 +135,7 @@ void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
 
 void FileStash::displayList(const QUrl &url) // FIXME: remove
 {
-    auto urlList = setFileList(url);
-    for (auto it = urlList.begin(); it != urlList.end(); it++) {
-        qDebug() << it->filePath << it->source << it->type;
-    }
+
 }
 
 void FileStash::mkdir(const QUrl &url, int permissions)
