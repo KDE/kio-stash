@@ -38,6 +38,7 @@ private:
     KDirWatch *dirWatch;
     StashFileSystem *fileSystem;
     QString processString(const QString &path);
+    QString encodeString(StashFileSystem::StashNode::iterator node);
 
 public:
     StashNotifier(QObject* parent, const QList<QVariant>&);

@@ -54,6 +54,35 @@ StashNotifier::~StashNotifier()
 {
 }
 
+QString StashNotifier::encodeString(StashFileSystem::StashNode::iterator node) //format type::stashpath::source
+{
+    QString encodedString;
+
+    switch (node.value().type) {
+        case StashFileSystem::NodeType::DirectoryNode:
+            encodedString = "dir";
+            break;
+        case StashFileSystem::NodeType::FileNode:
+            encodedString = "file";
+            break;
+        case StashFileSystem::NodeType::SymlinkNode:
+            encodedString = "symlink";
+            break;
+        case StashFileSystem::NodeType::InvalidNode:
+            encodedString = "invalid";
+            break;
+    }
+
+    encodedString += "::" + node.key();
+
+    if (node.value().type == StashFileSystem::NodeType::FileNode ||
+        node.value().type == StashFileSystem::NodeType::SymlinkNode) {
+        encodedString += "::" + node.value().source;
+    }
+
+    return encodedString;
+}
+
 QStringList StashNotifier::fileList(const QString &path) //forwards list over QDBus to the KIO slave
 {
     QStringList contents;
