@@ -78,6 +78,8 @@ QString StashNotifier::encodeString(StashFileSystem::StashNode::iterator node) /
     if (node.value().type == StashFileSystem::NodeType::FileNode ||
         node.value().type == StashFileSystem::NodeType::SymlinkNode) {
         encodedString += "::" + node.value().source;
+    } else {
+        encodedString += "::";
     }
 
     return encodedString;
@@ -86,6 +88,10 @@ QString StashNotifier::encodeString(StashFileSystem::StashNode::iterator node) /
 QStringList StashNotifier::fileList(const QString &path) //forwards list over QDBus to the KIO slave
 {
     QStringList contents;
+    StashFileSystem::StashNodeData node = fileSystem->findNode(path);
+    for (auto it = node.children->begin(); it != node.children->end(); it++) {
+        contents.append(encodeString(it));
+    }
     return contents;
 }
 

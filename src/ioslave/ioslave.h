@@ -30,11 +30,18 @@ public:
     FileStash(const QByteArray &pool, const QByteArray &app);
     ~FileStash();
 
+    enum NodeType {
+        DirectoryNode,
+        SymlinkNode,
+        FileNode,
+        InvalidNode
+    };
+
     struct dirList
     {
         QString filePath;
         QString source;
-        int type;
+        FileStash::NodeType type;
         dirList()
         {
         }
@@ -49,18 +56,12 @@ public:
         }
     };
 
-    enum NodeType {
-        DirectoryNode,
-        SymlinkNode,
-        FileNode,
-        InvalidNode
-    };
-
 private:
     void displayList(const QUrl &url);
     bool createUDSEntry(
         KIO::UDSEntry &entry, const FileStash::dirList &fileItem);
     QStringList setFileList(const QUrl &url);
+    FileStash::dirList createDirListItem(QString fileInfo);
 
 protected:
     void listDir(const QUrl &url) Q_DECL_OVERRIDE;

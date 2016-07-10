@@ -120,16 +120,35 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
     return true;
 }
 
+FileStash::dirList FileStash::createDirListItem(QString fileInfo)
+{
+    QStringList strings = fileInfo.split("::", QString::KeepEmptyParts);
+    FileStash::dirList item;
+    if (strings.at(0) == "dir") {
+        item.type = FileStash::NodeType::DirectoryNode;
+    } else if (strings.at(0) == "file") {
+        item.type = FileStash::NodeType::FileNode;
+    } else if (strings.at(0) == "symlink") {
+        item.type = FileStash::NodeType::SymlinkNode;
+    } else if (strings.at(0) == "invalid") {
+        item.type = FileStash::NodeType::InvalidNode;
+    }
+    item.filePath = strings.at(1);
+    item.source = strings.at(2);
+    return item;
+}
+
 void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
 {
-    auto fileList = setFileList(url);
+    QStringList fileList = setFileList(url);
+    FileStash::dirList item;
     KIO::UDSEntry entry;
     for (auto it = fileList.begin(); it != fileList.end(); it++) {
         entry.clear();
-        //createUDSEntry(entry, *it);
+        item = createDirListItem(*it);
+        createUDSEntry(entry, item);
         listEntry(entry);
     }
-    entry.clear();
     finished();
 }
 
