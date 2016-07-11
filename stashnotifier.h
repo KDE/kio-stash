@@ -45,6 +45,7 @@ public:
     ~StashNotifier();
     void displayRoot()
     {
+        qDebug() << "Parent ROOT==";
         fileSystem->displayRoot();
     }
 

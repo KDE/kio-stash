@@ -25,16 +25,22 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-    QDBusMessage m;
-    if (QString(argv[1]) == "-a") {
+    QDBusInterface *interface = new QDBusInterface("org.kde.kio.StashNotifier", "/StashNotifier","",QDBusConnection::sessionBus());
+    QList<QVariant> args;
+    args.append(argv[1]);
+    args.append(argv[2]);
+    args.append(QString(argv[3]).toInt());
+    interface->callWithArgumentList(QDBus::NoBlock, "addPath", args);
+
+    /*if (QString(argv[1]) == "-a") {
         m = QDBusMessage::createMethodCall("org.kde.kio.StashNotifier", "/StashNotifier","","addPath");
         m << argv[2] << argv[3] << argv[4];
         bool queued = QDBusConnection::sessionBus().send(m);
     } else if (QString(argv[1]) == "-d") {
+        m = QDBusMessage::createMethodCall("org.kde.kio.StashNotifier", "/StashNotifier","","removePath");
         m << argv[2];
         bool queued = QDBusConnection::sessionBus().send(m);
-        m = QDBusMessage::createMethodCall("org.kde.kio.StashNotifier", "/StashNotifier","","removePath");
-    }
+    }*/
 
     return 0;
 }

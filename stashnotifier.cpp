@@ -51,7 +51,7 @@ StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDED
     connect(this, &StashNotifier::listChanged, this, &StashNotifier::displayRoot);
 
     //fileSystem->addFile("/home/nic/msg", "/");
-    displayRoot();
+    addPath("/home/nic/errorlog", "/errorlog", StashFileSystem::NodeType::FileNode);
     qDebug() << "init finished";
 }
 
