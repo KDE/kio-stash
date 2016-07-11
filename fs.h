@@ -47,22 +47,13 @@ public:
     StashNodeData findNode(QString path);
     StashNodeData findNode(QStringList path);
 
-    void displayRoot()
+    void displayRoot() //make it recursive
     {
-        qDebug() << "DisplayingROOT";
+        qDebug() << "Displaying ROOT";
         for (auto it = this->root->children->begin(); it != this->root->children->end(); it++) {
             qDebug() << "stashpath" << it.key();
             qDebug() << "filepath" << it.value().source;
             qDebug() << "filetype" << it.value().type;
-            if (it.value().type == StashFileSystem::NodeType::DirectoryNode) {
-                StashNodeData data = findNode(it.key());
-                //qDebug() << "SIZEoffolder" << data.children->size();
-                for (auto it2 = data.children->begin(); it2 != data.children->end(); it2++) {
-                    qDebug() << "stashpath" << it2.key() << "c/o" << it.key();
-                    qDebug() << "filepath" << it2.value().source;
-                    qDebug() << "filetype" << it2.value().type;
-                }
-            }
         }
     }
 
