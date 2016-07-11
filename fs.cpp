@@ -5,6 +5,14 @@ StashFileSystem::StashFileSystem(QObject *parent) :
     root(new StashNodeData(DirectoryNode))
 {
     root->children = new StashNode();
+    StashFileSystem::StashNodeData x(StashFileSystem::NodeType::FileNode);
+    //x.source = "/home/nic/msg";
+    //x.type = 2;
+    //root->children->insert("/msg", x);
+    addFile("/home/nic/msg", "/msg");
+    addFolder("/qwerty");
+    addFile("/home/nic/valgrind", "/qwerty/valgrind");
+    qDebug() << "ctrfinished";
 }
 
 StashFileSystem::~StashFileSystem()
@@ -59,6 +67,8 @@ bool StashFileSystem::addNode(QString location, StashNodeData data)
 {
     QStringList path = splitPath(location);
     QString name = path.takeLast();
+    qDebug() << "NAME:" << name;
+    qDebug() << "LOC" << location;
     StashNodeData baseData = findNode(path);
 
     if (!(baseData.type == DirectoryNode)) {
@@ -118,5 +128,5 @@ StashFileSystem::StashNodeData StashFileSystem::findNode(QStringList path)
             return StashNodeData(InvalidNode);
         }
     }
-    return StashNodeData(InvalidNode);
+    return *root;
 }

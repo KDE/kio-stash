@@ -36,7 +36,7 @@ K_PLUGIN_FACTORY_WITH_JSON(StashNotifierFactory, "stashnotifier.json", registerP
 StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDEDModule(parent)
 {
     dirWatch = new KDirWatch(this);
-    qDebug() << "Launching STASH NOTIFIER DAEMON";
+    qDebug() << "Launching STASH NOTIFIER demon";
 
     new StashNotifierAdaptor(this);
     QDBusConnection dbus = QDBusConnection::sessionBus();
@@ -49,6 +49,10 @@ StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDED
     connect(dirWatch, &KDirWatch::created, this, &StashNotifier::created);
     connect(dirWatch, &KDirWatch::deleted, this, &StashNotifier::removePath);
     connect(this, &StashNotifier::listChanged, this, &StashNotifier::displayRoot);
+
+    //fileSystem->addFile("/home/nic/msg", "/");
+    displayRoot();
+    qDebug() << "init finished";
 }
 
 StashNotifier::~StashNotifier()
