@@ -27,11 +27,14 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
     QDBusMessage m;
     if (QString(argv[1]) == "-a") {
-        m = QDBusMessage::createMethodCall("org.kde.kio.StashNotifier", "/StashNotifier","","watchDir");
+        m = QDBusMessage::createMethodCall("org.kde.kio.StashNotifier", "/StashNotifier","","addPath");
+        m << argv[2] << argv[3] << argv[4];
+        bool queued = QDBusConnection::sessionBus().send(m);
     } else if (QString(argv[1]) == "-d") {
-        m = QDBusMessage::createMethodCall("org.kde.kio.StashNotifier", "/StashNotifier","","removeDir");
+        m << argv[2];
+        bool queued = QDBusConnection::sessionBus().send(m);
+        m = QDBusMessage::createMethodCall("org.kde.kio.StashNotifier", "/StashNotifier","","removePath");
     }
-    m << argv[2];
-    bool queued = QDBusConnection::sessionBus().send(m);
+
     return 0;
 }

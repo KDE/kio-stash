@@ -5,6 +5,7 @@
 #include <QPointer>
 #include <QHash>
 #include <QString>
+#include <QDebug>
 
 class StashFileSystem : public QObject
 {
@@ -45,6 +46,15 @@ public:
 
     StashNodeData findNode(QString path);
     StashNodeData findNode(QStringList path);
+
+    void displayRoot()
+    {
+        for (auto it = this->root->children->begin(); it != this->root->children->end(); it++) {
+            qDebug() << "stashpath" << it.key();
+            qDebug() << "filepath" << it.value().source;
+            qDebug() << "filetype" << it.value().type;
+        }
+    }
 
 private:
 

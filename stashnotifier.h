@@ -43,6 +43,10 @@ private:
 public:
     StashNotifier(QObject* parent, const QList<QVariant>&);
     ~StashNotifier();
+    void displayRoot()
+    {
+        fileSystem->displayRoot();
+    }
 
 Q_SIGNALS:
     Q_SCRIPTABLE void listChanged();

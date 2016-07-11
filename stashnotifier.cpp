@@ -48,6 +48,7 @@ StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDED
     connect(dirWatch, &KDirWatch::dirty, this, &StashNotifier::dirty);
     connect(dirWatch, &KDirWatch::created, this, &StashNotifier::created);
     connect(dirWatch, &KDirWatch::deleted, this, &StashNotifier::removePath);
+    connect(this, &StashNotifier::listChanged, this, &StashNotifier::displayRoot);
 }
 
 StashNotifier::~StashNotifier()
