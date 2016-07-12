@@ -38,7 +38,7 @@ private:
     KDirWatch *dirWatch;
     StashFileSystem *fileSystem;
     QString processString(const QString &path);
-    QString encodeString(StashFileSystem::StashNode::iterator node);
+    QString encodeString(StashFileSystem::StashNode::iterator node, const QString &path);
 
 public:
     StashNotifier(QObject* parent, const QList<QVariant>&);
@@ -49,7 +49,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     Q_SCRIPTABLE void addPath(const QString &source, const QString &stashPath, const int &fileType);
-    Q_SCRIPTABLE void removePath(const QString &path);
+    Q_SCRIPTABLE void removePath(const QString &path, const int &fileType);
     Q_SCRIPTABLE QStringList fileList(const QString &path);
 
 private Q_SLOTS:
@@ -57,7 +57,7 @@ private Q_SLOTS:
     void created(const QString &path);
     void displayRoot()
     {
-        fileSystem->displayRoot();
+        //fileSystem->displayRoot();
     }
 };
 

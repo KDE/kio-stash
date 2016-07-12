@@ -47,9 +47,8 @@ StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDED
 
     connect(dirWatch, &KDirWatch::dirty, this, &StashNotifier::dirty);
     connect(dirWatch, &KDirWatch::created, this, &StashNotifier::created);
-    connect(dirWatch, &KDirWatch::deleted, this, &StashNotifier::removePath);
+    //connect(dirWatch, &KDirWatch::deleted, this, &StashNotifier::removePath);
     connect(this, &StashNotifier::listChanged, this, &StashNotifier::displayRoot);
-
     qDebug() << "init finished";
 }
 
@@ -57,7 +56,7 @@ StashNotifier::~StashNotifier()
 {
 }
 
-QString StashNotifier::encodeString(StashFileSystem::StashNode::iterator node) //format type::stashpath::source
+QString StashNotifier::encodeString(StashFileSystem::StashNode::iterator node, const QString &path) //format type::stashpath::source
 {
     QString encodedString;
 
@@ -76,7 +75,7 @@ QString StashNotifier::encodeString(StashFileSystem::StashNode::iterator node) /
             break;
     }
 
-    encodedString += "::" + node.key();
+    encodedString += "::" + path + QStringLiteral("/") + node.key(); //will this work?
 
     if (node.value().type == StashFileSystem::NodeType::FileNode ||
         node.value().type == StashFileSystem::NodeType::SymlinkNode) {
@@ -93,7 +92,7 @@ QStringList StashNotifier::fileList(const QString &path) //forwards list over QD
     QStringList contents;
     StashFileSystem::StashNodeData node = fileSystem->findNode(path);
     for (auto it = node.children->begin(); it != node.children->end(); it++) {
-        contents.append(encodeString(it));
+        contents.append(encodeString(it, path));
     }
     return contents;
 }
@@ -125,12 +124,12 @@ QString StashNotifier::processString(const QString &path) //removes trailing sla
     return processedPath;
 }
 
-void StashNotifier::removePath(const QString &path)
+void StashNotifier::removePath(const QString &path, const int &fileType)
 {
     QString processedPath = processString(path);
-    if (QFileInfo(processedPath).isDir()) { //would this even work?
+    if (fileType == StashFileSystem::NodeType::DirectoryNode) {
         dirWatch->removeDir(processedPath);
-    } else if (QFileInfo(processedPath).isFile()) { //change file logic, remove folder logic
+    } else {
         dirWatch->removeFile(processedPath);
     }
     fileSystem->delEntry(path);
