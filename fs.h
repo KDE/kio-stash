@@ -50,6 +50,7 @@ public:
     void displayNode(StashNodeData node) //broken af
     {
         //QString fullpath;
+        /*
         for (auto it = node.children->begin(); it != node.children->end(); it++) {
             qDebug() << "stashpath" << it.key();
             qDebug() << "filepath" << it.value().source;
