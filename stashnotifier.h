@@ -43,11 +43,6 @@ private:
 public:
     StashNotifier(QObject* parent, const QList<QVariant>&);
     ~StashNotifier();
-    void displayRoot()
-    {
-        //qDebug() << "Parent ROOT==";
-        fileSystem->displayRoot();
-    }
 
 Q_SIGNALS:
     Q_SCRIPTABLE void listChanged();
@@ -60,7 +55,10 @@ public Q_SLOTS:
 private Q_SLOTS:
     void dirty(const QString &path);
     void created(const QString &path);
-    //void displayList(); //for internal purposes
+    void displayRoot()
+    {
+        fileSystem->displayRoot();
+    }
 };
 
 #endif

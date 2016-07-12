@@ -60,8 +60,6 @@ bool StashFileSystem::addNode(QString location, StashNodeData* data)
 {
     QStringList path = splitPath(location);
     QString name = path.takeLast();
-     for (auto it = path.begin(); it != path.end(); it++)
-         qDebug() << *it;
     StashNodeData baseData = findNode(path);
 
     if (!(baseData.type == DirectoryNode)) {
