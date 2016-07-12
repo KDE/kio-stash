@@ -47,20 +47,24 @@ public:
     StashNodeData findNode(QString path);
     StashNodeData findNode(QStringList path);
 
-    void displayNode(StashNodeData node) //make it recursive
+    void displayNode(StashNodeData node) //broken af
     {
-        if (node.children->size()) {
-            for (auto it = node.children->begin(); it != node.children->end(); it++) {
-                qDebug() << "stashpath" << it.key();
-                qDebug() << "filepath" << it.value().source;
-                qDebug() << "filetype" << it.value().type;
-                if (it.value().type == DirectoryNode) {
-                    qDebug() << "===Parent===" << it.key();
-                    displayNode(findNode(it.key()));
-                }
+        //QString fullpath;
+        for (auto it = node.children->begin(); it != node.children->end(); it++) {
+            qDebug() << "stashpath" << it.key();
+            qDebug() << "filepath" << it.value().source;
+            qDebug() << "filetype" << it.value().type;
+            if (it.value().type == DirectoryNode) {
+                qDebug() << "parent" << it.key();
+                displayNode(findNode(it.key()));
             }
         }
         return;
+    /*  qDebug() << "displayingdata";
+        StashNodeData data = findNode("/kqe/ljkas/ipqw");
+        for (auto it = data.children->begin(); it != data.children->end(); it++) {
+            qDebug() << it.key();
+        }*/
     }
 
     void displayRoot()
@@ -70,7 +74,7 @@ public:
 
 private:
 
-    bool addNode(QString location, StashNodeData data);
+    bool addNode(QString location, StashNodeData* data);
     void deleteChildren(StashNodeData nodeData);
     QStringList splitPath(QString path);
     StashNodeData *root;
