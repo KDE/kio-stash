@@ -47,7 +47,7 @@ public:
     StashNodeData findNode(QString path);
     StashNodeData findNode(QStringList path);
 
-    void displayNode(StashNode *node) //broken af
+    void displayNode(StashNode *node)
     {
         for (auto it = node->begin(); it != node->end(); it++)
         {

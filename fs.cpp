@@ -5,13 +5,6 @@ StashFileSystem::StashFileSystem(QObject *parent) :
     root(new StashNodeData(DirectoryNode))
 {
     root->children = new StashNode();
-    addFolder("/kqe");
-    addFolder("/kqe/ljkas");
-    addFolder("/kqe/ljkas/ipqw");
-    addFolder("/kqe/ljkas/ipqw/sfdsf");
-    addFolder("/kqe/ljkas/ipqw/sfa1");
-    addFolder("/kqe/ljkas/ipqw/sfa2");
-    addFolder("/kqe/ljkas/ipqw/sfa3");
     displayRoot();
 }
 
