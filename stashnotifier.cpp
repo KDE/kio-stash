@@ -49,7 +49,7 @@ StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDED
     connect(dirWatch, &KDirWatch::created, this, &StashNotifier::created);
     //connect(dirWatch, &KDirWatch::deleted, this, &StashNotifier::removePath);
     connect(this, &StashNotifier::listChanged, this, &StashNotifier::displayRoot);
-    addPath("/home/nic/bobby", "/f", 2);
+    addPath("/home/nic/ioslave.cpp", "/f", 2);
     addPath("", "/fas", 0);
     for (int i = 0; i < 100; i++) {
         qDebug() << i;
@@ -99,8 +99,12 @@ QStringList StashNotifier::fileList(const QString &path) //forwards list over QD
     QStringList contents;
     StashFileSystem::StashNodeData node = fileSystem->findNode(path);
     qDebug() <<"NODE TYPE" << node.type;
-    for (auto it = node.children->begin(); it != node.children->end(); it++) {
-        contents.append(encodeString(it, path));
+    if (node.type != StashFileSystem::NodeType::DirectoryNode) {
+        contents.append("error");
+    } else {
+        for (auto it = node.children->begin(); it != node.children->end(); it++) {
+            contents.append(encodeString(it, path));
+        }
     }
     return contents;
 }

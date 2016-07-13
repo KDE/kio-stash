@@ -141,15 +141,22 @@ FileStash::dirList FileStash::createDirListItem(QString fileInfo)
 void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
 {
     QStringList fileList = setFileList(url);
+    for (auto it = fileList.begin(); it != fileList.end(); it++) {
+        qDebug() << *it;
+    }
     FileStash::dirList item;
     KIO::UDSEntry entry;
-    for (auto it = fileList.begin(); it != fileList.end(); it++) {
-        entry.clear();
-        item = createDirListItem(*it);
-        createUDSEntry(entry, item);
-        listEntry(entry);
+    if (fileList.at(0) == "error") {
+        error(KIO::ERR_SLAVE_DEFINED, QString("NOPE"));
+    } else {
+        for (auto it = fileList.begin(); it != fileList.end(); it++) {
+            entry.clear();
+            item = createDirListItem(*it);
+            createUDSEntry(entry, item);
+            listEntry(entry);
+        }
+        finished();
     }
-    finished();
 }
 
 void FileStash::displayList(const QUrl &url) // FIXME: remove
