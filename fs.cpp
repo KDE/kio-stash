@@ -115,6 +115,9 @@ bool StashFileSystem::addFolder(QString dest)
 
 StashFileSystem::StashNodeData StashFileSystem::findNode(QString path)
 {
+    if (path == "/") {
+        return *root;
+    }
     return findNode(splitPath(path));
 }
 

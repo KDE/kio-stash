@@ -140,12 +140,8 @@ FileStash::dirList FileStash::createDirListItem(QString fileInfo)
 
 void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
 {
-    QStringList fileList;
-    if (url.path() == "/") {
-        fileList = setFileList(QUrl("")); //migrate this to SFS
-    } else {
-        fileList = setFileList(url);
-    }
+    qDebug() << "CURRENT PATH" << url.path();
+    QStringList fileList = setFileList(url);
     for (auto it = fileList.begin(); it != fileList.end(); it++) {
         qDebug() << *it;
     }
