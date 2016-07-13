@@ -122,7 +122,7 @@ StashFileSystem::StashNodeData StashFileSystem::findNode(QStringList path)
 {
     StashNode *node = root->children;
     StashNodeData data = StashNodeData(InvalidNode);
-    if (!path.size()) {
+    if (!path.size() || path.at(0) == "") {
         return *root;
     } else {
         for (int i = 0; i < path.size(); ++i) {

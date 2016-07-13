@@ -89,11 +89,10 @@ public:
     }
 
 private:
-
+    StashNodeData *root;
     bool addNode(QString location, StashNodeData* data);
     void deleteChildren(StashNodeData nodeData);
     QStringList splitPath(QString path);
-    StashNodeData *root;
 };
 
 #endif
