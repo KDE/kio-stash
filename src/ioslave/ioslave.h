@@ -68,6 +68,7 @@ protected:
     void copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags) Q_DECL_OVERRIDE;
     void mkdir(const QUrl &url, int permissions) Q_DECL_OVERRIDE;
     void del(const QUrl &url, bool isFile) Q_DECL_OVERRIDE;
+//    void put(const QUrl & url, int permissions, KIO::JobFlags flags) Q_DECL_OVERRIDE;
     bool rewriteUrl(const QUrl &url, QUrl &newUrl) Q_DECL_OVERRIDE;
 };
 

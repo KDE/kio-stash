@@ -140,14 +140,19 @@ FileStash::dirList FileStash::createDirListItem(QString fileInfo)
 
 void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
 {
-    QStringList fileList = setFileList(url);
+    QStringList fileList;
+    if (url.path() == "/") {
+        fileList = setFileList(QUrl("")); //migrate this to SFS
+    } else {
+        fileList = setFileList(url);
+    }
     for (auto it = fileList.begin(); it != fileList.end(); it++) {
         qDebug() << *it;
     }
     FileStash::dirList item;
     KIO::UDSEntry entry;
     if (fileList.at(0) == "error") {
-        error(KIO::ERR_SLAVE_DEFINED, QString("NOPE"));
+        error(KIO::ERR_SLAVE_DEFINED, QString("The file either does not exist or has not been stashed yet."));
     } else {
         for (auto it = fileList.begin(); it != fileList.end(); it++) {
             entry.clear();
@@ -170,10 +175,14 @@ void FileStash::mkdir(const QUrl &url, int permissions)
     finished();
 }
 
+/*void FileStash::put(const QUrl & url, int permissions, KIO::JobFlags flags)
+{
+    qDebug() << "NOT SUPPORTED YET :P";
+}
+*/
 void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
 {
-    QDBusMessage msg = QDBusMessage::createMethodCall(
-        "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
+    qDebug() << "COPY CALLED";
     NodeType fileType;
     if (QFileInfo(src.path()).isFile()) {
         fileType = NodeType::FileNode;
@@ -185,7 +194,11 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
     } else {
         error(KIO::ERR_SLAVE_DEFINED, QString("Could not determine file type."));
     }
-    msg << src.path() << dest.path() << (int) fileType;
+    QDBusMessage msg = QDBusMessage::createMethodCall(
+        "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
+    QString destinationPath = dest.path() + QStringLiteral("/") + QUrl(src).fileName();
+    qDebug() << src.path() << destinationPath << (int) fileType;
+    msg << src.path() << destinationPath << (int) fileType;
     bool queued = QDBusConnection::sessionBus().send(msg);
     if (queued) {
         finished();
