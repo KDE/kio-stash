@@ -62,6 +62,7 @@ private:
         KIO::UDSEntry &entry, const FileStash::dirList &fileItem);
     QStringList setFileList(const QUrl &url);
     FileStash::dirList createDirListItem(QString fileInfo);
+    QString currentDir;
 
 protected:
     void listDir(const QUrl &url) Q_DECL_OVERRIDE;

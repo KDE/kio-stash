@@ -107,6 +107,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
             entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, fileMimetype.name());
             entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
             entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.source);
+            entry.insert(KIO::UDSEntry::UDS_TARGET_URL, "file:/" + fileItem.source);
             entry.insert(KIO::UDSEntry::UDS_ACCESS, entryInfo.permissions());
             entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
             entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, QString::number(epoch.secsTo(entryInfo.lastModified()))); // FIXME: Broken af
@@ -141,6 +142,7 @@ FileStash::dirList FileStash::createDirListItem(QString fileInfo)
 void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
 {
     qDebug() << url;
+    currentDir = url.path();
     QStringList fileList = setFileList(url);
     for (auto it = fileList.begin(); it != fileList.end(); it++) {
         qDebug() << *it;
@@ -205,6 +207,7 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
 
 void FileStash::del(const QUrl &url, bool isFile)
 {
+    qDebug() << "DEl request CALLLED" << url.path() << "for dir" << currentDir;
     QDBusMessage msg = QDBusMessage::createMethodCall(
         "org.kde.kio.StashNotifier", "/StashNotifier", "", "removePath");
     msg << url.path();
