@@ -60,6 +60,7 @@ private:
     void displayList(const QUrl &url);
     bool createUDSEntry(
         KIO::UDSEntry &entry, const FileStash::dirList &fileItem);
+    bool isRoot(const QString &string);
     QStringList setFileList(const QUrl &url);
     FileStash::dirList createDirListItem(QString fileInfo);
     QString currentDir;

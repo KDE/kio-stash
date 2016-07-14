@@ -107,9 +107,9 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
             entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0100000);
             entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, fileMimetype.name());
             entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
-            if (fileItem.filePath == "" || fileItem.filePath == "/") {
+            if (isRoot(currentDir)) {
                 qDebug() << "QUALIFIES crit";
-                entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.source);
+                entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.source); //we have to use a URL which exists so delete doesn't get angry
             } else {
                 entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
             }
@@ -216,13 +216,25 @@ void FileStash::del(const QUrl &url, bool isFile)
     qDebug() << "DEl request CALLLED" << url.path() << "for dir" << currentDir;
     QDBusMessage msg = QDBusMessage::createMethodCall(
         "org.kde.kio.StashNotifier", "/StashNotifier", "", "removePath");
-    msg << url.path();
+    if (isRoot(currentDir)) {
+        msg << url.fileName();
+    } else {
+        msg << url.path();
+    }
     bool queued = QDBusConnection::sessionBus().send(msg);
     if (queued) {
         finished();
     } else {
         error(KIO::ERR_CANNOT_DELETE, url.path());
     }
+}
+
+bool FileStash::isRoot(const QString &string)
+{
+    if (string == "" || string == "/") {
+        return true;
+    }
+    return false;
 }
 
 #include "ioslave.moc"
