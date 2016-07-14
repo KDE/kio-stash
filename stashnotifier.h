@@ -49,7 +49,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     Q_SCRIPTABLE void addPath(const QString &source, const QString &stashPath, const int &fileType);
-    Q_SCRIPTABLE void removePath(const QString &path, const int &fileType);
+    Q_SCRIPTABLE void removePath(const QString &path);
     Q_SCRIPTABLE QStringList fileList(const QString &path);
 
 private Q_SLOTS:

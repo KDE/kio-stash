@@ -82,7 +82,12 @@ QString StashNotifier::encodeString(StashFileSystem::StashNode::iterator node, c
             break;
     }
 
-    encodedString += "::" + path + QStringLiteral("/") + node.key(); //will this work?
+    if (path == "/") {
+        encodedString += "::" + QStringLiteral("/") + node.key(); //will this work?
+    } else {
+        encodedString += "::" + path + QStringLiteral("/") + node.key(); //will this work?
+    }
+
 
     if (node.value().type == StashFileSystem::NodeType::FileNode ||
         node.value().type == StashFileSystem::NodeType::SymlinkNode) {
@@ -138,14 +143,15 @@ QString StashNotifier::processString(const QString &path) //removes trailing sla
 
 void StashNotifier::removePath(const QString &path)
 {
-    StashNotifier::NodeType fileType;
+    qDebug() << "delete request called for " << path;
+    StashFileSystem::NodeType fileType;
     QString processedPath = processString(path);
-    if (fileType == StashFileSystem::NodeType::DirectoryNode) {
+/*    if (fileType == StashFileSystem::NodeType::DirectoryNode) {
         dirWatch->removeDir(processedPath);
     } else {
         dirWatch->removeFile(processedPath);
     }
-    fileSystem->delEntry(path);
+    fileSystem->delEntry(path);*/
     emit listChanged();
 }
 
