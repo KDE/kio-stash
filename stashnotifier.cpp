@@ -95,7 +95,7 @@ QString StashNotifier::encodeString(StashFileSystem::StashNode::iterator node, c
     } else {
         encodedString += "::";
     }
-    qDebug() << "ENCODED STRING" << encodedString;
+    //qDebug() << "ENCODED STRING" << encodedString;
     return encodedString;
 }
 
@@ -150,8 +150,8 @@ void StashNotifier::removePath(const QString &path)
         dirWatch->removeDir(processedPath);
     } else {
         dirWatch->removeFile(processedPath);
-    }
-    fileSystem->delEntry(path);*/
+    }*/
+    fileSystem->delEntry(path);
     emit listChanged();
 }
 

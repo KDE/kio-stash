@@ -106,7 +106,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
             entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0100000);
             entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, fileMimetype.name());
             entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
-            entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.source);
+            entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
             entry.insert(KIO::UDSEntry::UDS_TARGET_URL, "file:/" + fileItem.source);
             entry.insert(KIO::UDSEntry::UDS_ACCESS, entryInfo.permissions());
             entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
@@ -145,7 +145,7 @@ void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
     currentDir = url.path();
     QStringList fileList = setFileList(url);
     for (auto it = fileList.begin(); it != fileList.end(); it++) {
-        qDebug() << *it;
+        //qDebug() << *it;
     }
     FileStash::dirList item;
     KIO::UDSEntry entry;
