@@ -117,10 +117,10 @@ void StashNotifier::addPath(const QString &source, const QString &stashPath, con
             dirWatch->addDir(processedPath);
             fileSystem->addFolder(processedPath);
         } else if (fileType == StashFileSystem::NodeType::FileNode) {
-            dirWatch->addFile(processedPath);
+            dirWatch->addFile(source);
             fileSystem->addFile(processString(source), stashPath);
         } else if (fileType == StashFileSystem::NodeType::SymlinkNode) {
-            dirWatch->addFile(processedPath);
+            dirWatch->addFile(source);
             fileSystem->addSymlink(processString(source), stashPath);
         }
         emit listChanged();
@@ -136,8 +136,9 @@ QString StashNotifier::processString(const QString &path) //removes trailing sla
     return processedPath;
 }
 
-void StashNotifier::removePath(const QString &path, const int &fileType)
+void StashNotifier::removePath(const QString &path)
 {
+    StashNotifier::NodeType fileType;
     QString processedPath = processString(path);
     if (fileType == StashFileSystem::NodeType::DirectoryNode) {
         dirWatch->removeDir(processedPath);

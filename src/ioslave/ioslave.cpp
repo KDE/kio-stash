@@ -140,7 +140,7 @@ FileStash::dirList FileStash::createDirListItem(QString fileInfo)
 
 void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
 {
-    qDebug() << "CURRENT PATH" << url.path();
+    qDebug() << url;
     QStringList fileList = setFileList(url);
     for (auto it = fileList.begin(); it != fileList.end(); it++) {
         qDebug() << *it;
