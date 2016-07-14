@@ -100,13 +100,19 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
             break;
         }
         case NodeType::FileNode: {
+            QString stashPath = fileItem.filePath;
             QFileInfo entryInfo;
             entryInfo = QFileInfo(fileItem.source);
             fileMimetype = mimeDatabase.mimeTypeForFile(fileItem.source);
             entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0100000);
             entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, fileMimetype.name());
             entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
-            entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
+            if (fileItem.filePath == "" || fileItem.filePath == "/") {
+                qDebug() << "QUALIFIES crit";
+                entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.source);
+            } else {
+                entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
+            }
             entry.insert(KIO::UDSEntry::UDS_TARGET_URL, "file:/" + fileItem.source);
             entry.insert(KIO::UDSEntry::UDS_ACCESS, entryInfo.permissions());
             entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
