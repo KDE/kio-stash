@@ -113,7 +113,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
             } else {
                 entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
             }
-            entry.insert(KIO::UDSEntry::UDS_TARGET_URL, "file:/" + fileItem.source);
+            entry.insert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
             entry.insert(KIO::UDSEntry::UDS_ACCESS, entryInfo.permissions());
             entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
             entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, QString::number(epoch.secsTo(entryInfo.lastModified()))); // FIXME: Broken af
@@ -176,6 +176,14 @@ void FileStash::displayList(const QUrl &url) // FIXME: remove
 void FileStash::mkdir(const QUrl &url, int permissions)
 {
     qDebug() << "mkdirOut" << url;
+    //if (url.path() != "") {
+        QDBusMessage msg = QDBusMessage::createMethodCall(
+            "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
+        QString destinationPath = url.path();
+        qDebug() << "" << destinationPath << NodeType::DirectoryNode;
+        msg << "" << destinationPath << NodeType::DirectoryNode;
+        bool queued = QDBusConnection::sessionBus().send(msg);
+//    }
     finished();
 }
 
@@ -231,7 +239,7 @@ void FileStash::del(const QUrl &url, bool isFile)
 
 bool FileStash::isRoot(const QString &string)
 {
-    if (string == "" || string == "/") {
+    if (string.isEmpty() || string == "/") {
         return true;
     }
     return false;

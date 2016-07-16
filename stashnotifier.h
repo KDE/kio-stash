@@ -57,7 +57,7 @@ private Q_SLOTS:
     void created(const QString &path);
     void displayRoot()
     {
-    //    fileSystem->displayRoot();
+       fileSystem->displayRoot();
     }
 };
 
