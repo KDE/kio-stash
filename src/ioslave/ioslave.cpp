@@ -64,6 +64,7 @@ void FileStash::createTopLevelDirEntry(KIO::UDSEntry &entry)
     entry.clear();
     entry.insert(KIO::UDSEntry::UDS_NAME, QStringLiteral("."));
     entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0040000);
+    entry.insert(KIO::UDSEntry::UDS_ACCESS, 0700);
     entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, QStringLiteral("inode/directory"));
 }
 

@@ -45,6 +45,10 @@ class StashNotifierAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"out\" type=\"as\"/>\n"
 "      <arg direction=\"in\" type=\"s\" name=\"path\"/>\n"
 "    </method>\n"
+"    <method name=\"fileInfo\">\n"
+"      <arg direction=\"out\" type=\"s\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"path\"/>\n"
+"    </method>\n"
 "  </interface>\n"
         "")
 public:
@@ -54,6 +58,7 @@ public:
 public: // PROPERTIES
 public Q_SLOTS: // METHODS
     void addPath(const QString &source, const QString &stashPath, int fileType);
+    QString fileInfo(const QString &path);
     QStringList fileList(const QString &path);
     void removePath(const QString &path);
 Q_SIGNALS: // SIGNALS

@@ -25,13 +25,3 @@ Adaptor classes for D-Bus were generated using:
 qdbuscpp2xml -a stashnotifier.h -o dbus/org.kde.kio.StashNotifier.xml
 qdbusxml2cpp -c StashNotifierAdaptor -a stash_adaptor.h:stash_adaptor.cpp dbus/org.kde.kio.StashNotifier.xml
 ```
-
-The annotation for custom types are:
-
-```
-<method name="fileList">
-  <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;dirListDBus::dirList&gt;"/>
-  <arg name="path" type="s" direction="in"/>
-  <arg name="contents" type="a(ssi)" direction="out"/>
-</method>
-```

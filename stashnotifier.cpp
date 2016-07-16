@@ -83,9 +83,9 @@ QString StashNotifier::encodeString(StashFileSystem::StashNode::iterator node, c
     }
 
     if (path == "/") {
-        encodedString += "::" + QStringLiteral("/") + node.key(); //will this work?
+        encodedString += "::" + QStringLiteral("/") + node.key();
     } else {
-        encodedString += "::" + path + QStringLiteral("/") + node.key(); //will this work?
+        encodedString += "::" + path + QStringLiteral("/") + node.key();
     }
 
 
@@ -96,6 +96,38 @@ QString StashNotifier::encodeString(StashFileSystem::StashNode::iterator node, c
         encodedString += "::";
     }
     //qDebug() << "ENCODED STRING" << encodedString;
+    return encodedString;
+}
+
+QString StashNotifier::encodeString(StashFileSystem::StashNodeData nodeData, const QString &path)
+{
+    QString encodedString;
+
+    switch (nodeData.type) {
+        case StashFileSystem::NodeType::DirectoryNode:
+            encodedString = "dir";
+            break;
+        case StashFileSystem::NodeType::FileNode:
+            encodedString = "file";
+            break;
+        case StashFileSystem::NodeType::SymlinkNode:
+            encodedString = "symlink";
+            break;
+        case StashFileSystem::NodeType::InvalidNode:
+            encodedString = "invalid";
+            break;
+    }
+
+    encodedString += "::" + path;
+
+    if (nodeData.type == StashFileSystem::NodeType::FileNode ||
+        nodeData.type == StashFileSystem::NodeType::SymlinkNode) {
+        encodedString += "::" + nodeData.source;
+    } else {
+        encodedString += "::";
+    }
+
+    qDebug() << "ENCODED STRING4stats" << encodedString;
     return encodedString;
 }
 
@@ -112,6 +144,14 @@ QStringList StashNotifier::fileList(const QString &path) //forwards list over QD
         }
     }
     return contents;
+}
+
+QString StashNotifier::fileInfo(const QString &path) //forwards data of a single file to the KIO slave
+{
+    QString fileData;
+    StashFileSystem::StashNodeData node = fileSystem->findNode(path);
+    fileData = encodeString(node, path);
+    return fileData;
 }
 
 void StashNotifier::addPath(const QString &source, const QString &stashPath, const int &fileType)

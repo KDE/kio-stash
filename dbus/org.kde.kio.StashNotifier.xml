@@ -15,5 +15,9 @@
       <arg type="as" direction="out"/>
       <arg name="path" type="s" direction="in"/>
     </method>
+    <method name="fileInfo">
+      <arg type="s" direction="out"/>
+      <arg name="path" type="s" direction="in"/>
+    </method>
   </interface>
 </node>

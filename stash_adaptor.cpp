@@ -39,6 +39,14 @@ void StashNotifierAdaptor::addPath(const QString &source, const QString &stashPa
     QMetaObject::invokeMethod(parent(), "addPath", Q_ARG(QString, source), Q_ARG(QString, stashPath), Q_ARG(int, fileType));
 }
 
+QString StashNotifierAdaptor::fileInfo(const QString &path)
+{
+    // handle method call org.kde.kio.StashNotifier.fileInfo
+    QString out0;
+    QMetaObject::invokeMethod(parent(), "fileInfo", Q_RETURN_ARG(QString, out0), Q_ARG(QString, path));
+    return out0;
+}
+
 QStringList StashNotifierAdaptor::fileList(const QString &path)
 {
     // handle method call org.kde.kio.StashNotifier.fileList
