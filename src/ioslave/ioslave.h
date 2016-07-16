@@ -20,9 +20,10 @@
 #ifndef KIO_FILESTASH_H
 #define KIO_FILESTASH_H
 
-#include <KIO/ForwardingSlaveBase>
+#include <KIO/SlaveBase>
+#include <QObject>
 
-class FileStash : public KIO::ForwardingSlaveBase
+class FileStash : public QObject, public KIO::SlaveBase
 {
     Q_OBJECT
 
@@ -74,7 +75,7 @@ protected:
     void del(const QUrl &url, bool isFile) Q_DECL_OVERRIDE;
 //    void put(const QUrl & url, int permissions, KIO::JobFlags flags) Q_DECL_OVERRIDE;
     void stat(const QUrl &url) Q_DECL_OVERRIDE;
-    bool rewriteUrl(const QUrl &url, QUrl &newUrl) Q_DECL_OVERRIDE;
+    //bool rewriteUrl(const QUrl &url, QUrl &newUrl) Q_DECL_OVERRIDE;
 };
 
 #endif

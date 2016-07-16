@@ -53,7 +53,7 @@ extern "C" {
 }
 
 FileStash::FileStash(const QByteArray &pool, const QByteArray &app) :
-    KIO::ForwardingSlaveBase("stash", pool, app)
+    KIO::SlaveBase("stash", pool, app)
 {}
 
 FileStash::~FileStash()
@@ -101,7 +101,7 @@ void FileStash::stat(const QUrl &url)
     finished();
 }
 
-bool FileStash::rewriteUrl(const QUrl &url, QUrl &newUrl)
+/*bool FileStash::rewriteUrl(const QUrl &url, QUrl &newUrl)
 {
     if (url.scheme() != "file") {
         newUrl.setScheme("file");
@@ -110,7 +110,7 @@ bool FileStash::rewriteUrl(const QUrl &url, QUrl &newUrl)
         newUrl = url;
     }
     return true;
-}
+}*/
 
 bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &fileItem)
 {

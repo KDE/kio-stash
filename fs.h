@@ -70,7 +70,7 @@ public:
     explicit StashFileSystem(QObject *parent = 0);
     virtual ~StashFileSystem();
 
-    bool delEntry(const QString &path);
+    bool delEntry(QString path);
     bool addFile(QString src, QString dest);
     bool addFolder(QString dest);
     bool addSymlink(QString src, QString dest);
