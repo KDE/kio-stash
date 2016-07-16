@@ -78,12 +78,18 @@ QStringList FileStash::setFileList(const QUrl &url)
 
 void FileStash::stat(const QUrl &url)
 {
+    qDebug() << "statcalled" << url;
+    KIO::UDSEntry entry;
     if (isRoot(url.path())) {
-        KIO::UDSEntry entry;
         createTopLevelDirEntry(entry);
-        statEntry(entry);
-        finished();
+    } else {
+        entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0040000);
+        entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, QString("inode/directory"));
+        entry.insert(KIO::UDSEntry::UDS_NAME, url.fileName());
+        entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, url.fileName());
     }
+    statEntry(entry);
+    finished();
 }
 
 bool FileStash::rewriteUrl(const QUrl &url, QUrl &newUrl)
@@ -109,7 +115,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
         case NodeType::DirectoryNode: { // TODO: add logic for number of children by modifying SFS
             entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0040000);
             entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, QString("inode/directory"));
-            entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.filePath);
+            entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
             entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
             break;
         }
@@ -165,12 +171,18 @@ FileStash::dirList FileStash::createDirListItem(QString fileInfo)
 
 void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
 {
-    qDebug() << url;
+    //qDebug() << url;
     currentDir = url.path();
     QStringList fileList = setFileList(url);
 
     for (auto it = fileList.begin(); it != fileList.end(); it++) {
         //qDebug() << *it;
+    }
+
+    if (!fileList.size()) {
+        qDebug() << "empty dir";
+        finished();
+        return;
     }
 
     FileStash::dirList item;
@@ -219,6 +231,7 @@ void FileStash::mkdir(const QUrl &url, int permissions)
     qDebug() << "NOT SUPPORTED YET :P";
 }
 */
+
 void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
 {
     qDebug() << "COPY CALLED";
@@ -235,7 +248,7 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
     }
     QDBusMessage msg = QDBusMessage::createMethodCall(
         "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
-    QString destinationPath = dest.path() + QStringLiteral("/") + QUrl(src).fileName();
+    QString destinationPath = dest.path();// + QStringLiteral("/") + QUrl(src).fileName();
     qDebug() << src.path() << destinationPath << (int) fileType;
     msg << src.path() << destinationPath << (int) fileType;
     bool queued = QDBusConnection::sessionBus().send(msg);
