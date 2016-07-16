@@ -67,7 +67,7 @@ QStringList StashFileSystem::splitPath(QString path)
     return path.split('/');
 }
 
-bool StashFileSystem::delEntry(QString location)
+bool StashFileSystem::delEntry(const QString &path)
 {
     QStringList path = splitPath(location);
     QString name = path.takeLast();

@@ -245,11 +245,12 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
 {
     qDebug() << "COPY CALLED";
     NodeType fileType;
-    if (QFileInfo(src.path()).isFile()) {
+    QFileInfo fileInfo = QFileInfo(src.path());
+    if (fileInfo.isFile()) {
         fileType = NodeType::FileNode;
-    } else if (QFileInfo(src.path()).isSymLink()) {
+    } else if (fileInfo.isSymLink()) {
         fileType = NodeType::SymlinkNode;
-    } else if (QFileInfo(src.path()).isDir()) { // if I'm not wrong, this can never happen, but we should handle it anyway
+    } else if (fileInfo.isDir()) { // if I'm not wrong, this can never happen, but we should handle it anyway
         fileType = NodeType::DirectoryNode;
         qDebug() << "DirectoryNode...created?";
     } else {
@@ -270,7 +271,7 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
 
 void FileStash::del(const QUrl &url, bool isFile)
 {
-    qDebug() << "DEl request CALLLED" << url.path() << "for dir" << currentDir;
+    qDebug() << "Del request CALLLED" << url.path() << "for dir" << currentDir;
     QDBusMessage msg = QDBusMessage::createMethodCall(
         "org.kde.kio.StashNotifier", "/StashNotifier", "", "removePath");
     if (isRoot(currentDir)) {
