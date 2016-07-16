@@ -59,6 +59,14 @@ FileStash::FileStash(const QByteArray &pool, const QByteArray &app) :
 FileStash::~FileStash()
 {}
 
+void FileStash::createTopLevelDirEntry(KIO::UDSEntry &entry)
+{
+    entry.clear();
+    entry.insert(KIO::UDSEntry::UDS_NAME, QStringLiteral("."));
+    entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0040000);
+    entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, QStringLiteral("inode/directory"));
+}
+
 QStringList FileStash::setFileList(const QUrl &url)
 {
     QDBusMessage msg = QDBusMessage::createMethodCall(
@@ -66,6 +74,16 @@ QStringList FileStash::setFileList(const QUrl &url)
     msg << url.path();
     QDBusReply<QStringList> received = QDBusConnection::sessionBus().call(msg);
     return received.value();
+}
+
+void FileStash::stat(const QUrl &url)
+{
+    if (isRoot(url.path())) {
+        KIO::UDSEntry entry;
+        createTopLevelDirEntry(entry);
+        statEntry(entry);
+        finished();
+    }
 }
 
 bool FileStash::rewriteUrl(const QUrl &url, QUrl &newUrl)
@@ -150,11 +168,19 @@ void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
     qDebug() << url;
     currentDir = url.path();
     QStringList fileList = setFileList(url);
+
     for (auto it = fileList.begin(); it != fileList.end(); it++) {
         //qDebug() << *it;
     }
+
     FileStash::dirList item;
     KIO::UDSEntry entry;
+
+    if (isRoot(url.path())) {
+        createTopLevelDirEntry(entry);
+        listEntry(entry);
+    }
+
     if (fileList.at(0) == "error") {
         error(KIO::ERR_SLAVE_DEFINED, QString("The file either does not exist or has not been stashed yet."));
     } else {
@@ -164,6 +190,7 @@ void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
             createUDSEntry(entry, item);
             listEntry(entry);
         }
+
         finished();
     }
 }
