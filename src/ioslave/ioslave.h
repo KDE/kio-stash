@@ -63,6 +63,7 @@ private:
     void createTopLevelDirEntry(KIO::UDSEntry &entry);
     bool isRoot(const QString &string);
     QStringList setFileList(const QUrl &url);
+    QString setFileInfo(const QUrl &url);
     FileStash::dirList createDirListItem(QString fileInfo);
     QString currentDir;
 

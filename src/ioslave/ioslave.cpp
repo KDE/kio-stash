@@ -77,6 +77,15 @@ QStringList FileStash::setFileList(const QUrl &url)
     return received.value();
 }
 
+QString FileStash::setFileInfo(const QUrl &url)
+{
+    QDBusMessage msg = QDBusMessage::createMethodCall(
+        "org.kde.kio.StashNotifier", "/StashNotifier", "", "fileInfo");
+    msg << url.path();
+    QDBusReply<QString> received = QDBusConnection::sessionBus().call(msg);
+    return received.value();
+}
+
 void FileStash::stat(const QUrl &url)
 {
     qDebug() << "statcalled" << url;
@@ -84,10 +93,9 @@ void FileStash::stat(const QUrl &url)
     if (isRoot(url.path())) {
         createTopLevelDirEntry(entry);
     } else {
-        entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0040000);
-        entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, QString("inode/directory"));
-        entry.insert(KIO::UDSEntry::UDS_NAME, url.fileName());
-        entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, url.fileName());
+        QString fileInfo = setFileInfo(url.path());
+        FileStash::dirList item = createDirListItem(fileInfo);
+        createUDSEntry(entry, item);
     }
     statEntry(entry);
     finished();
