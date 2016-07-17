@@ -58,7 +58,6 @@ public:
     };
 
 private:
-    void displayList(const QUrl &url);
     bool createUDSEntry(
         KIO::UDSEntry &entry, const FileStash::dirList &fileItem);
     void createTopLevelDirEntry(KIO::UDSEntry &entry);

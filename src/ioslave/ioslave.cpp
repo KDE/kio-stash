@@ -143,7 +143,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
             break;
         }
         case NodeType::InvalidNode: {
-            entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.filePath); //find a generic mimetype
+            entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.filePath); // TODO: find a generic mimetype
         }
     }
     return true;
@@ -169,13 +169,8 @@ FileStash::dirList FileStash::createDirListItem(QString fileInfo)
 
 void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
 {
-    //qDebug() << url;
     currentDir = url.path();
     QStringList fileList = setFileList(url);
-
-    for (auto it = fileList.begin(); it != fileList.end(); it++) {
-        //qDebug() << *it;
-    }
 
     if (!fileList.size()) {
         qDebug() << "empty dir";
@@ -203,11 +198,6 @@ void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
 
         finished();
     }
-}
-
-void FileStash::displayList(const QUrl &url) // FIXME: remove
-{
-
 }
 
 void FileStash::mkdir(const QUrl &url, int permissions)
@@ -241,7 +231,7 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
     }
     QDBusMessage msg = QDBusMessage::createMethodCall(
         "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
-    QString destinationPath = dest.path();// + QStringLiteral("/") + QUrl(src).fileName();
+    QString destinationPath = dest.path();
     qDebug() << src.path() << destinationPath << (int) fileType;
     msg << src.path() << destinationPath << (int) fileType;
     bool queued = QDBusConnection::sessionBus().send(msg);
