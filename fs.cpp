@@ -54,20 +54,21 @@ void StashFileSystem::deleteChildren(StashNodeData nodeData)
     }
 }
 
-QStringList StashFileSystem::splitPath(QString path)
+QStringList StashFileSystem::splitPath(const QString &path)
 {
-    if (path.startsWith('/')) {
-        path = path.right(path.size() - 1);
+    QString filePath = path;
+    if (filePath.startsWith('/')) {
+        filePath = filePath.right(filePath.size() - 1);
     }
 
-    if (path.endsWith('/')) {
-        path = path.left(path.size() - 1);
+    if (filePath.endsWith('/')) {
+        filePath = filePath.left(filePath.size() - 1);
     }
 
-    return path.split('/');
+    return filePath.split('/');
 }
 
-bool StashFileSystem::delEntry(QString location)
+bool StashFileSystem::delEntry(const QString &location)
 {
     QStringList path = splitPath(location);
     QString name = path.takeLast();
@@ -85,7 +86,7 @@ bool StashFileSystem::delEntry(QString location)
     return (baseData.children->remove(name) > 0);
 }
 
-bool StashFileSystem::addNode(QString location, StashNodeData* data)
+bool StashFileSystem::addNode(const QString &location, StashNodeData* data)
 {
     QStringList path = splitPath(location);
     QString name = path.takeLast();
@@ -100,21 +101,21 @@ bool StashFileSystem::addNode(QString location, StashNodeData* data)
     return true;
 }
 
-bool StashFileSystem::addFile(QString src, QString dest)
+bool StashFileSystem::addFile(const QString &src, const QString &dest)
 {
     StashNodeData *fileData = new StashNodeData(FileNode);
     fileData->source = src;
     return addNode(dest, fileData);
 }
 
-bool StashFileSystem::addSymlink(QString src, QString dest)
+bool StashFileSystem::addSymlink(const QString &src, const QString &dest)
 {
     StashNodeData *fileData = new StashNodeData(SymlinkNode);
     fileData->source = src;
     return addNode(dest, fileData);
 }
 
-bool StashFileSystem::addFolder(QString dest)
+bool StashFileSystem::addFolder(const QString &dest)
 {
     StashNodeData *fileData = new StashNodeData(DirectoryNode);
     fileData->source = QStringLiteral("");

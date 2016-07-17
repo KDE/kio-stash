@@ -70,10 +70,10 @@ public:
     explicit StashFileSystem(QObject *parent = 0);
     virtual ~StashFileSystem();
 
-    bool delEntry(QString path);
-    bool addFile(QString src, QString dest);
-    bool addFolder(QString dest);
-    bool addSymlink(QString src, QString dest);
+    bool delEntry(const QString &path);
+    bool addFile(const QString &src, const QString &dest);
+    bool addFolder(const QString &dest);
+    bool addSymlink(const QString &src, const QString &dest);
 
     StashNodeData findNode(QString path);
     StashNodeData findNode(QStringList path);
@@ -100,9 +100,9 @@ public:
 
 private:
     StashNodeData *root;
-    bool addNode(QString location, StashNodeData* data);
+    bool addNode(const QString &location, StashNodeData* data);
     void deleteChildren(StashNodeData nodeData);
-    QStringList splitPath(QString path);
+    QStringList splitPath(const QString &path);
 };
 
 #endif

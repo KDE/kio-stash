@@ -117,8 +117,20 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
             entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
             break;
         }
-        case NodeType::SymlinkNode: {// TODO: work on this later
+        case NodeType::SymlinkNode: {// TODO: make more elegant
+            QString stashPath = fileItem.filePath;
+            QFileInfo entryInfo;
+            entryInfo = QFileInfo(fileItem.source);
+            fileMimetype = mimeDatabase.mimeTypeForFile(fileItem.source);
             entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0120000);
+            entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, fileMimetype.name());
+            entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
+            entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
+            entry.insert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
+            entry.insert(KIO::UDSEntry::UDS_ACCESS, entryInfo.permissions());
+            entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
+            entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, QString::number(epoch.secsTo(entryInfo.lastModified()))); // FIXME: Broken af
+            entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, QString::number(epoch.secsTo(entryInfo.lastRead())));
             break;
         }
         case NodeType::FileNode: {
@@ -129,12 +141,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
             entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0100000);
             entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, fileMimetype.name());
             entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
-            if (isRoot(currentDir)) {
-                qDebug() << "QUALIFIES crit";
-                entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.source); //we have to use a URL which exists so delete doesn't get angry
-            } else {
-                entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
-            }
+            entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
             entry.insert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
             entry.insert(KIO::UDSEntry::UDS_ACCESS, entryInfo.permissions());
             entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
@@ -143,7 +150,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
             break;
         }
         case NodeType::InvalidNode: {
-            entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.filePath); // TODO: find a generic mimetype
+            entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.filePath); // TODO: find a generic mimetype for broken files
         }
     }
     return true;
@@ -186,7 +193,7 @@ void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
         listEntry(entry);
     }
 
-    if (fileList.at(0) == "error") {
+    if (fileList.at(0) == "error::error::InvalidNode") {
         error(KIO::ERR_SLAVE_DEFINED, QString("The file either does not exist or has not been stashed yet."));
     } else {
         for (auto it = fileList.begin(); it != fileList.end(); it++) {
@@ -195,7 +202,6 @@ void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
             createUDSEntry(entry, item);
             listEntry(entry);
         }
-
         finished();
     }
 }
@@ -203,14 +209,12 @@ void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
 void FileStash::mkdir(const QUrl &url, int permissions)
 {
     qDebug() << "mkdirOut" << url;
-    //if (url.path() != "") {
-        QDBusMessage msg = QDBusMessage::createMethodCall(
-            "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
-        QString destinationPath = url.path();
-        qDebug() << "" << destinationPath << NodeType::DirectoryNode;
-        msg << "" << destinationPath << NodeType::DirectoryNode;
-        bool queued = QDBusConnection::sessionBus().send(msg);
-//    }
+    QDBusMessage msg = QDBusMessage::createMethodCall(
+        "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
+    QString destinationPath = url.path();
+    qDebug() << "" << destinationPath << NodeType::DirectoryNode;
+    msg << "" << destinationPath << NodeType::DirectoryNode;
+    bool queued = QDBusConnection::sessionBus().send(msg);
     finished();
 }
 

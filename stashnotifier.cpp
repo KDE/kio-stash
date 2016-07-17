@@ -135,9 +135,8 @@ QStringList StashNotifier::fileList(const QString &path) //forwards list over QD
 {
     QStringList contents;
     StashFileSystem::StashNodeData node = fileSystem->findNode(path);
-    qDebug() <<"NODE Folder" << path;
     if (node.type != StashFileSystem::NodeType::DirectoryNode) {
-        contents.append("error");
+        contents.append("error::error::InvalidNode");
     } else {
         for (auto it = node.children->begin(); it != node.children->end(); it++) {
             contents.append(encodeString(it, path));
