@@ -22,6 +22,6 @@ kdeinit5
 Adaptor classes for D-Bus were generated using:
 
 ```
-qdbuscpp2xml -a src/iodaemon/stashnotifier.h -o dbus/org.kde.kio.StashNotifier.xml
-qdbusxml2cpp -c StashNotifierAdaptor -a src/iodaemon/stash_adaptor.h:src/iodaemon/stash_adaptor.cpp dbus/org.kde.kio.StashNotifier.xml
+qdbuscpp2xml -a stashnotifier.h -o ../../dbus/org.kde.kio.StashNotifier.xml
+qdbusxml2cpp -c StashNotifierAdaptor -a stash_adaptor.h:stash_adaptor.cpp ../../dbus/org.kde.kio.StashNotifier.xml
 ```
