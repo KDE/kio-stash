@@ -101,17 +101,6 @@ void FileStash::stat(const QUrl &url)
     finished();
 }
 
-/*bool FileStash::rewriteUrl(const QUrl &url, QUrl &newUrl)
-{
-    if (url.scheme() != "file") {
-        newUrl.setScheme("file");
-        newUrl.setPath(url.path());
-    } else {
-        newUrl = url;
-    }
-    return true;
-}*/
-
 bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &fileItem)
 {
     QDateTime epoch;
@@ -234,12 +223,6 @@ void FileStash::mkdir(const QUrl &url, int permissions)
 //    }
     finished();
 }
-
-/*void FileStash::put(const QUrl & url, int permissions, KIO::JobFlags flags)
-{
-    qDebug() << "NOT SUPPORTED YET :P";
-}
-*/
 
 void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
 {
