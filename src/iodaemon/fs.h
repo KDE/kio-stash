@@ -100,7 +100,7 @@ public:
 
 private:
     StashNodeData *root;
-    bool addNode(const QString &location, StashNodeData* data);
+    bool addNode(const QString &location, const StashNodeData &data);
     void deleteChildren(StashNodeData nodeData);
     QStringList splitPath(const QString &path);
 };

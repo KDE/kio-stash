@@ -86,40 +86,40 @@ bool StashFileSystem::delEntry(const QString &location)
     return (baseData.children->remove(name) > 0);
 }
 
-bool StashFileSystem::addNode(const QString &location, StashNodeData* data)
+bool StashFileSystem::addNode(const QString &location, const StashNodeData &data)
 {
     QStringList path = splitPath(location);
     QString name = path.takeLast();
     StashNodeData baseData = findNode(path);
 
     if (!(baseData.type == DirectoryNode)) {
-        delete data->children;
+        deleteChildren(data);
         return false;
     }
 
-    baseData.children->insert(name, *data);
+    baseData.children->insert(name, data);
     return true;
 }
 
 bool StashFileSystem::addFile(const QString &src, const QString &dest)
 {
-    StashNodeData *fileData = new StashNodeData(FileNode);
-    fileData->source = src;
+    StashNodeData fileData(FileNode);
+    fileData.source = src;
     return addNode(dest, fileData);
 }
 
 bool StashFileSystem::addSymlink(const QString &src, const QString &dest)
 {
-    StashNodeData *fileData = new StashNodeData(SymlinkNode);
-    fileData->source = src;
+    StashNodeData fileData(SymlinkNode);
+    fileData.source = src;
     return addNode(dest, fileData);
 }
 
 bool StashFileSystem::addFolder(const QString &dest)
 {
-    StashNodeData *fileData = new StashNodeData(DirectoryNode);
-    fileData->source = QStringLiteral("");
-    fileData->children = new StashNode();
+    StashNodeData fileData(DirectoryNode);
+    fileData.source = QStringLiteral("");
+    fileData.children = new StashNode();
 
     return addNode(dest, fileData);
 }
