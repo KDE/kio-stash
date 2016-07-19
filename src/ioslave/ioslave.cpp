@@ -22,7 +22,6 @@
 #include <QDebug>
 #include <QMimeType>
 #include <QMimeDatabase>
-#include <QDateTime>
 #include <QDir>
 #include <QMetaType>
 #include <QDBusMetaType>
@@ -117,7 +116,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
             entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
             break;
         }
-        case NodeType::SymlinkNode: {// TODO: make more elegant
+        case NodeType::SymlinkNode: { // TODO: make more elegant
             QByteArray physicalPath_c = QFile::encodeName(fileItem.source);
             QT_STATBUF buff;
 
@@ -163,6 +162,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
         }
         case NodeType::InvalidNode: {
             entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.filePath); // TODO: find a generic mimetype for broken files
+            break;
         }
     }
     return true;
