@@ -118,7 +118,13 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
             break;
         }
         case NodeType::SymlinkNode: {// TODO: make more elegant
-            QString stashPath = fileItem.filePath;
+            QByteArray physicalPath_c = QFile::encodeName(fileItem.source);
+            QT_STATBUF buff;
+
+            if (QT_LSTAT(physicalPath_c, &buff) == -1) {
+                return false;
+            }
+
             QFileInfo entryInfo;
             entryInfo = QFileInfo(fileItem.source);
             fileMimetype = mimeDatabase.mimeTypeForFile(fileItem.source);
@@ -129,12 +135,18 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
             entry.insert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
             entry.insert(KIO::UDSEntry::UDS_ACCESS, entryInfo.permissions());
             entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
-            entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, QString::number(epoch.secsTo(entryInfo.lastModified()))); // FIXME: Broken af
-            entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, QString::number(epoch.secsTo(entryInfo.lastRead())));
+            entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, buff.st_mtime);
+            entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
             break;
         }
         case NodeType::FileNode: {
-            QString stashPath = fileItem.filePath;
+            QByteArray physicalPath_c = QFile::encodeName(fileItem.source);
+            QT_STATBUF buff;
+
+            if (QT_LSTAT(physicalPath_c, &buff) == -1) {
+                return false;
+            }
+
             QFileInfo entryInfo;
             entryInfo = QFileInfo(fileItem.source);
             fileMimetype = mimeDatabase.mimeTypeForFile(fileItem.source);
@@ -145,8 +157,8 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
             entry.insert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
             entry.insert(KIO::UDSEntry::UDS_ACCESS, entryInfo.permissions());
             entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
-            entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, QString::number(epoch.secsTo(entryInfo.lastModified()))); // FIXME: Broken af
-            entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, QString::number(epoch.secsTo(entryInfo.lastRead())));
+            entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, buff.st_mtime);
+            entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
             break;
         }
         case NodeType::InvalidNode: {
