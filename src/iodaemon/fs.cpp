@@ -31,16 +31,15 @@
 
 StashFileSystem::StashFileSystem(QObject *parent) :
     QObject(parent),
-    root(new StashNodeData(DirectoryNode))
+    root(DirectoryNode)
 {
-    root->children = new StashNode();
+    root.children = new StashNode();
     displayRoot();
 }
 
 StashFileSystem::~StashFileSystem()
 {
-    deleteChildren(*root);
-    delete root;
+    deleteChildren(root);
 }
 
 void StashFileSystem::deleteChildren(StashNodeData nodeData)
@@ -64,7 +63,6 @@ QStringList StashFileSystem::splitPath(const QString &path)
     if (filePath.endsWith('/')) {
         filePath = filePath.left(filePath.size() - 1);
     }
-
     return filePath.split('/');
 }
 
@@ -131,10 +129,10 @@ StashFileSystem::StashNodeData StashFileSystem::findNode(QString path)
 
 StashFileSystem::StashNodeData StashFileSystem::findNode(QStringList path)
 {
-    StashNode *node = root->children;
+    StashNode *node = root.children;
     StashNodeData data = StashNodeData(InvalidNode);
     if (!path.size() || path.at(0) == "") {
-        return *root;
+        return root;
     } else {
         for (int i = 0; i < path.size(); ++i) {
             if (node->contains(path[i])) {

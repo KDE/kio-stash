@@ -95,11 +95,11 @@ public:
 
     void displayRoot()
     {
-        displayNode(root->children);
+        displayNode(root.children);
     }
 
 private:
-    StashNodeData *root;
+    StashNodeData root;
     bool addNode(const QString &location, const StashNodeData &data);
     void deleteChildren(StashNodeData nodeData);
     QStringList splitPath(const QString &path);
