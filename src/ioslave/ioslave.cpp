@@ -98,7 +98,6 @@ QString FileStash::setFileInfo(const QUrl &url)
 
 void FileStash::stat(const QUrl &url)
 {
-    qDebug() << "statcalled" << url;
     KIO::UDSEntry entry;
     if (isRoot(url.path())) {
         createTopLevelDirEntry(entry);
@@ -203,7 +202,6 @@ void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
     QStringList fileList = setFileList(url);
 
     if (!fileList.size()) {
-        qDebug() << "empty dir";
         finished();
         return;
     }
@@ -232,11 +230,9 @@ void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
 
 void FileStash::mkdir(const QUrl &url, int permissions)
 {
-    qDebug() << "mkdirOut" << url;
     QDBusMessage msg = QDBusMessage::createMethodCall(
         "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
     QString destinationPath = url.path();
-    qDebug() << "" << destinationPath << NodeType::DirectoryNode;
     msg << "" << destinationPath << NodeType::DirectoryNode;
     bool queued = QDBusConnection::sessionBus().send(msg);
     finished();
@@ -244,9 +240,7 @@ void FileStash::mkdir(const QUrl &url, int permissions)
 
 void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
 {
-//    qDebug() << "COPY CALLED";
     if (src.scheme() == "file" && dest.scheme() == "stash") {
-//        qDebug() << "implemented this copy";
         NodeType fileType;
         QFileInfo fileInfo = QFileInfo(src.path());
         if (fileInfo.isFile()) {
@@ -271,19 +265,19 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
             error(KIO::ERR_SLAVE_DEFINED, QString("Cannot reach the stash daemon."));
         }
     } else if (src.scheme() == "stash" && dest.scheme() == "file") {
-//        qDebug() << "Copying this way 2 be added";
         QString destInfo = setFileInfo(src);
         FileStash::dirList fileItem = createDirListItem(destInfo);
         if (fileItem.type != NodeType::DirectoryNode) {
             QUrl newDestPath = QUrl::fromLocalFile(fileItem.source);
             ForwardingSlaveBase::copy(newDestPath, dest, permissions, flags);
         }
+    } else {
+        error(KIO::ERR_UNSUPPORTED_ACTION, QString("Copying between these protocols is not supported."));
     }
 }
 
 void FileStash::del(const QUrl &url, bool isFile)
 {
-    qDebug() << "Del request CALLLED" << url.path() << "for dir" << currentDir;
     QDBusMessage msg = QDBusMessage::createMethodCall(
         "org.kde.kio.StashNotifier", "/StashNotifier", "", "removePath");
     if (isRoot(currentDir)) {
