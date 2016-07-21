@@ -32,6 +32,7 @@
 #include <QDBusReply>
 #include <QCoreApplication>
 
+#include <KProtocolManager>
 #include <KLocalizedString>
 #include <KConfigGroup>
 
@@ -53,7 +54,13 @@ extern "C" {
 
 FileStash::FileStash(const QByteArray &pool, const QByteArray &app) :
     KIO::ForwardingSlaveBase("stash", pool, app)
-{}
+{
+    QString src = "tags:/";
+    qDebug() << "supports deleting?" << KProtocolManager::supportsDeleting(QUrl(src));
+    qDebug() << "supports makedir?" << KProtocolManager::supportsMakeDir(QUrl(src));
+    qDebug() << "supports moving?" << KProtocolManager::supportsMoving(QUrl(src));
+    qDebug() << "supports writing?" << KProtocolManager::supportsWriting(QUrl(src));
+}
 
 FileStash::~FileStash()
 {}
