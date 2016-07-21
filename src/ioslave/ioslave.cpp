@@ -52,11 +52,22 @@ extern "C" {
 }
 
 FileStash::FileStash(const QByteArray &pool, const QByteArray &app) :
-    KIO::SlaveBase("stash", pool, app)
+    KIO::ForwardingSlaveBase("stash", pool, app)
 {}
 
 FileStash::~FileStash()
 {}
+
+bool FileStash::rewriteUrl(const QUrl &url, QUrl &newUrl)
+{
+    if (url.scheme() != "file") {
+        newUrl.setScheme("file");
+        newUrl.setPath(url.path());
+    } else {
+        newUrl = url;
+    }
+    return true;
+}
 
 void FileStash::createTopLevelDirEntry(KIO::UDSEntry &entry)
 {
@@ -206,6 +217,7 @@ void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
     }
 
     if (fileList.at(0) == "error::error::InvalidNode") {
+        qDebug() << "error URL" << url;
         error(KIO::ERR_SLAVE_DEFINED, QString("The file either does not exist or has not been stashed yet."));
     } else {
         for (auto it = fileList.begin(); it != fileList.end(); it++) {
@@ -232,29 +244,40 @@ void FileStash::mkdir(const QUrl &url, int permissions)
 
 void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
 {
-    qDebug() << "COPY CALLED";
-    NodeType fileType;
-    QFileInfo fileInfo = QFileInfo(src.path());
-    if (fileInfo.isFile()) {
-        fileType = NodeType::FileNode;
-    } else if (fileInfo.isSymLink()) {
-        fileType = NodeType::SymlinkNode;
-    } else if (fileInfo.isDir()) { // if I'm not wrong, this can never happen, but we should handle it anyway
-        fileType = NodeType::DirectoryNode;
-        qDebug() << "DirectoryNode...created?";
-    } else {
-        error(KIO::ERR_SLAVE_DEFINED, QString("Could not determine file type."));
-    }
-    QDBusMessage msg = QDBusMessage::createMethodCall(
-        "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
-    QString destinationPath = dest.path();
-    qDebug() << src.path() << destinationPath << (int) fileType;
-    msg << src.path() << destinationPath << (int) fileType;
-    bool queued = QDBusConnection::sessionBus().send(msg);
-    if (queued) {
-        finished();
-    } else {
-        error(KIO::ERR_SLAVE_DEFINED, QString("Cannot reach the stash daemon."));
+//    qDebug() << "COPY CALLED";
+    if (src.scheme() == "file" && dest.scheme() == "stash") {
+//        qDebug() << "implemented this copy";
+        NodeType fileType;
+        QFileInfo fileInfo = QFileInfo(src.path());
+        if (fileInfo.isFile()) {
+            fileType = NodeType::FileNode;
+        } else if (fileInfo.isSymLink()) {
+            fileType = NodeType::SymlinkNode;
+        } else if (fileInfo.isDir()) { // if I'm not wrong, this can never happen, but we should handle it anyway
+            fileType = NodeType::DirectoryNode;
+            qDebug() << "DirectoryNode...created?";
+        } else {
+            error(KIO::ERR_SLAVE_DEFINED, QString("Could not determine file type."));
+        }
+        QDBusMessage msg = QDBusMessage::createMethodCall(
+            "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
+        QString destinationPath = dest.path();
+        qDebug() << src.path() << destinationPath << (int) fileType;
+        msg << src.path() << destinationPath << (int) fileType;
+        bool queued = QDBusConnection::sessionBus().send(msg);
+        if (queued) {
+            finished();
+        } else {
+            error(KIO::ERR_SLAVE_DEFINED, QString("Cannot reach the stash daemon."));
+        }
+    } else if (src.scheme() == "stash" && dest.scheme() == "file") {
+//        qDebug() << "Copying this way 2 be added";
+        QString destInfo = setFileInfo(src);
+        FileStash::dirList fileItem = createDirListItem(destInfo);
+        if (fileItem.type != NodeType::DirectoryNode) {
+            QUrl newDestPath = QUrl::fromLocalFile(fileItem.source);
+            ForwardingSlaveBase::copy(newDestPath, dest, permissions, flags);
+        }
     }
 }
 
