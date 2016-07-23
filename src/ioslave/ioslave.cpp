@@ -149,9 +149,9 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
         entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
 
         if (fileItem.type == NodeType::FileNode) {
-            entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0100000); //filenode
+            entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0100000);
         } else if (fileItem.type == NodeType::SymlinkNode) {
-            entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0120000); //filenode
+            entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0120000);
         } else {
             return false;
         }
@@ -198,8 +198,12 @@ void FileStash::listDir(const QUrl &url)
         for (auto it = fileList.begin(); it != fileList.end(); it++) {
             entry.clear();
             item = createDirListItem(*it);
-            createUDSEntry(entry, item);
-            listEntry(entry);
+            if (createUDSEntry(entry, item)) {
+                listEntry(entry);
+            } else {
+                error(KIO:ERR_SLAVE_DEFINED, QString("The UDS Entry could not be created."));
+                return;
+            }
         }
         finished();
     }
