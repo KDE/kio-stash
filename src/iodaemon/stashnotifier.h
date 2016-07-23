@@ -59,7 +59,7 @@ private Q_SLOTS:
     void created(const QString &path);
     void displayRoot() //function to the contents of the SFS for testing
     {
-       //fileSystem->displayRoot();
+        //fileSystem->displayRoot();
     }
 };
 

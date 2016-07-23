@@ -60,18 +60,18 @@ QString StashNotifier::encodeString(StashFileSystem::StashNode::iterator node, c
     QString encodedString;
 
     switch (node.value().type) {
-        case StashFileSystem::NodeType::DirectoryNode:
-            encodedString = "dir";
-            break;
-        case StashFileSystem::NodeType::FileNode:
-            encodedString = "file";
-            break;
-        case StashFileSystem::NodeType::SymlinkNode:
-            encodedString = "symlink";
-            break;
-        case StashFileSystem::NodeType::InvalidNode:
-            encodedString = "invalid";
-            break;
+    case StashFileSystem::NodeType::DirectoryNode:
+        encodedString = "dir";
+        break;
+    case StashFileSystem::NodeType::FileNode:
+        encodedString = "file";
+        break;
+    case StashFileSystem::NodeType::SymlinkNode:
+        encodedString = "symlink";
+        break;
+    case StashFileSystem::NodeType::InvalidNode:
+        encodedString = "invalid";
+        break;
     }
 
     if (path == "/") {
@@ -81,7 +81,7 @@ QString StashNotifier::encodeString(StashFileSystem::StashNode::iterator node, c
     }
 
     if (node.value().type == StashFileSystem::NodeType::FileNode ||
-        node.value().type == StashFileSystem::NodeType::SymlinkNode) {
+            node.value().type == StashFileSystem::NodeType::SymlinkNode) {
         encodedString += "::" + node.value().source;
     } else {
         encodedString += "::";
@@ -95,24 +95,24 @@ QString StashNotifier::encodeString(StashFileSystem::StashNodeData nodeData, con
     QString encodedString;
 
     switch (nodeData.type) {
-        case StashFileSystem::NodeType::DirectoryNode:
-            encodedString = "dir";
-            break;
-        case StashFileSystem::NodeType::FileNode:
-            encodedString = "file";
-            break;
-        case StashFileSystem::NodeType::SymlinkNode:
-            encodedString = "symlink";
-            break;
-        case StashFileSystem::NodeType::InvalidNode:
-            encodedString = "invalid";
-            break;
+    case StashFileSystem::NodeType::DirectoryNode:
+        encodedString = "dir";
+        break;
+    case StashFileSystem::NodeType::FileNode:
+        encodedString = "file";
+        break;
+    case StashFileSystem::NodeType::SymlinkNode:
+        encodedString = "symlink";
+        break;
+    case StashFileSystem::NodeType::InvalidNode:
+        encodedString = "invalid";
+        break;
     }
 
     encodedString += "::" + path;
 
     if (nodeData.type == StashFileSystem::NodeType::FileNode ||
-        nodeData.type == StashFileSystem::NodeType::SymlinkNode) {
+            nodeData.type == StashFileSystem::NodeType::SymlinkNode) {
         encodedString += "::" + nodeData.source;
     } else {
         encodedString += "::";

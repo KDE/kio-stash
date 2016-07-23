@@ -82,7 +82,7 @@ void FileStash::createTopLevelDirEntry(KIO::UDSEntry &entry)
 QStringList FileStash::setFileList(const QUrl &url)
 {
     QDBusMessage msg = QDBusMessage::createMethodCall(
-        "org.kde.kio.StashNotifier", "/StashNotifier", "", "fileList");
+                           "org.kde.kio.StashNotifier", "/StashNotifier", "", "fileList");
     msg << url.path();
     QDBusReply<QStringList> received = QDBusConnection::sessionBus().call(msg);
     return received.value();
@@ -91,7 +91,7 @@ QStringList FileStash::setFileList(const QUrl &url)
 QString FileStash::setFileInfo(const QUrl &url)
 {
     QDBusMessage msg = QDBusMessage::createMethodCall(
-        "org.kde.kio.StashNotifier", "/StashNotifier", "", "fileInfo");
+                           "org.kde.kio.StashNotifier", "/StashNotifier", "", "fileInfo");
     msg << url.path();
     QDBusReply<QString> received = QDBusConnection::sessionBus().call(msg);
     return received.value();
@@ -201,7 +201,7 @@ void FileStash::listDir(const QUrl &url)
             if (createUDSEntry(entry, item)) {
                 listEntry(entry);
             } else {
-                error(KIO:ERR_SLAVE_DEFINED, QString("The UDS Entry could not be created."));
+                error(KIO: ERR_SLAVE_DEFINED, QString("The UDS Entry could not be created."));
                 return;
             }
         }
@@ -212,7 +212,7 @@ void FileStash::listDir(const QUrl &url)
 void FileStash::mkdir(const QUrl &url, int permissions)
 {
     QDBusMessage msg = QDBusMessage::createMethodCall(
-        "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
+                           "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
     QString destinationPath = url.path();
     msg << "" << destinationPath << NodeType::DirectoryNode;
     bool queued = QDBusConnection::sessionBus().send(msg);
@@ -235,7 +235,7 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not determine file type."));
         }
         QDBusMessage msg = QDBusMessage::createMethodCall(
-            "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
+                               "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
         QString destinationPath = dest.path();
         qDebug() << src.path() << destinationPath << (int) fileType;
         msg << src.path() << destinationPath << (int) fileType;
@@ -260,7 +260,7 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
 void FileStash::del(const QUrl &url, bool isFile)
 {
     QDBusMessage msg = QDBusMessage::createMethodCall(
-        "org.kde.kio.StashNotifier", "/StashNotifier", "", "removePath");
+                           "org.kde.kio.StashNotifier", "/StashNotifier", "", "removePath");
     if (isRoot(currentDir)) {
         msg << url.fileName();
     } else {

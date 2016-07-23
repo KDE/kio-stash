@@ -45,7 +45,7 @@ StashFileSystem::~StashFileSystem()
 void StashFileSystem::deleteChildren(StashNodeData nodeData)
 {
     if (nodeData.children != nullptr) {
-        Q_FOREACH(auto data, nodeData.children->values()) {
+        Q_FOREACH (auto data, nodeData.children->values()) {
             deleteChildren(data);
         }
         delete nodeData.children;
