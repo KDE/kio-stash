@@ -36,7 +36,7 @@ K_PLUGIN_FACTORY_WITH_JSON(StashNotifierFactory, "stashnotifier.json", registerP
 StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDEDModule(parent)
 {
     dirWatch = new KDirWatch(this);
-    qDebug() << "Launching STASH daemon";
+    qDebug() << "Launching stash daemon.";
 
     new StashNotifierAdaptor(this);
     QDBusConnection dbus = QDBusConnection::sessionBus();
@@ -47,16 +47,8 @@ StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDED
 
     connect(dirWatch, &KDirWatch::dirty, this, &StashNotifier::dirty);
     connect(dirWatch, &KDirWatch::created, this, &StashNotifier::created);
-    //connect(dirWatch, &KDirWatch::deleted, this, &StashNotifier::removePath);
+    connect(dirWatch, &KDirWatch::deleted, this, &StashNotifier::removePath);
     connect(this, &StashNotifier::listChanged, this, &StashNotifier::displayRoot);
-    addPath("/home/nic/ioslave.cpp", "/f", 2);
-    addPath("", "/fas", 0);
-    for (int i = 0; i < 3; i++) {
-        qDebug() << i;
-        addPath("/home/nic/" + QString::number(i), "/fas/" + QString::number(i), 2);
-    }
-    displayRoot();
-    qDebug() << "init finished";
 }
 
 StashNotifier::~StashNotifier()
@@ -88,14 +80,13 @@ QString StashNotifier::encodeString(StashFileSystem::StashNode::iterator node, c
         encodedString += "::" + path + QStringLiteral("/") + node.key();
     }
 
-
     if (node.value().type == StashFileSystem::NodeType::FileNode ||
         node.value().type == StashFileSystem::NodeType::SymlinkNode) {
         encodedString += "::" + node.value().source;
     } else {
         encodedString += "::";
     }
-    //qDebug() << "ENCODED STRING" << encodedString;
+
     return encodedString;
 }
 
@@ -185,24 +176,24 @@ void StashNotifier::removePath(const QString &path)
     qDebug() << "delete request called for " << path;
     StashFileSystem::NodeType fileType;
     QString processedPath = processString(path);
-/*    if (fileType == StashFileSystem::NodeType::DirectoryNode) {
+    if (fileType == StashFileSystem::NodeType::DirectoryNode) {
         dirWatch->removeDir(processedPath);
     } else {
-        dirWatch->removeFile(processedPath);
-    }*/
+        QString encodedName = fileInfo(path);
+        QString filePath = encodedName.split("::", QString::KeepEmptyParts).at(2);
+        dirWatch->removeFile(filePath);
+    }
     fileSystem->delEntry(path);
     emit listChanged();
 }
 
 void StashNotifier::dirty(const QString &path)
 {
-    //what is supposed to happen here?
-    qDebug() << "SOMETHING HAS CHANGED:" << path;
+    //nothing to be done here
 }
 
 void StashNotifier::created(const QString &path)
 {
-    qDebug() << "CREATED:" << path;
 }
 
 #include "stashnotifier.moc"

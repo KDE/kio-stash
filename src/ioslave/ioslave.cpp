@@ -54,13 +54,7 @@ extern "C" {
 
 FileStash::FileStash(const QByteArray &pool, const QByteArray &app) :
     KIO::ForwardingSlaveBase("stash", pool, app)
-{
-    QString src = "tags:/";
-    qDebug() << "supports deleting?" << KProtocolManager::supportsDeleting(QUrl(src));
-    qDebug() << "supports makedir?" << KProtocolManager::supportsMakeDir(QUrl(src));
-    qDebug() << "supports moving?" << KProtocolManager::supportsMoving(QUrl(src));
-    qDebug() << "supports writing?" << KProtocolManager::supportsWriting(QUrl(src));
-}
+{}
 
 FileStash::~FileStash()
 {}
@@ -119,68 +113,50 @@ void FileStash::stat(const QUrl &url)
 
 bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &fileItem)
 {
-    QDateTime epoch;
-    epoch.setMSecsSinceEpoch(0);
     QMimeType fileMimetype;
     QMimeDatabase mimeDatabase;
     QString stringFilePath = fileItem.filePath;
 
     switch (fileItem.type) {
-        case NodeType::DirectoryNode: { // TODO: add logic for number of children by modifying SFS
-            entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0040000);
-            entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, QString("inode/directory"));
-            entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
-            entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
-            break;
+    case NodeType::DirectoryNode: { // TODO: add logic for number of children by modifying SFS
+        entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0040000);
+        entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, QString("inode/directory"));
+        entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
+        entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
+        break;
+    }
+    case NodeType::InvalidNode: {
+        entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.filePath); // TODO: find a generic mimetype for broken files
+        break;
+    }
+    default: {
+        QByteArray physicalPath_c = QFile::encodeName(fileItem.source);
+        QT_STATBUF buff;
+        if (QT_LSTAT(physicalPath_c, &buff) == -1) {
+            return false;
         }
-        case NodeType::SymlinkNode: { // TODO: make more elegant
-            QByteArray physicalPath_c = QFile::encodeName(fileItem.source);
-            QT_STATBUF buff;
 
-            if (QT_LSTAT(physicalPath_c, &buff) == -1) {
-                return false;
-            }
-
-            QFileInfo entryInfo;
-            entryInfo = QFileInfo(fileItem.source);
-            fileMimetype = mimeDatabase.mimeTypeForFile(fileItem.source);
-            entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0120000);
-            entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, fileMimetype.name());
-            entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
-            entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
-            entry.insert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
-            entry.insert(KIO::UDSEntry::UDS_ACCESS, entryInfo.permissions());
-            entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
-            entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, buff.st_mtime);
-            entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
-            break;
-        }
-        case NodeType::FileNode: {
-            QByteArray physicalPath_c = QFile::encodeName(fileItem.source);
-            QT_STATBUF buff;
-
-            if (QT_LSTAT(physicalPath_c, &buff) == -1) {
-                return false;
-            }
-
-            QFileInfo entryInfo;
-            entryInfo = QFileInfo(fileItem.source);
-            fileMimetype = mimeDatabase.mimeTypeForFile(fileItem.source);
-            entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0100000);
-            entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, fileMimetype.name());
-            entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
-            entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
-            entry.insert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
-            entry.insert(KIO::UDSEntry::UDS_ACCESS, entryInfo.permissions());
-            entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
-            entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, buff.st_mtime);
-            entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
-            break;
-        }
-        case NodeType::InvalidNode: {
-            entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.filePath); // TODO: find a generic mimetype for broken files
-            break;
-        }
+        QFileInfo entryInfo;
+        entryInfo = QFileInfo(fileItem.source);
+        fileMimetype = mimeDatabase.mimeTypeForFile(fileItem.source);
+        entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, fileMimetype.name());
+        entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
+        entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
+        entry.insert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
+        entry.insert(KIO::UDSEntry::UDS_ACCESS, entryInfo.permissions());
+        entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
+        entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, buff.st_mtime);
+        entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
+        break;
+    }
+    case NodeType::FileNode: {
+        entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0100000);
+        break;
+    }
+    case NodeType::SymlinkNode: {
+        entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0120000);
+        break;
+    }
     }
     return true;
 }
@@ -203,24 +179,20 @@ FileStash::dirList FileStash::createDirListItem(QString fileInfo)
     return item;
 }
 
-void FileStash::listDir(const QUrl &url) // FIXME: remove debug statements
+void FileStash::listDir(const QUrl &url)
 {
     currentDir = url.path();
     QStringList fileList = setFileList(url);
-
     if (!fileList.size()) {
         finished();
         return;
     }
-
     FileStash::dirList item;
     KIO::UDSEntry entry;
-
     if (isRoot(url.path())) {
         createTopLevelDirEntry(entry);
         listEntry(entry);
     }
-
     if (fileList.at(0) == "error::error::InvalidNode") {
         qDebug() << "error URL" << url;
         error(KIO::ERR_SLAVE_DEFINED, QString("The file either does not exist or has not been stashed yet."));
