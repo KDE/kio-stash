@@ -111,6 +111,8 @@ void FileStash::stat(const QUrl &url)
     finished();
 }
 
+
+
 bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &fileItem)
 {
     QMimeType fileMimetype;
@@ -118,18 +120,16 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
     QString stringFilePath = fileItem.filePath;
 
     switch (fileItem.type) {
-    case NodeType::DirectoryNode: { // TODO: add logic for number of children by modifying SFS
+    case NodeType::DirectoryNode: // TODO: add logic for number of children by modifying SFS
         entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0040000);
         entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, QString("inode/directory"));
         entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
         entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
         break;
-    }
-    case NodeType::InvalidNode: {
+    case NodeType::InvalidNode:
         entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.filePath); // TODO: find a generic mimetype for broken files
         break;
-    }
-    default: {
+    default:
         QByteArray physicalPath_c = QFile::encodeName(fileItem.source);
         QT_STATBUF buff;
         if (QT_LSTAT(physicalPath_c, &buff) == -1) {
@@ -139,24 +139,22 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
         QFileInfo entryInfo;
         entryInfo = QFileInfo(fileItem.source);
         fileMimetype = mimeDatabase.mimeTypeForFile(fileItem.source);
+        entry.insert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
         entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, fileMimetype.name());
         entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
         entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
-        entry.insert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
         entry.insert(KIO::UDSEntry::UDS_ACCESS, entryInfo.permissions());
         entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
         entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, buff.st_mtime);
         entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
-        break;
-    }
-    case NodeType::FileNode: {
-        entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0100000);
-        break;
-    }
-    case NodeType::SymlinkNode: {
-        entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0120000);
-        break;
-    }
+
+        if (fileItem.type == NodeType::FileNode) {
+            entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0100000); //filenode
+        } else if (fileItem.type == NodeType::SymlinkNode) {
+            entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0120000); //filenode
+        } else {
+            return false;
+        }
     }
     return true;
 }
