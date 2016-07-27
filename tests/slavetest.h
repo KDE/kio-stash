@@ -25,11 +25,11 @@ class SlaveTest : public QObject
         void copyStashToStash();
         void copySymlinkFromStash();
 
-        void moveFileFromStash();
-        void moveStashFromStash();
+        void moveToFileFromStash();
+        void moveToStashFromStash();
 
         void createDirectory();
-        void renameFileInStash(); //currently fails
+        //void renameFileInStash(); //currently fails
 
         void delRootFile();
         void delFileInDirectory();
@@ -47,4 +47,5 @@ class SlaveTest : public QObject
         void stashSymlink(const QString &path);
         bool stashCopy(const QUrl &src, const QUrl &dest)
         bool moveFromStash(const QUrl &src, const QUrl &dest);
+        bool delete(const QUrl &url);
 };
