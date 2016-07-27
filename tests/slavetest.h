@@ -42,9 +42,10 @@ class SlaveTest : public QObject
         void statSymlinkInRoot();
         void statFileInDirectory();
     private:
+        bool statUrl(const QUrl &url, KIO::UDSEntry &entry);
         void stashFile(const QString &path);
         void stashDirectory(const QString &path);
         void stashSymlink(const QString &path);
-        void copyFromStash(const QUrl &src, const QUrl &dest);
-        void moveFromStash(const QUrl &src, const QUrl &dest);
+        bool stashCopy(const QUrl &src, const QUrl &dest)
+        bool moveFromStash(const QUrl &src, const QUrl &dest);
 };
