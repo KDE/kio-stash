@@ -20,16 +20,18 @@ class SlaveTest : public QObject
         void listRootDir();
         void listSubDir();
 
-        void copyFileFromStash();
+        void copyFileToStash();
+        void copyStashToFile();
+        void copyStashToStash();
         void copyFileInDirectoryFromStash();
-        void copyFileFromStash();
         void copySymlinkFromStash();
 
-        void copyToStash();
+        void moveFileFromStash();
+        void moveStashFromStash();
 
         void createFile();
         void createDirectory();
-        void renameFile();
+        void renameFileInStash(); //currently fails
 
         void delRootFile();
         void delFileInDirectory();
@@ -40,5 +42,10 @@ class SlaveTest : public QObject
         void statDirectoryInRoot();
         void statSymlinkInRoot();
         void statFileInDirectory();
-
+    private:
+        void stashFile(const QString &path);
+        void stashDirectory(const QString &path);
+        void stashSymlink(const QString &path);
+        void copyFromStash(const QUrl &src, const QUrl &dest);
+        void moveFromStash(const QUrl &src, const QUrl &dest);
 };
