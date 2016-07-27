@@ -23,7 +23,6 @@ class SlaveTest : public QObject
         void copyFileToStash();
         void copyStashToFile();
         void copyStashToStash();
-        void copyFileInDirectoryFromStash();
         void copySymlinkFromStash();
 
         void moveFileFromStash();
