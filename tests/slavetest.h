@@ -45,7 +45,9 @@ class SlaveTest : public QObject
         void stashFile(const QString &path);
         void stashDirectory(const QString &path);
         void stashSymlink(const QString &path);
-        bool stashCopy(const QUrl &src, const QUrl &dest)
+        bool stashCopy(const QUrl &src, const QUrl &dest);
         bool moveFromStash(const QUrl &src, const QUrl &dest);
         bool delete(const QUrl &url);
 };
+
+#endif

@@ -1,10 +1,10 @@
- #include <QTest>
+#include <QTest>
+#include "slavetest.h"
+#include "../src/ioslave/ioslave.h"
 
- #include "ioslave.h"
-
- #include <QString>
- #include <QDir>
- #include <QFileInfo>
+#include <QString>
+#include <QDir>
+#include <QFileInfo>
 
 bool SlaveTest::statUrl(const QUrl &url, KIO::UDSEntry &entry)
 {
@@ -210,3 +210,6 @@ void SlaveTest::delDirectory()
     delete(url);
     QCOMPARE(url.exists(), false);
 }
+
+QTEST_MAIN(SlaveTest)
+//#include "slavetest.moc"

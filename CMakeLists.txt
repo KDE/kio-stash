@@ -20,6 +20,7 @@ include(FeatureSummary)
 find_package(Qt5 ${QT5_MIN_VERSION} REQUIRED COMPONENTS
     Core
     DBus
+    Test
 )
 
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
@@ -31,5 +32,6 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 
 add_subdirectory(dbus)
 add_subdirectory(src)
+add_subdirectory(tests)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
