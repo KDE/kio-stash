@@ -201,7 +201,7 @@ void FileStash::listDir(const QUrl &url)
             if (createUDSEntry(entry, item)) {
                 listEntry(entry);
             } else {
-                error(KIO: ERR_SLAVE_DEFINED, QString("The UDS Entry could not be created."));
+                error(KIO::ERR_SLAVE_DEFINED, QString("The UDS Entry could not be created."));
                 return;
             }
         }
@@ -221,6 +221,7 @@ void FileStash::mkdir(const QUrl &url, int permissions)
 
 void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
 {
+    //qDebug() << "copy of" << src << dest;
     if (src.scheme() == "file" && dest.scheme() == "stash") {
         NodeType fileType;
         QFileInfo fileInfo = QFileInfo(src.path());
@@ -237,7 +238,7 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
         QDBusMessage msg = QDBusMessage::createMethodCall(
                                "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
         QString destinationPath = dest.path();
-        qDebug() << src.path() << destinationPath << (int) fileType;
+        //qDebug() << src.path() << destinationPath << (int) fileType;
         msg << src.path() << destinationPath << (int) fileType;
         bool queued = QDBusConnection::sessionBus().send(msg);
         if (queued) {
@@ -251,6 +252,17 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
         if (fileItem.type != NodeType::DirectoryNode) {
             QUrl newDestPath = QUrl::fromLocalFile(fileItem.source);
             ForwardingSlaveBase::copy(newDestPath, dest, permissions, flags);
+        }
+    }
+    if (src.scheme() == "stash" && dest.scheme() == "stash") {
+        QDBusMessage msg = QDBusMessage::createMethodCall(
+                               "org.kde.kio.StashNotifier", "/StashNotifier", "", "copyWithStash");
+        msg << src.path() << dest.path();
+        QDBusReply<bool> received = QDBusConnection::sessionBus().call(msg);
+        if (received) {
+            finished();
+        } else {
+            error(KIO::ERR_SLAVE_DEFINED, QString("Copy failed."));
         }
     } else {
         error(KIO::ERR_UNSUPPORTED_ACTION, QString("Copying between these protocols is not supported."));

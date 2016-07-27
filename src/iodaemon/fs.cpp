@@ -122,6 +122,12 @@ bool StashFileSystem::addFolder(const QString &dest)
     return addNode(dest, fileData);
 }
 
+bool StashFileSystem::copyFile(const QString &src, const QString &dest)
+{
+    StashNodeData fileToCopy = findNode(src);
+    return addNode(dest, fileToCopy);
+}
+
 StashFileSystem::StashNodeData StashFileSystem::findNode(QString path)
 {
     return findNode(splitPath(path));

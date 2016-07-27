@@ -187,6 +187,11 @@ void StashNotifier::removePath(const QString &path)
     emit listChanged();
 }
 
+bool StashNotifier::copyWithStash(const QString &src, const QString &dest)
+{
+    return fileSystem->copyFile(src, dest);
+}
+
 void StashNotifier::dirty(const QString &path)
 {
     //nothing to be done here
