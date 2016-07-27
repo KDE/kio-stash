@@ -29,7 +29,6 @@ class SlaveTest : public QObject
         void moveFileFromStash();
         void moveStashFromStash();
 
-        void createFile();
         void createDirectory();
         void renameFileInStash(); //currently fails
 
