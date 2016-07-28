@@ -202,6 +202,7 @@ void FileStash::listDir(const QUrl &url)
                 listEntry(entry);
             } else {
                 error(KIO::ERR_SLAVE_DEFINED, QString("The UDS Entry could not be created."));
+                qDebug() << "Failed URL" << item.filePath << item.source << item.type;
                 return;
             }
         }

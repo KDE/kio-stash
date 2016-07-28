@@ -1,0 +1,13 @@
+{
+    "KPlugin": {
+        "Description": "Monitors directories for changes",
+        "Name": "Stash KIO slave watcher",
+        "ServiceTypes": [
+            "KDEDModule"
+        ]
+    },
+    "X-KDE-DBus-ModuleName": "stashnotifier",
+    "X-KDE-Kded-autoload": "true",
+    "X-KDE-Kded-load-on-demand": "true",
+    "X-KDE-Kded-phase": "1"
+}

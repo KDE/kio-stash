@@ -25,7 +25,7 @@
 #include <QtDBus>
 #include <QStringList>
 
-#include <kdedmodule.h>
+#include <KDEDModule>
 
 class KDirWatch;
 

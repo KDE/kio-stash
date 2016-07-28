@@ -1,5 +1,6 @@
 #include <QTest>
 #include "slavetest.h"
+#include "../src/iodaemon/stashnotifier.h"
 #include "../src/ioslave/ioslave.h"
 
 #include <QString>
@@ -9,7 +10,6 @@
 #include <KIO/Job>
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
-#include <KJob>
 #include <KFileItem>
 
 void SlaveTest::initTestCase()
