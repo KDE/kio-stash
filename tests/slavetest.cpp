@@ -22,14 +22,19 @@ void SlaveTest::cleanupTestCase()
 
 }
 
-void SlaveTest::listRootDir()
+void SlaveTest::stashFile(const QString &path)
 {
 
 }
 
-void SlaveTest::listSubDir()
+void SlaveTest::stashDirectory(const QString &path)
 {
-    
+
+}
+
+void SlaveTest::stashSymlink(const QString &path)
+{
+
 }
 
 void SlaveTest::statUrl(const QUrl &url, KIO::UDSEntry &entry)
@@ -62,6 +67,16 @@ void SlaveTest::deleteFromStash(const QUrl &url)
     KIO::Job *delJob = KIO::del(url, KIO::HideProgressInfo);
     bool ok = delJob->exec();
     QVERIFY(ok);
+}
+
+void SlaveTest::listRootDir()
+{
+
+}
+
+void SlaveTest::listSubDir()
+{
+
 }
 
 void SlaveTest::createDirectory() //find ways for finding files
