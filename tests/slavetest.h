@@ -11,6 +11,13 @@ class SlaveTest : public QObject
     public:
         SlaveTest() {}
 
+        enum NodeType {
+            DirectoryNode,
+            SymlinkNode,
+            FileNode,
+            InvalidNode
+        };
+
     private slots:
         void initTestCase();
         void cleanupTestCase();
@@ -40,9 +47,9 @@ class SlaveTest : public QObject
         void statFileInDirectory();
     private:
         void statUrl(const QUrl &url, KIO::UDSEntry &entry);
-        void stashFile(const QString &path);
+        void stashFile(const QString &realPath, const QString &stashPath);
+        void stashSymlink(const QString &realPath, const QString &stashPath);
         void stashDirectory(const QString &path);
-        void stashSymlink(const QString &path);
         void stashCopy(const QUrl &src, const QUrl &dest);
         void moveFromStash(const QUrl &src, const QUrl &dest);
         void deleteFromStash(const QUrl &url);

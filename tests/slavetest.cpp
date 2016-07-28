@@ -1,10 +1,12 @@
-#include <QTest>
 #include "slavetest.h"
 #include "../src/ioslave/ioslave.h"
 
+#include <QTest>
 #include <QString>
 #include <QDir>
 #include <QFileInfo>
+#include <QDBusMessage>
+#include <QDBusConnection>
 
 #include <KIO/Job>
 #include <KIO/CopyJob>
@@ -21,19 +23,34 @@ void SlaveTest::cleanupTestCase()
 
 }
 
-void SlaveTest::stashFile(const QString &path)
+void SlaveTest::stashFile(const QString &realPath, const QString &stashPath)
 {
-
+    //do something naughty and add D-Bus messages to the stashnotifier?
+    QDBusMessage msg = QDBusMessage::createMethodCall(
+                           "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
+    msg << realPath << stashPath << NodeType::FileNode;
+    bool queued = QDBusConnection::sessionBus().send(msg);
+    QVERIFY(queued);
 }
+
 
 void SlaveTest::stashDirectory(const QString &path)
 {
-
+    QDBusMessage msg = QDBusMessage::createMethodCall(
+                           "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
+    QString destinationPath = path;
+    msg << "" << destinationPath << NodeType::DirectoryNode;
+    bool queued = QDBusConnection::sessionBus().send(msg);
+    QVERIFY(queued);
 }
 
-void SlaveTest::stashSymlink(const QString &path)
+void SlaveTest::stashSymlink(const QString &realPath, const QString &stashPath)
 {
-
+    QDBusMessage msg = QDBusMessage::createMethodCall(
+                           "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
+    msg << realPath << stashPath << NodeType::SymlinkNode;
+    bool queued = QDBusConnection::sessionBus().send(msg);
+    QVERIFY(queued);
 }
 
 void SlaveTest::statUrl(const QUrl &url, KIO::UDSEntry &entry)
@@ -104,7 +121,7 @@ void SlaveTest::statRoot()
 void SlaveTest::statFileInRoot()
 {
     QUrl url(QStringLiteral("stash:/stashfile"));
-    stashFile(url.path());
+    stashFile(url.path(), url.path());
     KIO::UDSEntry entry;
     statUrl(url, entry);
     KFileItem item(entry, url);
@@ -136,7 +153,7 @@ void SlaveTest::statDirectoryInRoot()
 void SlaveTest::statSymlinkInRoot()
 {
     QUrl url(QStringLiteral("stash:/stashsymlink"));
-    stashSymlink(url.path());
+    stashSymlink(url.path(), url.path());
     KIO::UDSEntry entry;
     statUrl(url, entry);
     KFileItem item(entry, url);
@@ -152,7 +169,7 @@ void SlaveTest::statSymlinkInRoot()
 void SlaveTest::statFileInDirectory()
 {
     QUrl url(QStringLiteral("stash:/stashtestfolder/testfile"));
-    stashFile(url.path());
+    stashFile(url.path(), url.path());
     KIO::UDSEntry entry;
     statUrl(url, entry);
     KFileItem item(entry, url);
