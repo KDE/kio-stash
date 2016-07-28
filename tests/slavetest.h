@@ -3,9 +3,7 @@
 
 #include <QObject>
 #include <QTemporaryDir>
-
 #include <KIO/Job>
-
 class SlaveTest : public QObject
 {
     Q_OBJECT
@@ -41,13 +39,13 @@ class SlaveTest : public QObject
         void statSymlinkInRoot();
         void statFileInDirectory();
     private:
-        bool statUrl(const QUrl &url, KIO::UDSEntry &entry);
+        void statUrl(const QUrl &url, KIO::UDSEntry &entry);
         void stashFile(const QString &path);
         void stashDirectory(const QString &path);
         void stashSymlink(const QString &path);
-        bool stashCopy(const QUrl &src, const QUrl &dest);
-        bool moveFromStash(const QUrl &src, const QUrl &dest);
-        bool delete(const QUrl &url);
+        void stashCopy(const QUrl &src, const QUrl &dest);
+        void moveFromStash(const QUrl &src, const QUrl &dest);
+        void deleteFromStash(const QUrl &url);
 };
 
 #endif

@@ -6,34 +6,38 @@
 #include <QDir>
 #include <QFileInfo>
 
-bool SlaveTest::statUrl(const QUrl &url, KIO::UDSEntry &entry)
+#include <KIO/Job>
+#include <KIO/CopyJob>
+#include <KIO/DeleteJob>
+#include <KJob>
+#include <KFileItem>
+
+void SlaveTest::statUrl(const QUrl &url, KIO::UDSEntry &entry)
 {
     KIO::StatJob *statJob = KIO::stat(url, KIO::HideProgressInfo);
     bool ok = statJob->exec();
     if (ok) {
         entry = statJob->statResult();
     }
+    QVERIFY(ok);
 }
 
-bool SlaveTest::stashCopy(const QUrl &src, const QUrl &dest)
+void SlaveTest::stashCopy(const QUrl &src, const QUrl &dest)
 {
-    KIO::CopyJob *job = 0;
-    job = KIO::copy(src, dest, KIO::HideProgressInfo);
+    KIO::Job *job = KIO::copyAs(src, dest, KIO::HideProgressInfo);
     bool ok = job->exec();
     QVERIFY(ok);
-    return ok;
 }
 
-bool SlaveTest::moveFromStash(const QUrl &src, const QUrl &dest) //make this work
+void SlaveTest::moveFromStash(const QUrl &src, const QUrl &dest) //make this work
 {
     KIO::Job *job = KIO::moveAs(src, dest, KIO::HideProgressInfo);
     bool ok = job->exec();
     QVERIFY(ok);
-    QVERIFY(QFile::exists(dest));
-    return ok;
+    QVERIFY(QFile::exists(dest.toString()));
 }
 
-bool SlaveTest::delete(const QUrl &url)
+void SlaveTest::deleteFromStash(const QUrl &url)
 {
     KIO::Job *delJob = KIO::del(url, KIO::HideProgressInfo);
     bool ok = delJob->exec();
@@ -45,7 +49,7 @@ void SlaveTest::createDirectory() //find ways for finding files
     QUrl url("stash:/testfolder");
     KIO::SimpleJob *job = KIO::mkdir(url);
     bool ok = job->exec();
-    QVERIFY(QFile::exists()
+    QVERIFY(QFile::exists(url.toString()));
     QCOMPARE(ok, true);
 }
 
@@ -193,23 +197,23 @@ void SlaveTest::moveToStashFromStash()
 void SlaveTest::delRootFile()
 {
     QUrl file = "";
-    delete(url);
+    deleteFromStash(url);
     QCOMPARE(url.exists(), false);
 }
 
 void SlaveTest::delFileInDirectory()
 {
     QUrl file = "";
-    delete(url);
+    deleteFromStash(url);
     QCOMPARE(url.exists(), false);
 }
 
 void SlaveTest::delDirectory()
 {
     QUrl file = "";
-    delete(url);
+    deleteFromStash(url);
     QCOMPARE(url.exists(), false);
 }
 
 QTEST_MAIN(SlaveTest)
-//#include "slavetest.moc"
+#include "slavetest.moc"
