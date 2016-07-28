@@ -133,7 +133,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
         QByteArray physicalPath_c = QFile::encodeName(fileItem.source);
         QT_STATBUF buff;
         if (QT_LSTAT(physicalPath_c, &buff) == -1) {
-            return false;
+    //        return false;
         }
 
         QFileInfo entryInfo;

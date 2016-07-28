@@ -5,7 +5,6 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/.. )
 set(slavetest_SRCS
     slavetest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/ioslave/ioslave.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../src/iodaemon/stashnotifier.cpp
 )
 enable_testing()
 set(CMAKE_AUTOMOC_ON)

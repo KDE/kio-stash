@@ -1,6 +1,5 @@
 #include <QTest>
 #include "slavetest.h"
-#include "../src/iodaemon/stashnotifier.h"
 #include "../src/ioslave/ioslave.h"
 
 #include <QString>
