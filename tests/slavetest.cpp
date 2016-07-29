@@ -23,6 +23,11 @@ void SlaveTest::cleanupTestCase()
 
 }
 
+QString SlaveTest::tmpDirPath() const
+{
+    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation + QString("/slavetest/"));
+}
+
 void SlaveTest::stashFile(const QString &realPath, const QString &stashPath)
 {
     //do something naughty and add D-Bus messages to the stashnotifier?
@@ -87,12 +92,22 @@ void SlaveTest::deleteFromStash(const QUrl &url)
 
 void SlaveTest::listRootDir()
 {
-
+    //write qcompare cases
+    KIO::ListJob *job = KIO::listDir(QUrl(QStringLiteral("stash:/")), KIO::HideProgressInfo);
+    connect(job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)),
+    SLOT(slotEntries(KIO::Job*,KIO::UDSEntryList)));
+    bool ok = job->exec();
+    QVERIFY(ok);
 }
 
 void SlaveTest::listSubDir()
 {
-
+    //write qcompare cases
+    KIO::ListJob *job = KIO::listDir(QUrl(QStringLiteral("stash:/myfolder")), KIO::HideProgressInfo);
+    connect(job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)),
+            SLOT(slotEntries(KIO::Job*,KIO::UDSEntryList)));
+    bool ok = job->exec();
+    QVERIFY(ok);
 }
 
 void SlaveTest::createDirectory() //find ways for finding files
