@@ -115,7 +115,7 @@ void SlaveTest::createDirectory() //find ways for finding files
 {
     KIO::SimpleJob *job = KIO::mkdir(url);
     bool ok = job->exec();
-    QVERIFY(QFile::exists(url.toString()));
+    QVERIFY(QFile::exists(url));
     QCOMPARE(ok, true);
 }
 
@@ -201,20 +201,20 @@ void SlaveTest::statFileInDirectory()
 
 void SlaveTest::copyFileToStash()
 {
-    QUrl src(tmpDirPath() + "stashTestFile");
+    QString src(tmpDirPath() + "stashTestFile");
     QFile stashFile(src);
     QVERIFY(stashFile.open(QIODevice::WriteOnly));
-    QUrl dest("stash:/");
+    QString dest("stash:/");
     destinationFileName = src.fileName();
     stashCopy(src, dest);
     QVERIFY(stashFile.exists());
-    QVERIFY(dest.toString() + destinationFileName);
+    QVERIFY(dest + destinationFileName);
 
-    QUrl destDirectory("stash:/copyTestCase");
+    QString destDirectory("stash:/copyTestCase");
     destinationFileName = src.fileName();
     stashCopy(src, destDirectory);
     QVERIFY(stashFile.exists());
-    QVERIFY(destDirectory.toString() + destinationFileName);
+    QVERIFY(destDirectory + destinationFileName);
 }
 
 void SlaveTest::copySymlinkFromStash() //create test case
@@ -222,7 +222,7 @@ void SlaveTest::copySymlinkFromStash() //create test case
     QString src("stash:/");
     QString dest("file:/");
     stashCopy(src, dest);
-    QVERIFY(QFile(dest.toString()).exists());
+    QVERIFY(QFile(dest).exists());
     QCOMPARE(src.fileName(), dest.fileName());
 }
 
@@ -232,7 +232,7 @@ void SlaveTest::copyStashToFile()
     QString dest(tmpDirPath());
     destinationFileName = src.fileName();
     stashCopy(src, dest);
-    QVERIFY(QFile(dest.toString()).exists());
+    QVERIFY(QFile(dest).exists());
     QCOMPARE(src.fileName(), dest.fileName());
 }
 
@@ -241,7 +241,7 @@ void SlaveTest::copyStashToStash()
     QString src("stash:/");
     QString dest("file:/");
     stashCopy(src, dest);
-    QVERIFY(QFile(dest.toString()).exists());
+    QVERIFY(QFile(dest).exists());
     QCOMPARE(src.fileName(), dest.fileName());
 
 }
