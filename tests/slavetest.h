@@ -2,8 +2,8 @@
 #define SLAVETEST_H
 
 #include <QObject>
-#include <QTemporaryDir>
 #include <KIO/Job>
+
 class SlaveTest : public QObject
 {
     Q_OBJECT
@@ -33,7 +33,6 @@ class SlaveTest : public QObject
         void moveToFileFromStash();
         void moveToStashFromStash();
 
-        void createDirectory();
         //void renameFileInStash(); //currently fails
 
         void delRootFile();
@@ -52,6 +51,7 @@ class SlaveTest : public QObject
         void stashSymlink(const QString &realPath, const QString &stashPath);
         void stashDirectory(const QString &path);
         void stashCopy(const QUrl &src, const QUrl &dest);
+        void createDirectory();
         void moveFromStash(const QUrl &src, const QUrl &dest);
         void deleteFromStash(const QUrl &url);
 };

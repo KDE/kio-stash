@@ -4,6 +4,8 @@
 #include <QTest>
 #include <QString>
 #include <QDir>
+#include <QFile>
+#include <QTemporaryFile>
 #include <QFileInfo>
 #include <QDBusMessage>
 #include <QDBusConnection>
@@ -37,7 +39,6 @@ void SlaveTest::stashFile(const QString &realPath, const QString &stashPath)
     bool queued = QDBusConnection::sessionBus().send(msg);
     QVERIFY(queued);
 }
-
 
 void SlaveTest::stashDirectory(const QString &path)
 {
@@ -112,7 +113,6 @@ void SlaveTest::listSubDir()
 
 void SlaveTest::createDirectory() //find ways for finding files
 {
-    QUrl url("stash:/testfolder");
     KIO::SimpleJob *job = KIO::mkdir(url);
     bool ok = job->exec();
     QVERIFY(QFile::exists(url.toString()));
@@ -135,6 +135,7 @@ void SlaveTest::statRoot()
 
 void SlaveTest::statFileInRoot()
 {
+    QFile file
     QUrl url(QStringLiteral("stash:/stashfile"));
     stashFile(url.path(), url.path());
     KIO::UDSEntry entry;
@@ -200,11 +201,15 @@ void SlaveTest::statFileInDirectory()
 
 void SlaveTest::copyFileToStash()
 {
-    QUrl src("file:/");
+    QUrl src = tmpDirPath() + "stashTestFile";
+    QFile stashFile(src);
+    QVERIFY(stashFile.open(QIODevice::WriteOnly));
     QUrl dest("stash:/");
+    destinationFileName = src.fileName();
     stashCopy(src, dest);
-    QVERIFY(QFile(dest.toString()).exists());
-    QCOMPARE(src.fileName(), dest.fileName());
+    QVERIFY(stashFile.exists());
+    QVERIFY(dest.toString() + destinationFileName);
+
 }
 
 void SlaveTest::copySymlinkFromStash() //create test case
