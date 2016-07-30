@@ -28,7 +28,9 @@ class FileStash : public KIO::ForwardingSlaveBase
     Q_OBJECT
 
 public:
-    FileStash(const QByteArray &pool, const QByteArray &app);
+    FileStash(const QByteArray &pool, const QByteArray &app,
+                const QString daemonService = "org.kde.kio.StashNotifier",
+                const QString daemonPath = "/StashNotifier");
     ~FileStash();
 
     enum NodeType {
@@ -66,6 +68,8 @@ private:
     QString setFileInfo(const QUrl &url);
     FileStash::dirList createDirListItem(QString fileInfo);
     QString currentDir;
+    const QString m_daemonService;
+    const QString m_daemonPath;
 
 protected:
     void listDir(const QUrl &url) Q_DECL_OVERRIDE;
