@@ -281,7 +281,7 @@ void SlaveTest::delFileInDirectory()
 
 void SlaveTest::delDirectory()
 {
-    QString url("");
+    QString url("/deldir");
     deleteFromStash(url);
     QCOMPARE(QFile(url.toString()).exists(), false);
 }
