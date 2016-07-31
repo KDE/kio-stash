@@ -9,6 +9,7 @@
 #include <QFileInfo>
 #include <QDBusMessage>
 #include <QDBusConnection>
+#include <QStandardPaths>
 
 #include <KIO/Job>
 #include <KIO/CopyJob>
@@ -27,7 +28,7 @@ void SlaveTest::cleanupTestCase()
 
 QString SlaveTest::tmpDirPath() const
 {
-    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation + QString("/slavetest/"));
+    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+ QString("/slavetest/");
 }
 
 void SlaveTest::stashFile(const QString &realPath, const QString &stashPath)
@@ -113,9 +114,10 @@ void SlaveTest::listSubDir()
 
 void SlaveTest::createDirectory() //find ways for finding files
 {
-    KIO::SimpleJob *job = KIO::mkdir(url);
+    QString path = "";
+    KIO::SimpleJob *job = KIO::mkdir(path);
     bool ok = job->exec();
-    QVERIFY(QFile::exists(url));
+    QVERIFY(QFile::exists(path));
     QCOMPARE(ok, true);
 }
 
@@ -135,8 +137,8 @@ void SlaveTest::statRoot()
 
 void SlaveTest::statFileInRoot()
 {
-    QFile file
-    QUrl url(QStringLiteral("stash:/stashfile"));
+    QFile file;
+    QUrl url("stash:/stashfile");
     stashFile(url.path(), url.path());
     KIO::UDSEntry entry;
     statUrl(url, entry);
@@ -202,19 +204,19 @@ void SlaveTest::statFileInDirectory()
 void SlaveTest::copyFileToStash()
 {
     QString src(tmpDirPath() + "stashTestFile");
-    QFile stashFile(src);
+    QFile stashFile(QUrl(src));
     QVERIFY(stashFile.open(QIODevice::WriteOnly));
     QString dest("stash:/");
-    destinationFileName = src.fileName();
+    QString destinationFileName = QUrl(src).fileName();
     stashCopy(src, dest);
     QVERIFY(stashFile.exists());
-    QVERIFY(dest + destinationFileName);
+    QVERIFY(QFile(dest + destinationFileName).exists());
 
     QString destDirectory("stash:/copyTestCase");
     destinationFileName = src.fileName();
     stashCopy(src, destDirectory);
     QVERIFY(stashFile.exists());
-    QVERIFY(destDirectory + destinationFileName);
+    QVERIFY(QFile(dest + destinationFileName).exists());
 }
 
 void SlaveTest::copySymlinkFromStash() //create test case

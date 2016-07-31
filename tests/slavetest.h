@@ -45,7 +45,7 @@ class SlaveTest : public QObject
         void statSymlinkInRoot();
         void statFileInDirectory();
     private:
-        QString tmpDirPath();
+        QString tmpDirPath() const;
         void statUrl(const QUrl &url, KIO::UDSEntry &entry);
         void stashFile(const QString &realPath, const QString &stashPath);
         void stashSymlink(const QString &realPath, const QString &stashPath);
