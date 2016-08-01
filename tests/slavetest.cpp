@@ -18,6 +18,9 @@
 
 void SlaveTest::initTestCase()
 {
+    //qDebug() << QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+ QString("/slavetest/");
+    QDir tmpDir;
+    tmpDir.mkdir(tmpDirPath());
     QString program = "../src/iodaemon/testdaemon";
     stashDaemonProcess = new QProcess();
     stashDaemonProcess->start(program);
