@@ -20,8 +20,9 @@
 #ifndef KIO_FILESTASH_H
 #define KIO_FILESTASH_H
 
-#include <KIO/ForwardingSlaveBase>
 #include <QObject>
+
+#include <KIO/ForwardingSlaveBase>
 
 class FileStash : public KIO::ForwardingSlaveBase
 {

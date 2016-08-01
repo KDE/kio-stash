@@ -18,12 +18,14 @@
 
 void SlaveTest::initTestCase()
 {
-
+    QString program = "../src/iodaemon/testdaemon";
+    stashDaemonProcess = new QProcess();
+    stashDaemonProcess->start(program);
 }
 
 void SlaveTest::cleanupTestCase()
 {
-
+    stashDaemonProcess->terminate();
 }
 
 QString SlaveTest::tmpDirPath() const

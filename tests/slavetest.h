@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <KIO/Job>
+#include <QProcess>
 
 class SlaveTest : public QObject
 {
@@ -54,6 +55,7 @@ class SlaveTest : public QObject
         void createDirectory();
         void moveFromStash(const QUrl &src, const QUrl &dest);
         void deleteFromStash(const QUrl &url);
+        QProcess *stashDaemonProcess;
 };
 
 #endif
