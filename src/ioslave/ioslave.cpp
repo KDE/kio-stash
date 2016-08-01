@@ -94,7 +94,7 @@ QStringList FileStash::setFileList(const QUrl &url)
 QString FileStash::setFileInfo(const QUrl &url)
 {
     QDBusMessage msg = QDBusMessage::createMethodCall(
-                           m_daemonService, m_daemonPath, "", "fileList");
+                           m_daemonService, m_daemonPath, "", "fileInfo");
     msg << url.path();
     QDBusReply<QString> received = QDBusConnection::sessionBus().call(msg);
     return received.value();
@@ -216,7 +216,7 @@ void FileStash::listDir(const QUrl &url)
 void FileStash::mkdir(const QUrl &url, int permissions)
 {
     QDBusMessage msg = QDBusMessage::createMethodCall(
-                           m_daemonService, m_daemonPath, "", "fileList");
+                           m_daemonService, m_daemonPath, "", "addPath");
     QString destinationPath = url.path();
     msg << "" << destinationPath << NodeType::DirectoryNode;
     bool queued = QDBusConnection::sessionBus().send(msg);
@@ -240,7 +240,7 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not determine file type."));
         }
         QDBusMessage msg = QDBusMessage::createMethodCall(
-                               m_daemonService, m_daemonPath, "", "fileList");
+                               m_daemonService, m_daemonPath, "", "addPath");
         QString destinationPath = dest.path();
         //qDebug() << src.path() << destinationPath << (int) fileType;
         msg << src.path() << destinationPath << (int) fileType;
@@ -257,10 +257,9 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
             QUrl newDestPath = QUrl::fromLocalFile(fileItem.source);
             ForwardingSlaveBase::copy(newDestPath, dest, permissions, flags);
         }
-    }
-    if (src.scheme() == "stash" && dest.scheme() == "stash") {
+    } else if (src.scheme() == "stash" && dest.scheme() == "stash") {
         QDBusMessage msg = QDBusMessage::createMethodCall(
-                               m_daemonService, m_daemonPath, "", "fileList");
+                               m_daemonService, m_daemonPath, "", "addPath");
         msg << src.path() << dest.path();
         QDBusReply<bool> received = QDBusConnection::sessionBus().call(msg);
         if (received) {
@@ -276,7 +275,7 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
 void FileStash::del(const QUrl &url, bool isFile)
 {
     QDBusMessage msg = QDBusMessage::createMethodCall(
-                           m_daemonService, m_daemonPath, "", "fileList");
+                           m_daemonService, m_daemonPath, "", "removePath");
     if (isRoot(currentDir)) {
         msg << url.fileName();
     } else {
