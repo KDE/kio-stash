@@ -37,12 +37,16 @@ class StashNotifier : public KDEDModule
 private:
     KDirWatch *dirWatch;
     StashFileSystem *fileSystem;
+    const QString m_daemonService;
+    const QString m_daemonPath;
     QString processString(const QString &path);
     QString encodeString(StashFileSystem::StashNode::iterator node, const QString &path);
     QString encodeString(StashFileSystem::StashNodeData nodeData, const QString &path);
 
 public:
-    StashNotifier(QObject* parent, const QList<QVariant>&);
+    StashNotifier(QObject* parent, const QList<QVariant>&,
+                const QString daemonService = "org.kde.kio.StashNotifier",
+                const QString daemonPath = "/StashNotifier");
     ~StashNotifier();
 
 Q_SIGNALS:

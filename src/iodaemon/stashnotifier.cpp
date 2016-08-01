@@ -33,15 +33,20 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(StashNotifierFactory, "stashnotifier.json", registerPlugin<StashNotifier>();)
 
-StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var) : KDEDModule(parent)
+StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var,
+                            const QString daemonService,
+                            const QString daemonPath) :
+                            KDEDModule(parent),
+                            m_daemonService(daemonService),
+                            m_daemonPath(daemonPath)
 {
     dirWatch = new KDirWatch(this);
     qDebug() << "Launching stash daemon.";
 
     new StashNotifierAdaptor(this);
     QDBusConnection dbus = QDBusConnection::sessionBus();
-    dbus.registerObject("/StashNotifier", this);
-    dbus.registerService("org.kde.kio.StashNotifier");
+    dbus.registerObject(m_daemonPath, this);
+    dbus.registerService(m_daemonService);
 
     fileSystem = new StashFileSystem(parent);
 
