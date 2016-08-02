@@ -106,7 +106,7 @@ void FileStash::stat(const QUrl &url)
     if (isRoot(url.path())) {
         createTopLevelDirEntry(entry);
     } else {
-        QString fileInfo = setFileInfo(url.path());
+        QString fileInfo = setFileInfo(url);
         FileStash::dirList item = createDirListItem(fileInfo);
         createUDSEntry(entry, item);
     }
@@ -220,7 +220,11 @@ void FileStash::mkdir(const QUrl &url, int permissions)
     QString destinationPath = url.path();
     msg << "" << destinationPath << NodeType::DirectoryNode;
     bool queued = QDBusConnection::sessionBus().send(msg);
-    finished();
+    if (queued) {
+        finished();
+    } else {
+        error(KIO::ERR_SLAVE_DEFINED, QString("Could not create a directory"));
+    }
 }
 
 void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
@@ -274,6 +278,7 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
 
 void FileStash::del(const QUrl &url, bool isFile)
 {
+    Q_UNUSED(isFile)
     QDBusMessage msg = QDBusMessage::createMethodCall(
                            m_daemonService, m_daemonPath, "", "removePath");
     if (isRoot(currentDir)) {

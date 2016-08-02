@@ -208,20 +208,21 @@ void SlaveTest::statFileInDirectory()
 
 void SlaveTest::copyFileToStash()
 {
-    QString src(tmpDirPath() + "stashTestFile");
+    QString fileName = "stashTestFile";
+    QString src = "file:///" + tmpDirPath() + fileName;
     QFile stashFile(src);
     QVERIFY(stashFile.open(QIODevice::WriteOnly));
-    QString dest("stash:/");
-    QString destinationFileName = QUrl(src).fileName();
+    QString dest("stash:/" + fileName);
+
     stashCopy(src, dest);
     QVERIFY(stashFile.exists());
-    QVERIFY(QFile(dest + destinationFileName).exists());
-
+    QVERIFY(QFile(dest).exists());
+/*
     QString destDirectory("stash:/copyTestCase");
     destinationFileName = QUrl(src).fileName();
     stashCopy(src, destDirectory);
     QVERIFY(stashFile.exists());
-    QVERIFY(QFile(dest + destinationFileName).exists());
+    QVERIFY(QFile(dest + destinationFileName).exists());*/
 }
 
 void SlaveTest::copySymlinkFromStash() //create test case
