@@ -21,6 +21,7 @@ void SlaveTest::initTestCase()
     //qDebug() << QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+ QString("/slavetest/");
     QDir tmpDir;
     tmpDir.mkdir(tmpDirPath());
+    //enclose a check statement around this block to see if kded5 is not already there
     QString program = "../src/iodaemon/testdaemon";
     stashDaemonProcess = new QProcess();
     stashDaemonProcess->start(program);
@@ -31,7 +32,7 @@ void SlaveTest::cleanupTestCase()
     stashDaemonProcess->terminate();
 }
 
-QString SlaveTest::tmpDirPath() const
+QUrl SlaveTest::tmpDirPath() const
 {
     return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+ QString("/slavetest/");
 }
@@ -156,7 +157,7 @@ void SlaveTest::statFileInRoot()
     QVERIFY(!item.isHidden());
     QCOMPARE(item.text(), QStringLiteral("stashfile"));
 }
-
+//use kio::stat
 void SlaveTest::statDirectoryInRoot()
 {
     QUrl url(QStringLiteral("stash:/stashfolder"));
@@ -215,7 +216,7 @@ void SlaveTest::copyFileToStash()
     QUrl dest("stash:/" + fileName);
 
     stashCopy(src, dest);
-    QVERIFY(stashFile.exists());
+    QVERIFY(stashFile.exists()); //use kio::stat
     QVERIFY(QFile(dest).exists());
 /*
     QUrl destDirectory("stash:/copyTestCase");
@@ -230,24 +231,23 @@ void SlaveTest::copySymlinkFromStash() //create test case
     QUrl src("stash:/");
     QUrl dest("file:/");
     stashCopy(src, dest);
-    QVERIFY(QFile(dest).exists());
+    QVERIFY(QFile::exists(dest.toLocalFile()));
 }
 
 void SlaveTest::copyStashToFile()
 {
     QUrl src("stash:/stashTestFile");
     QUrl dest(tmpDirPath());
-    QUrl destinationFileName = QUrl(src).fileName();
     stashCopy(src, dest);
-    QVERIFY(QFile(dest).exists());
+    QVERIFY(QFile::exists(dest.toLocalFile()));
 }
 
 void SlaveTest::copyStashToStash()
 {
     QUrl src("stash:/");
-    QUrl dest("file:/");
+    QUrl dest("stash:/");
     stashCopy(src, dest);
-    QVERIFY(QFile(dest).exists());
+    QVERIFY(QFile(dest).exists()); //use kio::stat
 }
 
 void SlaveTest::moveToFileFromStash()
@@ -255,8 +255,8 @@ void SlaveTest::moveToFileFromStash()
     QUrl src("stash:/");
     QUrl dest("file:/");
     moveFromStash(src, dest);
-    QVERIFY(QFile(dest).exists());
-    QVERIFY(!QFile(src).exists());
+    QVERIFY(QFile(dest.toLocalFile()).exists());
+    QVERIFY(!QFile(src).exists()); //use kio::stat!
     //match properties also
 }
 
@@ -265,29 +265,29 @@ void SlaveTest::moveToStashFromStash()
     QUrl src("stash:/");
     QUrl dest("stash:/");
     moveFromStash(src, dest);
-    QVERIFY(QFile(dest).exists());
-    QVERIFY(!QFile(src).exists());
+    QVERIFY(QFile(dest).exists()); //use kio::stat
+    QVERIFY(!QFile(src).exists()); //use kio::stat
 }
 
 void SlaveTest::delRootFile()
 {
-    QUrl url("");
+    QUrl url(""); //url
     deleteFromStash(url);
-    QCOMPARE(QFile(url).exists(), false);
+    QCOMPARE(QFile(url).exists(), false); //use kio::stat
 }
 
 void SlaveTest::delFileInDirectory()
 {
-    QUrl url("");
+    QUrl url(""); //url
     deleteFromStash(url);
-    QCOMPARE(QFile(url).exists(), false);
+    QCOMPARE(QFile(url).exists(), false); //use kio::stat
 }
 
 void SlaveTest::delDirectory()
 {
     QUrl url("/deldir");
     deleteFromStash(url);
-    QCOMPARE(QFile(url).exists(), false);
+    QCOMPARE(QFile(url).exists(), false); //use kio::stat
 }
 
 QTEST_MAIN(SlaveTest)
