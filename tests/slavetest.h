@@ -21,10 +21,6 @@ class SlaveTest : public QObject
 
     private slots:
         void initTestCase();
-        void cleanupTestCase();
-
-        void listRootDir();
-        void listSubDir();
 
         void copyFileToStash();
         void copyStashToFile();
@@ -35,18 +31,23 @@ class SlaveTest : public QObject
         void moveToStashFromStash();
 
         //void renameFileInStash(); //currently fails
-
-        void delRootFile();
-        void delFileInDirectory();
-        void delDirectory();
-
         void statRoot();
         void statFileInRoot();
         void statDirectoryInRoot();
         void statSymlinkInRoot();
         void statFileInDirectory();
+
+        void listRootDir();
+        void listSubDir();
+
+        void delRootFile();
+        void delFileInDirectory();
+        void delDirectory();
+
+        void cleanupTestCase();
+
     private:
-        QUrl tmpDirPath() const;
+        QString tmpDirPath() const;
         void statUrl(const QUrl &url, KIO::UDSEntry &entry);
         void stashFile(const QString &realPath, const QString &stashPath);
         void stashSymlink(const QString &realPath, const QString &stashPath);

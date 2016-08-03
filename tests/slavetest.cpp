@@ -29,10 +29,11 @@ void SlaveTest::initTestCase()
 
 void SlaveTest::cleanupTestCase()
 {
+    //delete all test files
     stashDaemonProcess->terminate();
 }
 
-QUrl SlaveTest::tmpDirPath() const
+QString SlaveTest::tmpDirPath() const
 {
     return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+ QString("/slavetest/");
 }
@@ -120,10 +121,10 @@ void SlaveTest::listSubDir()
 
 void SlaveTest::createDirectory() //find ways for finding files
 {
-    QUrl path = QUrl("");
-    KIO::SimpleJob *job = KIO::mkdir(path);
+    QUrl directoryPath = QUrl("");
+    KIO::SimpleJob *job = KIO::mkdir(directoryPath);
     bool ok = job->exec();
-    QVERIFY(QFile::exists(path));
+    QVERIFY(QFile::exists(directoryPath.path()));
     QCOMPARE(ok, true);
 }
 
@@ -209,7 +210,7 @@ void SlaveTest::statFileInDirectory()
 
 void SlaveTest::copyFileToStash()
 {
-    QUrl fileName = "stashTestFile";
+    QUrl fileName = QUrl("stashTestFile");
     QUrl src = "file:///" + tmpDirPath() + fileName;
     QFile stashFile(src);
     QVERIFY(stashFile.open(QIODevice::WriteOnly));
