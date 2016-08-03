@@ -56,7 +56,13 @@ class SlaveTest : public QObject
         void createDirectory();
         void moveFromStash(const QUrl &src, const QUrl &dest);
         void deleteFromStash(const QUrl &url);
+
         QProcess *stashDaemonProcess;
+
+        const QString m_fileTestFile;
+        const QString m_stashTestFile;
+        const QString m_fileTestFolder;
+        const QString m_stashTestFolder;
 };
 
 #endif
