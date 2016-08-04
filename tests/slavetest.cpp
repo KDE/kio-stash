@@ -65,7 +65,28 @@ void SlaveTest::cleanupTestCase()
 
 QString SlaveTest::tmpDirPath()
 {
-    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + tmpFolder;
+    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/" + tmpFolder;
+}
+
+void SlaveTest::statItem(const QUrl &url, const SlaveTest::NodeType &type)
+{
+    KIO::UDSEntry entry;
+    QVERIFY(statUrl(url, entry));
+    KFileItem item(entry, url);
+    switch (type) {
+    case NodeType::DirectoryNode:
+        QVERIFY(item.isDir());
+        break;
+    case NodeType::FileNode:
+        QVERIFY(item.isFile());
+        break;
+    case NodeType::SymlinkNode:
+        QVERIFY(item.isLink());
+        break;
+    }
+    QVERIFY(item.isReadable());
+    QVERIFY(!item.isHidden());
+    QCOMPARE(item.text(), url.fileName());
 }
 
 void SlaveTest::stashFile(const QString &realPath, const QString &stashPath)
@@ -184,7 +205,6 @@ void SlaveTest::statFileInRoot()
     QVERIFY(!item.isDir());
     QVERIFY(!item.isLink());
     QVERIFY(item.isReadable());
-    QVERIFY(!item.isWritable());
     QVERIFY(!item.isHidden());
 //    QCOMPARE(item.text(), m_stashTestFile);
 }
@@ -200,7 +220,6 @@ void SlaveTest::statDirectoryInRoot()
     QVERIFY(item.isDir());
     QVERIFY(!item.isLink());
     QVERIFY(item.isReadable());
-    QVERIFY(!item.isWritable());
     QVERIFY(!item.isHidden());
 //    QCOMPARE(item.text(), QStringLiteral(m_stastTestFolder));
 }
@@ -216,7 +235,6 @@ void SlaveTest::statSymlinkInRoot()
     QVERIFY(!item.isDir());
     QVERIFY(item.isLink());
     QVERIFY(item.isReadable());
-    QVERIFY(!item.isWritable());
     QVERIFY(!item.isHidden());
 //    QCOMPARE(item.text(), QStringLiteral(m_stashTestSymlink));
 }
@@ -232,7 +250,6 @@ void SlaveTest::statFileInDirectory()
     QVERIFY(!item.isDir());
     QVERIFY(!item.isLink());
     QVERIFY(item.isReadable());
-    QVERIFY(!item.isWritable());
     QVERIFY(!item.isHidden());
 //    QCOMPARE(item.text(), QStringLiteral(m_stashTestFileInSubDirectory));
 }
@@ -246,7 +263,7 @@ void SlaveTest::copyFileToStash()
 
     stashCopy(src, dest);
     QVERIFY(testFile.exists()); //use kio::stat
-    QVERIFY(QFile(dest.path()).exists());
+    statItem(dest, NodeType::FileNode);
 /*
     QUrl destDirectory("stash:/copyTestCase");
     destinationFileName = QUrl(src).fileName();
