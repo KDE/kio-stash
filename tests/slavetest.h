@@ -10,7 +10,8 @@ class SlaveTest : public QObject
     Q_OBJECT
 
     public:
-        SlaveTest() {}
+        SlaveTest();
+        ~SlaveTest(){}
 
         enum NodeType {
             DirectoryNode,
@@ -27,8 +28,8 @@ class SlaveTest : public QObject
         void copyStashToStash();
         void copySymlinkFromStash();
 
-        void moveToFileFromStash();
         void moveToStashFromStash();
+        void moveToFileFromStash();
 
         //void renameFileInStash(); //currently fails
         void statRoot();
@@ -56,13 +57,16 @@ class SlaveTest : public QObject
         void createDirectory();
         void moveFromStash(const QUrl &src, const QUrl &dest);
         void deleteFromStash(const QUrl &url);
+        void createTestFiles();
 
         QProcess *stashDaemonProcess;
 
+        const QString tmpFolder;
         const QString m_fileTestFile;
         const QString m_stashTestFile;
         const QString m_fileTestFolder;
         const QString m_stashTestFolder;
+        const QString m_stashTestSymlink;
 };
 
 #endif
