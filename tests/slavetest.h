@@ -28,7 +28,7 @@ class SlaveTest : public QObject
         void stashSymlink(const QString &realPath, const QString &stashPath);
         void stashDirectory(const QString &path);
         void stashCopy(const QUrl &src, const QUrl &dest);
-        void statItem(const QUrl &url, const SlaveTest::NodeType &type);
+        void statItem(const QUrl &url, const int &type);
         void createDirectory();
         void moveFromStash(const QUrl &src, const QUrl &dest);
         void deleteFromStash(const QUrl &url);

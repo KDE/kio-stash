@@ -108,16 +108,14 @@ void FileStash::stat(const QUrl &url)
     } else {
         QString fileInfo = setFileInfo(url);
         FileStash::dirList item = createDirListItem(fileInfo);
-        if (createUDSEntry(entry, item)) {
-            statEntry(entry);
-            finished();
-        } else {
+        if (!createUDSEntry(entry, item)) {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not stat."));
+            return;
         }
     }
+    statEntry(entry);
+    finished();
 }
-
-
 
 bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &fileItem)
 {

@@ -16,12 +16,12 @@
 #include <KFileItem>
 
 SlaveTest::SlaveTest() : tmpFolder("SlaveTest"),
-                        m_fileTestFile("TestFile"),
-                        m_fileTestFolder("TestSubFolder"),
-                        m_stashTestFolder("StashTestFolder"),
-                        m_stashTestSymlink("StashTestSymlink"),
-                        m_stashTestFile("StashFile"),
-                        m_stashTestFileInSubDirectory("SubTestFile")
+                         m_fileTestFile("TestFile"),
+                         m_fileTestFolder("TestSubFolder"),
+                         m_stashTestFolder("StashTestFolder"),
+                         m_stashTestSymlink("StashTestSymlink"),
+                         m_stashTestFile("StashFile"),
+                         m_stashTestFileInSubDirectory("SubTestFile")
 {
 }
 
@@ -38,18 +38,24 @@ void SlaveTest::initTestCase()
 void SlaveTest::createTestFiles() //also find a way to reset the directory prior to use
 {
     QDir tmpDir;
-    tmpDir.mkdir(tmpDirPath());
+    tmpDir.mkdir(tmpDirPath()); //creates test dir
 
     QUrl src = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFile); //creates a file to be tested
     QFile tmpFile;
-
+    //at file protocol
     tmpFile.setFileName(src.path());
-    QVERIFY(tmpFile.open(QIODevice::WriteOnly));
+    QVERIFY(tmpFile.open(QIODevice::ReadWrite));
 
+    //create a file to be stashed
     src = QUrl::fromLocalFile(tmpDirPath() + m_stashTestFile);
-
     tmpFile.setFileName(src.path());
-    QVERIFY(tmpFile.open(QIODevice::WriteOnly));
+    QVERIFY(tmpFile.open(QIODevice::ReadWrite));
+    stashFile(src.path(), "/" + m_stashTestFile);
+
+    //create a file in a stash-subdir
+    src = QUrl::fromLocalFile(tmpDirPath() + m_stashTestFileInSubDirectory);
+    tmpFile.setFileName(src.path());
+    QVERIFY(tmpFile.open(QIODevice::ReadWrite));
     stashFile(src.path(), "/" + m_stashTestFile);
 
     tmpDir.mkdir(tmpDirPath() + m_fileTestFolder);
@@ -65,10 +71,10 @@ void SlaveTest::cleanupTestCase()
 
 QString SlaveTest::tmpDirPath()
 {
-    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/" + tmpFolder;
+    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/" + tmpFolder + "/";
 }
 
-void SlaveTest::statItem(const QUrl &url, const SlaveTest::NodeType &type)
+void SlaveTest::statItem(const QUrl &url, const int &type)
 {
     KIO::UDSEntry entry;
     QVERIFY(statUrl(url, entry));
@@ -262,7 +268,7 @@ void SlaveTest::copyFileToStash()
     QUrl dest("stash:/" + m_fileTestFile);
 
     stashCopy(src, dest);
-    QVERIFY(testFile.exists()); //use kio::stat
+    QVERIFY(testFile.exists());
     statItem(dest, NodeType::FileNode);
 /*
     QUrl destDirectory("stash:/copyTestCase");
@@ -294,7 +300,7 @@ void SlaveTest::copyStashToStash()
     QUrl src("stash:/" + m_stashTestFile);
     QUrl dest("stash:/" + m_stashTestFolder + "/" + m_stashTestFile);
     stashCopy(src, dest);
-    QVERIFY(QFile(dest.path()).exists()); //use kio::stat
+    statItem(dest, NodeType::FileNode);
 }
 
 void SlaveTest::moveToFileFromStash()

@@ -152,7 +152,7 @@ QString StashNotifier::fileInfo(const QString &path) //forwards data of a single
 void StashNotifier::addPath(const QString &source, const QString &stashPath, const int &fileType)
 {
     QString processedPath = processString(stashPath);
-    qDebug() << processedPath;
+    qDebug() << "adding new" << source << processedPath << fileType;
     if (fileSystem->findNode(stashPath).type == StashFileSystem::NodeType::InvalidNode) { //only folders not already exisiting are added
         if (fileType == StashFileSystem::NodeType::DirectoryNode) {
             dirWatch->addDir(processedPath);
