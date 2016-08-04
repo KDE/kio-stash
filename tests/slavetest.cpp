@@ -22,8 +22,7 @@ SlaveTest::SlaveTest() : tmpFolder("SlaveTest"),
                          m_stashTestSymlink("StashTestSymlink"),
                          m_stashTestFile("StashFile"),
                          m_stashTestFileInSubDirectory("SubTestFile")
-{
-}
+{}
 
 void SlaveTest::initTestCase()
 {
@@ -153,8 +152,9 @@ void SlaveTest::stashCopy(const QUrl &src, const QUrl &dest)
 
 void SlaveTest::moveFromStash(const QUrl &src, const QUrl &dest) //make this work
 {
-    KIO::Job *job = KIO::moveAs(src, dest, KIO::HideProgressInfo);
+    KIO::Job *job = KIO::move(src, dest, KIO::HideProgressInfo);
     bool ok = job->exec();
+    qDebug() << src << dest << ok;
     QVERIFY(ok);
     QVERIFY(QFile::exists(dest.toString()));
 }
@@ -171,7 +171,7 @@ void SlaveTest::listRootDir()
     //write qcompare cases
     KIO::ListJob *job = KIO::listDir(QUrl(QStringLiteral("stash:/")), KIO::HideProgressInfo);
     connect(job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)),
-    SLOT(slotEntries(KIO::Job*,KIO::UDSEntryList)));
+            SLOT(slotEntries(KIO::Job*,KIO::UDSEntryList)));
     bool ok = job->exec();
     QVERIFY(ok);
 }
@@ -179,7 +179,7 @@ void SlaveTest::listRootDir()
 void SlaveTest::listSubDir()
 {
     //write qcompare cases
-    KIO::ListJob *job = KIO::listDir(QUrl(QStringLiteral("stash:/myfolder")), KIO::HideProgressInfo);
+    KIO::ListJob *job = KIO::listDir(QUrl("stash:/" + m_stashTestFolder), KIO::HideProgressInfo);
     connect(job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)),
             SLOT(slotEntries(KIO::Job*,KIO::UDSEntryList)));
     bool ok = job->exec();
@@ -309,7 +309,7 @@ void SlaveTest::copyStashToFile()
     statUrl(src, entry);
     KFileItem item(entry, src);
     stashCopy(item.targetUrl(), dest);
-    QVERIFY(QFile::exists(dest.path()));
+    QVERIFY(QFile::exists(dest.toLocalFile()));
 }
 /*
 void SlaveTest::copyStashToStash()
@@ -320,24 +320,28 @@ void SlaveTest::copyStashToStash()
     statItem(dest, NodeType::FileNode);
 }
 */
-void SlaveTest::moveToFileFromStash()
+void SlaveTest::moveToFileFromStash() //this is actually rather broken as of now
 {
     QUrl src("stash:/" + m_stashTestFile);
-    QUrl dest(QUrl::fromLocalFile(tmpDirPath() + m_stashTestFile));
+    QUrl dest(QUrl::fromLocalFile(tmpDirPath() + m_stashTestFolder + "/" + m_stashTestFile));
     //moveFromStash(src, dest);
-    QVERIFY(QFile(dest.toLocalFile()).exists());
-    QVERIFY(!QFile(src.path()).exists()); //use kio::stat!
+    KIO::UDSEntry entry;
+    statUrl(src, entry);
+    KFileItem item(entry, src);
+    moveFromStash(item.targetUrl(), dest);
+    QVERIFY(!QFile::exists(item.targetUrl().path()));
+    QVERIFY(QFile::exists(dest.toLocalFile()));
     //match properties also
 }
 
-void SlaveTest::moveToStashFromStash()
+/*void SlaveTest::moveToStashFromStash()
 {
     QUrl src("stash:/" + m_stashTestFile);
     QUrl dest("stash:/" + m_stashTestFolder + "/" + m_stashTestFile);
     //moveFromStash(src, dest);
     QVERIFY(QFile(dest.path()).exists()); //use kio::stat
     QVERIFY(!QFile(src.path()).exists()); //use kio::stat
-}
+}*/
 
 void SlaveTest::delRootFile()
 {
