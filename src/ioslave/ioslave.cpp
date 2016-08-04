@@ -230,7 +230,7 @@ void FileStash::mkdir(const QUrl &url, int permissions)
 
 void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
 {
-    //qDebug() << "copy of" << src << dest;
+    qDebug() << "copy of" << src << dest;
     if (src.scheme() == "file" && dest.scheme() == "stash") {
         NodeType fileType;
         QFileInfo fileInfo = QFileInfo(src.path());
@@ -262,18 +262,20 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
             QUrl newDestPath = QUrl::fromLocalFile(fileItem.source);
             ForwardingSlaveBase::copy(newDestPath, dest, permissions, flags);
         }
-    } else if (src.scheme() == "stash" && dest.scheme() == "stash") {
+    } else if (src.scheme() == "stash" && dest.scheme() == "stash") { //should not occur
         QDBusMessage msg = QDBusMessage::createMethodCall(
                                m_daemonService, m_daemonPath, "", "addPath");
         msg << src.path() << dest.path();
-        QDBusReply<bool> received = QDBusConnection::sessionBus().call(msg);
-        if (received) {
+        bool queued = QDBusConnection::sessionBus().send(msg);
+        if (queued) {
             finished();
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Copy failed."));
         }
     } else {
-        error(KIO::ERR_UNSUPPORTED_ACTION, QString("Copying between these protocols is not supported."));
+        KIO::ForwardingSlaveBase::copy(src, dest, permissions, flags);
+        finished();
+        //error(KIO::ERR_UNSUPPORTED_ACTION, QString("Copying between these protocols is not supported."));
     }
 }
 
