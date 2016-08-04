@@ -18,7 +18,8 @@
 
 SlaveTest::SlaveTest() : tmpFolder("SlaveTest") m_fileTestFile("TestFile"),
                         m_stashTestFile("StashFile"), m_fileTestFolder("TestSubFolder"),
-                        m_stashTestFolder("StashTestFolder"), m_stastTestSymlink("StashTestSymlink")
+                        m_stashTestFolder("StashTestFolder"), m_stastTestSymlink("StashTestSymlink"),
+                        m_stashTestFileInSubDirectory("SubTestFile")
 {
 }
 
@@ -32,7 +33,7 @@ void SlaveTest::initTestCase()
     stashDaemonProcess->start(program);
 }
 
-void createTestFiles()
+void createTestFiles() //also find a way to reset the directory prior to use
 {
     QDir tmpDir;
     tmpDir.mkdir(tmpDirPath());
@@ -93,14 +94,14 @@ void SlaveTest::stashSymlink(const QString &realPath, const QString &stashPath)
     QVERIFY(queued);
 }
 
-void SlaveTest::statUrl(const QUrl &url, KIO::UDSEntry &entry)
+bool SlaveTest::statUrl(const QUrl &url, KIO::UDSEntry &entry)
 {
     KIO::StatJob *statJob = KIO::stat(url, KIO::HideProgressInfo);
     bool ok = statJob->exec();
     if (ok) {
         entry = statJob->statResult();
     }
-    QVERIFY(ok);
+    return ok;
 }
 
 void SlaveTest::stashCopy(const QUrl &src, const QUrl &dest)
@@ -158,7 +159,7 @@ void SlaveTest::statRoot()
 {
     QUrl url("stash:/");
     KIO::UDSEntry entry;
-    statUrl(url, entry);
+    QVERIFYstatUrl(url, entry));
     KFileItem item(entry, url);
     QVERIFY(item.isDir());
     QVERIFY(!item.isLink());
@@ -171,10 +172,10 @@ void SlaveTest::statRoot()
 void SlaveTest::statFileInRoot()
 {
     QFile file;
-    QUrl url("stash:/stashfile");
+    QUrl url("stash:/" + m_stashTestFile);
     stashFile(url.path(), url.path());
     KIO::UDSEntry entry;
-    statUrl(url, entry);
+    QVERIFY(statUrl(url, entry));
     KFileItem item(entry, url);
     QVERIFY(item.isFile());
     QVERIFY(!item.isDir());
@@ -182,15 +183,15 @@ void SlaveTest::statFileInRoot()
     QVERIFY(item.isReadable());
     QVERIFY(!item.isWritable());
     QVERIFY(!item.isHidden());
-    QCOMPARE(item.text(), QStringLiteral("stashfile"));
+    QCOMPARE(item.text(), QStringLiteral(m_stashTestFile);
 }
 //use kio::stat
 void SlaveTest::statDirectoryInRoot()
 {
-    QUrl url(QStringLiteral("stash:/stashfolder"));
+    QUrl url("stash:/" + m_stashTestFolder);
     stashDirectory(url.path());
     KIO::UDSEntry entry;
-    statUrl(url, entry);
+    QVERIFY(statUrl(url, entry));
     KFileItem item(entry, url);
     QVERIFY(!item.isFile());
     QVERIFY(item.isDir());
@@ -198,15 +199,15 @@ void SlaveTest::statDirectoryInRoot()
     QVERIFY(item.isReadable());
     QVERIFY(!item.isWritable());
     QVERIFY(!item.isHidden());
-    QCOMPARE(item.text(), QStringLiteral("stashfolder"));
+    QCOMPARE(item.text(), QStringLiteral(m_stastTestFolder));
 }
 
 void SlaveTest::statSymlinkInRoot()
 {
-    QUrl url(QStringLiteral("stash:/stashsymlink"));
+    QUrl url(QStringLiteral("stash:/" + m_stashTestSymlink));
     stashSymlink(url.path(), url.path());
     KIO::UDSEntry entry;
-    statUrl(url, entry);
+    QVERIFY(statUrl(url, entry));
     KFileItem item(entry, url);
     QVERIFY(!item.isFile());
     QVERIFY(!item.isDir());
@@ -214,15 +215,15 @@ void SlaveTest::statSymlinkInRoot()
     QVERIFY(item.isReadable());
     QVERIFY(!item.isWritable());
     QVERIFY(!item.isHidden());
-    QCOMPARE(item.text(), QStringLiteral("stashsymlink"));
+    QCOMPARE(item.text(), QStringLiteral(m_stashTestSymlink));
 }
 
 void SlaveTest::statFileInDirectory()
 {
-    QUrl url(QStringLiteral("stash:/stashtestfolder/testfile"));
+    QUrl url(QStringLiteral("stash:/" + m_stashTestFolder + m_stashTestFileInSubDirectory));
     stashFile(url.path(), url.path());
     KIO::UDSEntry entry;
-    statUrl(url, entry);
+    QVERIFY(statUrl(url, entry));
     KFileItem item(entry, url);
     QVERIFY(item.isFile());
     QVERIFY(!item.isDir());
@@ -230,7 +231,7 @@ void SlaveTest::statFileInDirectory()
     QVERIFY(item.isReadable());
     QVERIFY(!item.isWritable());
     QVERIFY(!item.isHidden());
-    QCOMPARE(item.text(), QStringLiteral("testfile"));
+    QCOMPARE(item.text(), QStringLiteral(m_stashTestFileInSubDirectory));
 }
 
 void SlaveTest::copyFileToStash()

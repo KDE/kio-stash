@@ -49,7 +49,7 @@ class SlaveTest : public QObject
 
     private:
         QString tmpDirPath() const;
-        void statUrl(const QUrl &url, KIO::UDSEntry &entry);
+        bool statUrl(const QUrl &url, KIO::UDSEntry &entry);
         void stashFile(const QString &realPath, const QString &stashPath);
         void stashSymlink(const QString &realPath, const QString &stashPath);
         void stashDirectory(const QString &path);
@@ -63,10 +63,11 @@ class SlaveTest : public QObject
 
         const QString tmpFolder;
         const QString m_fileTestFile;
-        const QString m_stashTestFile;
         const QString m_fileTestFolder;
         const QString m_stashTestFolder;
         const QString m_stashTestSymlink;
+        const QString m_stashTestFile;
+        const QString m_stashTestFileInSubDirectory;
 };
 
 #endif
