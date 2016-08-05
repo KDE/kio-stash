@@ -35,6 +35,8 @@
 #include <KProtocolManager>
 #include <KLocalizedString>
 #include <KConfigGroup>
+#include <KFileItem>
+#include <KIO/Job>
 
 class KIOPluginForMetaData : public QObject
 {
@@ -115,6 +117,16 @@ void FileStash::stat(const QUrl &url)
     }
     statEntry(entry);
     finished();
+}
+
+bool FileStash::statUrl(const QUrl &url, KIO::UDSEntry &entry)
+{
+    KIO::StatJob *statJob = KIO::stat(url, KIO::HideProgressInfo);
+    bool ok = statJob->exec();
+    if (ok) {
+        entry = statJob->statResult();
+    }
+    return ok;
 }
 
 bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &fileItem)
@@ -282,6 +294,7 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
 void FileStash::del(const QUrl &url, bool isFile)
 {
     Q_UNUSED(isFile)
+    qDebug() << "deleting file" << url;
     QDBusMessage msg = QDBusMessage::createMethodCall(
                            m_daemonService, m_daemonPath, "", "removePath");
     if (isRoot(currentDir)) {
@@ -289,11 +302,39 @@ void FileStash::del(const QUrl &url, bool isFile)
     } else {
         msg << url.path();
     }
+
     bool queued = QDBusConnection::sessionBus().send(msg);
     if (queued) {
         finished();
     } else {
         error(KIO::ERR_CANNOT_DELETE, url.path());
+    }
+}
+
+void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
+{
+    qDebug() << "rename" << src << dest;
+    KIO::UDSEntry entry;
+    if (src.scheme() == "stash" && dest.scheme() == "stash") {
+        if (statUrl(src, entry)) {
+            KFileItem item(entry, src);
+            copy(item.targetUrl(), dest, -1, flags);
+            del(src, item.isFile());
+        } else {
+            error(KIO::ERR_SLAVE_DEFINED, QString("Could not stat."));
+            return;
+        }
+    } else if (src.scheme() == "file" && dest.scheme() == "stash") {
+        copy(src, dest, -1, flags);
+        //don't do anything to the src
+    } else if (src.scheme() == "stash" && dest.scheme() == "file") {
+        if (statUrl(src, entry)) {
+            KFileItem item(entry, src);
+            KIO::ForwardingSlaveBase::copy(item.targetUrl(), dest, -1, flags);
+        } else {
+            error(KIO::ERR_SLAVE_DEFINED, QString("Could not stat."));
+            return;
+        }
     }
 }
 

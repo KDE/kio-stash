@@ -68,6 +68,8 @@ private:
     QStringList setFileList(const QUrl &url);
     QString setFileInfo(const QUrl &url);
     FileStash::dirList createDirListItem(QString fileInfo);
+    bool statUrl(const QUrl &url, KIO::UDSEntry &entry);
+
     QString currentDir;
     const QString m_daemonService;
     const QString m_daemonPath;
@@ -79,6 +81,7 @@ protected:
     bool rewriteUrl(const QUrl &url, QUrl &newUrl) Q_DECL_OVERRIDE;
     void del(const QUrl &url, bool isFile) Q_DECL_OVERRIDE;
     void stat(const QUrl &url) Q_DECL_OVERRIDE;
+    void rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) Q_DECL_OVERRIDE;
 };
 
 #endif

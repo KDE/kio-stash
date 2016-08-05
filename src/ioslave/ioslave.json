@@ -20,6 +20,8 @@
             "protocol": "stash",
             "copyFromFile": true,
             "copyToFile": true,
+            "renameFromFile": true,
+            "renameToFile": true,
             "makedir": true,
             "writing": true,
             "moving": true,
