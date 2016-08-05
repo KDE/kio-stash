@@ -163,6 +163,7 @@ void SlaveTest::deleteFromStash(const QUrl &url)
 {
     KIO::Job *delJob = KIO::del(url, KIO::HideProgressInfo);
     bool ok = delJob->exec();
+    qDebug() << "delete" << url << ok;
     QVERIFY(ok);
 }
 
@@ -345,22 +346,42 @@ void SlaveTest::moveToFileFromStash() //this is actually rather broken as of now
 
 void SlaveTest::delRootFile()
 {
-    QUrl url(""); //url
+    QUrl url("stash:/" + m_stashTestFile); //url
+    qDebug() << url;
     deleteFromStash(url);
+    KIO::UDSEntry entry;
+    QVERIFY(statUrl(url, entry));
+    KFileItem item(entry, url);
+    qDebug() << "item name" << item.name();
+    qDebug() << "stash test file name" << m_stashTestFile;
+    QVERIFY(item.name() != m_stashTestFile);
 //    QCOMPARE(QFile(url.path()).exists(), false); //use kio::stat
 }
 
 void SlaveTest::delFileInDirectory()
 {
-    QUrl url(""); //url
+    QUrl url("stash:/" + m_stashTestFolder + "/" + m_stashTestFileInSubDirectory); //url
+    qDebug() << url;
     deleteFromStash(url);
+    KIO::UDSEntry entry;
+    QVERIFY(statUrl(url, entry));
+    KFileItem item(entry, url);
+    qDebug() << "item name" << item.name();
+    qDebug() << "stash test file name" << m_stashTestFileInSubDirectory;
+    QVERIFY(item.name() != m_stashTestFileInSubDirectory);
 //    QCOMPARE(QFile(url).exists(), false); //use kio::stat
 }
 
 void SlaveTest::delDirectory()
 {
-    QUrl url("/deldir");
+    QUrl url("stash:/" + m_stashTestFolder);
     deleteFromStash(url);
+    KIO::UDSEntry entry;
+    QVERIFY(statUrl(url, entry));
+    KFileItem item(entry, url);
+    qDebug() << "item name" << item.name();
+    qDebug() << "stash test file name" << m_stashTestFolder;
+    QVERIFY(item.name() != m_stashTestFolder);
 //    QCOMPARE(QFile(url).exists(), false); //use kio::stat
 }
 
