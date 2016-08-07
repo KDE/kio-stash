@@ -202,6 +202,14 @@ void FileStash::get(const QUrl &url)
     KIO::ForwardingSlaveBase::get(QUrl::fromLocalFile(item.source));
 }
 
+void FileStash::put(const QUrl &url, int permissions, KIO::JobFlags flags)
+{
+    const QString fileInfo = setFileInfo(url);
+    const dirList item = createDirListItem(fileInfo);
+    qDebug() << "putting at" << QUrl::fromLocalFile(item.source);
+    KIO::ForwardingSlaveBase::put(QUrl::fromLocalFile(item.source), permissions, flags);
+}
+
 void FileStash::listDir(const QUrl &url)
 {
     currentDir = url.path();
@@ -283,10 +291,24 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
             QUrl newDestPath = QUrl::fromLocalFile(fileItem.source);
             ForwardingSlaveBase::copy(newDestPath, dest, permissions, flags);
         }
-    } else if (src.scheme() == "stash" && dest.scheme() == "stash") { //should not occur
+    } else if (src.scheme() == "stash" && dest.scheme() == "stash") {
+        const dirList item = createDirListItem(setFileInfo(src));
+        NodeType fileType;
+        QFileInfo fileInfo = QFileInfo(item.source);
+        if (fileInfo.isFile()) {
+            fileType = NodeType::FileNode;
+        } else if (fileInfo.isSymLink()) {
+            fileType = NodeType::SymlinkNode;
+        } else if (fileInfo.isDir()) { // if I'm not wrong, this can never happen, but we should handle it anyway
+            fileType = NodeType::DirectoryNode;
+            qDebug() << "DirectoryNode...created?";
+        } else {
+            error(KIO::ERR_SLAVE_DEFINED, QString("Could not determine file type."));
+        }
+
         QDBusMessage msg = QDBusMessage::createMethodCall(
                                m_daemonService, m_daemonPath, "", "addPath");
-        msg << src.path() << dest.path();
+        msg << item.source << dest.path() << fileType;
         bool queued = QDBusConnection::sessionBus().send(msg);
         if (queued) {
             finished();
