@@ -155,7 +155,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
         QFileInfo entryInfo;
         entryInfo = QFileInfo(fileItem.source);
         fileMimetype = mimeDatabase.mimeTypeForFile(fileItem.source);
-        entry.insert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
+//        entry.insert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
         entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, fileMimetype.name());
         entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
         entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
@@ -191,6 +191,15 @@ FileStash::dirList FileStash::createDirListItem(QString fileInfo)
     item.filePath = strings.at(1);
     item.source = strings.at(2);
     return item;
+}
+
+void FileStash::get(const QUrl &url)
+{
+    //qDebug() << "get called for" << url;
+    const QString fileInfo = setFileInfo(url);
+    const dirList item = createDirListItem(fileInfo);
+    qDebug() << QUrl::fromLocalFile(item.source);
+    KIO::ForwardingSlaveBase::get(QUrl::fromLocalFile(item.source));
 }
 
 void FileStash::listDir(const QUrl &url)
@@ -268,8 +277,8 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
             error(KIO::ERR_SLAVE_DEFINED, QString("Cannot reach the stash daemon."));
         }
     } else if (src.scheme() == "stash" && dest.scheme() == "file") {
-        QString destInfo = setFileInfo(src);
-        FileStash::dirList fileItem = createDirListItem(destInfo);
+        const QString destInfo = setFileInfo(src);
+        const FileStash::dirList fileItem = createDirListItem(destInfo);
         if (fileItem.type != NodeType::DirectoryNode) {
             QUrl newDestPath = QUrl::fromLocalFile(fileItem.source);
             ForwardingSlaveBase::copy(newDestPath, dest, permissions, flags);

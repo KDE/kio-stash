@@ -82,6 +82,7 @@ protected:
     void del(const QUrl &url, bool isFile) Q_DECL_OVERRIDE;
     void stat(const QUrl &url) Q_DECL_OVERRIDE;
     void rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) Q_DECL_OVERRIDE;
+    void get(const QUrl &url) Q_DECL_OVERRIDE;
 };
 
 #endif
