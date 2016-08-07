@@ -67,6 +67,7 @@ void SlaveTest::createTestFiles() //also find a way to reset the directory prior
 
 void SlaveTest::cleanupTestCase()
 {
+    nukeStash();
     //delete all test files
     QString path = tmpDirPath();
     QDir dir(path);
@@ -142,9 +143,12 @@ bool SlaveTest::statUrl(const QUrl &url, KIO::UDSEntry &entry)
     return ok;
 }
 
-void nukeStash()
+void SlaveTest::nukeStash()
 {
-    
+    QDBusMessage msg = QDBusMessage::createMethodCall(
+                           "org.kde.kio.StashNotifier", "/StashNotifier", "", "nukeStash");
+    bool queued = QDBusConnection::sessionBus().send(msg);
+    QVERIFY(queued);
 }
 
 void SlaveTest::stashCopy(const QUrl &src, const QUrl &dest)
@@ -388,6 +392,18 @@ void SlaveTest::delDirectory()
     qDebug() << "stash test file name" << m_stashTestFolder;
     QVERIFY(item.name() != m_stashTestFolder);
 //    QCOMPARE(QFile(url).exists(), false); //use kio::stat
+}
+
+void SlaveTest::init()
+{
+    qDebug() << "calling init";
+    createTestFiles();
+}
+
+void SlaveTest::cleanup()
+{
+    qDebug() << "Cleaning up this test case";
+    //nukeStash();
 }
 
 QTEST_MAIN(SlaveTest)

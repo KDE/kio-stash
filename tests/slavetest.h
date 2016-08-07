@@ -47,7 +47,7 @@ class SlaveTest : public QObject
 
     private slots:
         void initTestCase();
-
+        void init();
         void copyFileToStash();
         void copyStashToFile();
 //        void copyStashToStash(); //not ever needed
@@ -70,6 +70,7 @@ class SlaveTest : public QObject
         void delFileInDirectory();
         void delDirectory();
 
+        void cleanup();
         void cleanupTestCase();
 };
 
