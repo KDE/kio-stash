@@ -156,3 +156,14 @@ StashFileSystem::StashNodeData StashFileSystem::findNode(QStringList path)
         return StashNodeData(InvalidNode);
     }
 }
+
+bool StashFileSystem::deleteAllItems()
+{
+    for (auto it = root.children->begin(); it != root.children->end(); it++)
+    {
+        if (!delEntry(it.key())) {
+            return false;
+        }
+    }
+    return true;
+}

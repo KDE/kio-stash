@@ -142,6 +142,11 @@ bool SlaveTest::statUrl(const QUrl &url, KIO::UDSEntry &entry)
     return ok;
 }
 
+void nukeStash()
+{
+    
+}
+
 void SlaveTest::stashCopy(const QUrl &src, const QUrl &dest)
 {
     KIO::CopyJob *job = KIO::copy(src, dest, KIO::HideProgressInfo);

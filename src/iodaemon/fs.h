@@ -75,6 +75,7 @@ public:
     bool addFolder(const QString &dest);
     bool addSymlink(const QString &src, const QString &dest);
     bool copyFile(const QString &src, const QString &dest);
+    bool deleteAllItems();
 
     StashNodeData findNode(QString path);
     StashNodeData findNode(QStringList path);

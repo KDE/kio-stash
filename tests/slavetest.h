@@ -33,6 +33,7 @@ class SlaveTest : public QObject
         void moveFromStash(const QUrl &src, const QUrl &dest);
         void deleteFromStash(const QUrl &url);
         void createTestFiles();
+        void nukeStash(); //deletes every folder and file in stash:/
 
         QProcess *stashDaemonProcess;
 

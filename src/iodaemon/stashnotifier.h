@@ -58,6 +58,7 @@ public Q_SLOTS:
     Q_SCRIPTABLE QStringList fileList(const QString &path);
     Q_SCRIPTABLE QString fileInfo(const QString &path);
     Q_SCRIPTABLE bool copyWithStash(const QString &src, const QString &dest);
+    Q_SCRIPTABLE void nukeStash();
 
 private Q_SLOTS:
     void dirty(const QString &path);

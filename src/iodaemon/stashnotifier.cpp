@@ -193,6 +193,14 @@ void StashNotifier::removePath(const QString &path)
     emit listChanged();
 }
 
+void StashNotifier::nukeStash()
+{
+    qDebug() << "Nuking stash: all files on it will be deleted!";
+    if (!fileSystem->deleteAllItems()) {
+        qDebug() << "Could not nuke the stash! Please check the ioslave.";
+    }
+}
+
 bool StashNotifier::copyWithStash(const QString &src, const QString &dest)
 {
     return fileSystem->copyFile(src, dest);

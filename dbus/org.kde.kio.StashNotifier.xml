@@ -24,5 +24,7 @@
       <arg name="src" type="s" direction="in"/>
       <arg name="dest" type="s" direction="in"/>
     </method>
+    <method name="nukeStash">
+    </method>
   </interface>
 </node>
