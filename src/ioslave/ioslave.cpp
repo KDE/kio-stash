@@ -193,7 +193,7 @@ FileStash::dirList FileStash::createDirListItem(QString fileInfo)
     return item;
 }
 
-void FileStash::get(const QUrl &url) //leaving this in for special handling 
+void FileStash::get(const QUrl &url) //leaving this in for special handling if needed later on
 {
     //qDebug() << "get called for" << url;
 /*    const QString fileInfo = setFileInfo(url);

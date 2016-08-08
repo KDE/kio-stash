@@ -4,8 +4,8 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/.. )
 
 set(slavetest_SRCS
     slavetest.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../src/ioslave/ioslave.cpp
 )
+
 enable_testing()
 set(CMAKE_AUTOMOC_ON)
 add_executable(slavetest ${slavetest_SRCS})

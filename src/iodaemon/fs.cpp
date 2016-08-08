@@ -157,13 +157,7 @@ StashFileSystem::StashNodeData StashFileSystem::findNode(QStringList path)
     }
 }
 
-bool StashFileSystem::deleteAllItems()
+void StashFileSystem::deleteAllItems()
 {
-    for (auto it = root.children->begin(); it != root.children->end(); it++)
-    {
-        if (!delEntry(it.key())) {
-            return false;
-        }
-    }
-    return true;
+    deleteChildren(root);
 }

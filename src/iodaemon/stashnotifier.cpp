@@ -196,9 +196,7 @@ void StashNotifier::removePath(const QString &path)
 void StashNotifier::nukeStash()
 {
     qDebug() << "Nuking stash: all files on it will be deleted!";
-    if (!fileSystem->deleteAllItems()) {
-        qDebug() << "Could not nuke the stash! Please check the ioslave.";
-    }
+    fileSystem->deleteAllItems();
 }
 
 bool StashNotifier::copyWithStash(const QString &src, const QString &dest)
