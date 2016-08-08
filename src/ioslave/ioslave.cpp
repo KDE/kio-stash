@@ -155,7 +155,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
         QFileInfo entryInfo;
         entryInfo = QFileInfo(fileItem.source);
         fileMimetype = mimeDatabase.mimeTypeForFile(fileItem.source);
-//        entry.insert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
+        entry.insert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
         entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, fileMimetype.name());
         entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
         entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
@@ -193,21 +193,23 @@ FileStash::dirList FileStash::createDirListItem(QString fileInfo)
     return item;
 }
 
-void FileStash::get(const QUrl &url)
+void FileStash::get(const QUrl &url) //leaving this in for special handling 
 {
     //qDebug() << "get called for" << url;
-    const QString fileInfo = setFileInfo(url);
+/*    const QString fileInfo = setFileInfo(url);
     const dirList item = createDirListItem(fileInfo);
     qDebug() << QUrl::fromLocalFile(item.source);
-    KIO::ForwardingSlaveBase::get(QUrl::fromLocalFile(item.source));
+    KIO::ForwardingSlaveBase::get(QUrl::fromLocalFile(item.source));*/
+    KIO::ForwardingSlaveBase::get(url);
 }
 
 void FileStash::put(const QUrl &url, int permissions, KIO::JobFlags flags)
 {
-    const QString fileInfo = setFileInfo(url);
+/*    const QString fileInfo = setFileInfo(url);
     const dirList item = createDirListItem(fileInfo);
     qDebug() << "putting at" << QUrl::fromLocalFile(item.source);
-    KIO::ForwardingSlaveBase::put(QUrl::fromLocalFile(item.source), permissions, flags);
+    KIO::ForwardingSlaveBase::put(QUrl::fromLocalFile(item.source), permissions, flags);*/
+    KIO::ForwardingSlaveBase::put(url, permissions, flags);
 }
 
 void FileStash::listDir(const QUrl &url)
