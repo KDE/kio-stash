@@ -291,7 +291,7 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
         const FileStash::dirList fileItem = createDirListItem(destInfo);
         if (fileItem.type != NodeType::DirectoryNode) {
             QUrl newDestPath = QUrl::fromLocalFile(fileItem.source);
-            ForwardingSlaveBase::copy(newDestPath, dest, permissions, flags);
+            ForwardingSlaveBase::copy(newDestPath, dest, -1, flags); //permissions is a bit wonky
         }
     } else if (src.scheme() == "stash" && dest.scheme() == "stash") {
         const dirList item = createDirListItem(setFileInfo(src));
