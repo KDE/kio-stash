@@ -29,26 +29,27 @@ void SlaveTest::initTestCase()
 {
     //enclose a check statement around this block to see if kded5 is not already there
     QDBusMessage msg;
+    QDBusMessage replyMessage;
     bool queued;
 
     msg = QDBusMessage::createMethodCall(
                            "org.kde.kio.StashNotifier", "/StashNotifier", "", "pingDaemon");
-    queued = QDBusConnection::sessionBus().send(msg);
-    if (!queued) {
+    replyMessage = QDBusConnection::sessionBus().call(msg);
+    if (replyMessage.type() == QDBusMessage::ErrorMessage) {
         qDebug() << "Launching fallback daemon";
         const QString program = "../src/iodaemon/testdaemon";
         stashDaemonProcess = new QProcess();
         stashDaemonProcess->start(program);
     }
 
-    createTestFiles();
-    queued = QDBusConnection::sessionBus().send(msg);
+    replyMessage = QDBusConnection::sessionBus().call(msg);
 
-    if (queued) {
+    if (replyMessage.type() != QDBusMessage::ErrorMessage) {
         qDebug() << "Test case initialised";
     } else {
         qDebug() << "Something is wrong!";
     }
+    createTestFiles();
 }
 
 void SlaveTest::createTestFiles() //also find a way to reset the directory prior to use
@@ -88,7 +89,7 @@ void SlaveTest::cleanupTestCase()
     nukeStash();
     QDir dir(tmpDirPath());
     dir.removeRecursively();
-    stashDaemonProcess->terminate();
+//    stashDaemonProcess->terminate();
 }
 
 QString SlaveTest::tmpDirPath()
