@@ -8,7 +8,7 @@ This is an original project with a novel solution to this problem. My solution i
 
 ##Installation
 
-Make sure you have KF5 backports installed with all the [KDE dependencies](https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source/Install_the_dependencies) installed before you build!
+Make sure you have KF5 backports with all the [KDE dependency libraries](https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source/Install_the_dependencies) installed before you build!
 
 Clone master to your favorite folder and run:
 

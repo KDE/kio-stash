@@ -396,7 +396,11 @@ void FileStash::del(const QUrl &url, bool isFile)
     }
 }
 
-void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) //not exactly correct - finished gets called twice
+void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
+/*TO DO:
+    folder rename
+    targetUrl rename
+*/
 {
     qDebug() << "rename" << src << dest;
     KIO::UDSEntry entry;
