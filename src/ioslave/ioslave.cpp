@@ -334,7 +334,6 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
 void FileStash::del(const QUrl &url, bool isFile)
 {
     Q_UNUSED(isFile)
-    qDebug() << "deleting file" << url;
 
     QDBusMessage replyMessage;
     QDBusMessage msg;
@@ -376,7 +375,7 @@ void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) /
     } else if (src.scheme() == "stash" && dest.scheme() == "file") {
         if (statUrl(src, entry)) {
             KFileItem item(entry, src);
-            KIO::ForwardingSlaveBase::copy(item.targetUrl(), dest, -1, flags);
+            KIO::ForwardingSlaveBase::copy(item.targetUrl(), dest, QFile(item.targetUrl().path()).permissions(), flags);
             del(src, item.isFile());
             return;
         } else {

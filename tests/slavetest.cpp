@@ -22,7 +22,8 @@ SlaveTest::SlaveTest() : tmpFolder("SlaveTest"),
                          m_stashTestSymlink("StashTestSymlink"),
                          m_stashTestFile("StashFile"),
                          m_stashTestFileInSubDirectory("SubTestFile"),
-                         m_newStashFileName("NewStashFile")
+                         m_newStashFileName("NewStashFile"),
+                         m_stashFileForRename("StashRenameFile")
 {}
 
 void SlaveTest::initTestCase()
@@ -56,6 +57,7 @@ void SlaveTest::createTestFiles() //also find a way to reset the directory prior
 {
     QDir tmpDir;
     tmpDir.mkdir(tmpDirPath()); //creates test dir
+    tmpDir.mkdir(tmpDirPath() + m_fileTestFolder);
 
     QFile tmpFile;
     stashDirectory("/" + m_stashTestFolder);
@@ -72,6 +74,12 @@ void SlaveTest::createTestFiles() //also find a way to reset the directory prior
     tmpFile.close();
     stashFile(src.path(), "/" + m_stashTestFile);
 
+    src = QUrl::fromLocalFile(tmpDirPath() + m_stashFileForRename);
+    tmpFile.setFileName(src.path());
+    QVERIFY(tmpFile.open(QIODevice::ReadWrite));
+    tmpFile.close();
+    stashFile(src.path(), "/" + m_stashFileForRename);
+
     //create a file in a stash-subdir why do we need this?
     src = QUrl::fromLocalFile(tmpDirPath() + m_stashTestFileInSubDirectory);
     tmpFile.setFileName(src.path());
@@ -81,12 +89,11 @@ void SlaveTest::createTestFiles() //also find a way to reset the directory prior
     stashFile(src.path(), "/" + m_stashTestFolder + "/" + m_stashTestFileInSubDirectory);
     //qDebug() << src.path() << "/" + m_stashTestFolder + "/" + m_stashTestFileInSubDirectory;
 
-    tmpDir.mkdir(tmpDirPath() + m_fileTestFolder);
 }
 
 void SlaveTest::cleanupTestCase()
 {
-    nukeStash();
+//    nukeStash();
     QDir dir(tmpDirPath());
     dir.removeRecursively();
 //    stashDaemonProcess->terminate();
@@ -343,20 +350,19 @@ void SlaveTest::moveToFileFromStash() //this is actually rather broken as of now
 //    QUrl dest = QUrl::fromLocalFile("/home/nic/test/" + m_stashTestFile);
     QUrl dest = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFolder + "/" + m_stashTestFile);
 
-//    moveFromStash(src, dest);
+    moveFromStash(src, dest);
     //QVERIFY(!QFile::exists(item.url().path()));
     KIO::UDSEntry entry;
     statUrl(src, entry);
     KFileItem item(entry, src);
     QVERIFY(item.name() != m_stashTestFile);
-    qDebug() << dest.toLocalFile();
     QVERIFY(QFile::exists(dest.toLocalFile()));
     //match properties also
 }
 
 void SlaveTest::renameFileInStash()
 {
-    QUrl src("stash:/" + m_stashTestFile);
+    QUrl src("stash:/" + m_stashFileForRename);
     QUrl dest("stash:/" + m_newStashFileName);
 
     KIO::UDSEntry entry;
@@ -365,7 +371,7 @@ void SlaveTest::renameFileInStash()
 
     statUrl(src, entry);
     KFileItem item(entry, src);
-    QVERIFY(item.name() != m_stashTestFile);
+    QVERIFY(item.name() != m_stashFileForRename);
 
     statUrl(dest, entry);
     item = KFileItem(entry, src);
@@ -431,7 +437,7 @@ void SlaveTest::init()
 void SlaveTest::cleanup()
 {
     QDir dir(tmpDirPath());
-    //dir.removeRecursively();
+    dir.removeRecursively();
     //qDebug() << "Cleaning up this test case";
     //nukeStash();
 }

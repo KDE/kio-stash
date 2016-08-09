@@ -45,6 +45,7 @@ class SlaveTest : public QObject
         const QString m_stashTestFile;
         const QString m_stashTestFileInSubDirectory;
         const QString m_newStashFileName;
+        const QString m_stashFileForRename;
 
     private slots:
         void initTestCase();
