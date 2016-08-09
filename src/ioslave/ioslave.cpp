@@ -405,28 +405,31 @@ void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) /
     qDebug() << "rename" << src << dest;
     KIO::UDSEntry entry;
     if (src.scheme() == "stash" && dest.scheme() == "stash") {
-        if (statUrl(src, entry)) {
-            KFileItem item(entry, src);
-            copy(item.url(), dest, -1, flags);
-            del(src, item.isFile());
-            return;
+        if (copyStashToStash(src, dest, -1, flags)) {
+            if (statUrl(src, entry)) {
+                KFileItem item(entry, src);
+                del(src, item.isFile());
+            }
         } else {
-            error(KIO::ERR_SLAVE_DEFINED, QString("Could not stat."));
-            return;
+            error(KIO::ERR_SLAVE_DEFINED, QString("Could not rename."));
         }
+        return;
     } else if (src.scheme() == "file" && dest.scheme() == "stash") {
-        copy(src, dest, -1, flags);
+        if (copyFileToStash(src, dest, -1, flags)) {
+            finished();
+        } else {
+            error(KIO::ERR_SLAVE_DEFINED, QString("Could not rename."));
+        }
         return;
         //don't do anything to the src
     } else if (src.scheme() == "stash" && dest.scheme() == "file") {
-        if (statUrl(src, entry)) {
-            KFileItem item(entry, src);
-            KIO::ForwardingSlaveBase::copy(item.targetUrl(), dest, -1, flags);
-            del(src, item.isFile());
-            return;
+        if (copyStashToFile(src, dest, -1, flags)) {
+            if (statUrl(src, entry)) {
+                KFileItem item(entry, src);
+                del(src, item.isFile());
+            }
         } else {
-            error(KIO::ERR_SLAVE_DEFINED, QString("Could not stat."));
-            return;
+            error(KIO::ERR_SLAVE_DEFINED, QString("Could not rename."));
         }
     }
 }
