@@ -55,6 +55,7 @@ class StashNotifierAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"in\" type=\"s\" name=\"dest\"/>\n"
 "    </method>\n"
 "    <method name=\"nukeStash\"/>\n"
+"    <method name=\"pingDaemon\"/>\n"
 "  </interface>\n"
         "")
 public:
@@ -68,6 +69,7 @@ public Q_SLOTS: // METHODS
     QString fileInfo(const QString &path);
     QStringList fileList(const QString &path);
     void nukeStash();
+    void pingDaemon();
     void removePath(const QString &path);
 Q_SIGNALS: // SIGNALS
     void listChanged();

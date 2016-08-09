@@ -44,6 +44,7 @@ class SlaveTest : public QObject
         const QString m_stashTestSymlink;
         const QString m_stashTestFile;
         const QString m_stashTestFileInSubDirectory;
+        const QString m_newStashFileName;
 
     private slots:
         void initTestCase();
@@ -56,7 +57,7 @@ class SlaveTest : public QObject
         //void moveToStashFromStash(); //this test case probably never occurs either
         void moveToFileFromStash();
 
-        //void renameFileInStash(); //currently fails
+        void renameFileInStash(); //currently fails
         void statRoot();
         void statFileInRoot();
         void statDirectoryInRoot();

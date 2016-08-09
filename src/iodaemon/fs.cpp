@@ -157,7 +157,7 @@ StashFileSystem::StashNodeData StashFileSystem::findNode(QStringList path)
     }
 }
 
-void StashFileSystem::deleteAllItems()
+void StashFileSystem::deleteAllItems() //nuking an empty root messes it up
 {
     deleteChildren(root);
 }

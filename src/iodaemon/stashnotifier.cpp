@@ -197,6 +197,12 @@ void StashNotifier::nukeStash()
 {
     qDebug() << "Nuking stash: all files on it will be deleted!";
     fileSystem->deleteAllItems();
+    qDebug() << "Nuked.";
+}
+
+void StashNotifier::pingDaemon()
+{
+    // just to see if this exists in kded5 or whether we need to create a process for it
 }
 
 bool StashNotifier::copyWithStash(const QString &src, const QString &dest)

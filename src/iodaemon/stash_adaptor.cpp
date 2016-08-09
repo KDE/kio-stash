@@ -69,6 +69,12 @@ void StashNotifierAdaptor::nukeStash()
     QMetaObject::invokeMethod(parent(), "nukeStash");
 }
 
+void StashNotifierAdaptor::pingDaemon()
+{
+    // handle method call org.kde.kio.StashNotifier.pingDaemon
+    QMetaObject::invokeMethod(parent(), "pingDaemon");
+}
+
 void StashNotifierAdaptor::removePath(const QString &path)
 {
     // handle method call org.kde.kio.StashNotifier.removePath

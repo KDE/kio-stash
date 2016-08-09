@@ -21,17 +21,34 @@ SlaveTest::SlaveTest() : tmpFolder("SlaveTest"),
                          m_stashTestFolder("StashTestFolder"),
                          m_stashTestSymlink("StashTestSymlink"),
                          m_stashTestFile("StashFile"),
-                         m_stashTestFileInSubDirectory("SubTestFile")
+                         m_stashTestFileInSubDirectory("SubTestFile"),
+                         m_newStashFileName("NewStashFile")
 {}
 
 void SlaveTest::initTestCase()
 {
-    ////qDebug() << QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+ QString("/slavetest/");
     //enclose a check statement around this block to see if kded5 is not already there
+    QDBusMessage msg;
+    bool queued;
+
+    msg = QDBusMessage::createMethodCall(
+                           "org.kde.kio.StashNotifier", "/StashNotifier", "", "pingDaemon");
+    queued = QDBusConnection::sessionBus().send(msg);
+    if (!queued) {
+        qDebug() << "Launching fallback daemon";
+        const QString program = "../src/iodaemon/testdaemon";
+        stashDaemonProcess = new QProcess();
+        stashDaemonProcess->start(program);
+    }
+
     createTestFiles();
-    const QString program = "../src/iodaemon/testdaemon";
-    stashDaemonProcess = new QProcess();
-    stashDaemonProcess->start(program);
+    queued = QDBusConnection::sessionBus().send(msg);
+
+    if (queued) {
+        qDebug() << "Test case initialised";
+    } else {
+        qDebug() << "Something is wrong!";
+    }
 }
 
 void SlaveTest::createTestFiles() //also find a way to reset the directory prior to use
@@ -159,7 +176,6 @@ void SlaveTest::moveFromStash(const QUrl &src, const QUrl &dest) //make this wor
     bool ok = job->exec();
     //qDebug() << src << dest << ok;
     QVERIFY(ok);
-    QVERIFY(QFile::exists(dest.path()));
 }
 
 void SlaveTest::deleteFromStash(const QUrl &url)
@@ -326,7 +342,7 @@ void SlaveTest::moveToFileFromStash() //this is actually rather broken as of now
 //    QUrl dest = QUrl::fromLocalFile("/home/nic/test/" + m_stashTestFile);
     QUrl dest = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFolder + "/" + m_stashTestFile);
 
-    moveFromStash(src, dest);
+//    moveFromStash(src, dest);
     //QVERIFY(!QFile::exists(item.url().path()));
     KIO::UDSEntry entry;
     statUrl(src, entry);
@@ -335,6 +351,24 @@ void SlaveTest::moveToFileFromStash() //this is actually rather broken as of now
     qDebug() << dest.toLocalFile();
     QVERIFY(QFile::exists(dest.toLocalFile()));
     //match properties also
+}
+
+void SlaveTest::renameFileInStash()
+{
+    QUrl src("stash:/" + m_stashTestFile);
+    QUrl dest("stash:/" + m_newStashFileName);
+
+    KIO::UDSEntry entry;
+
+    moveFromStash(src, dest);
+
+    statUrl(src, entry);
+    KFileItem item(entry, src);
+    QVERIFY(item.name() != m_stashTestFile);
+
+    statUrl(dest, entry);
+    item = KFileItem(entry, src);
+    QVERIFY(item.name() == m_newStashFileName);
 }
 
 /*void SlaveTest::moveToStashFromStash()

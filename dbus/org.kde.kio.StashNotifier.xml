@@ -26,5 +26,7 @@
     </method>
     <method name="nukeStash">
     </method>
+    <method name="pingDaemon">
+    </method>
   </interface>
 </node>
