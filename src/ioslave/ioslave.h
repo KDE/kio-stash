@@ -66,9 +66,9 @@ private:
     bool statUrl(const QUrl &url, KIO::UDSEntry &entry);
     bool createUDSEntry(
         KIO::UDSEntry &entry, const FileStash::dirList &fileItem);
-    bool copyFileToStash(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags);
-    bool copyStashToFile(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags);
-    bool copyStashToStash(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags);
+    bool copyFileToStash(const QUrl &src, const QUrl &dest, KIO::JobFlags flags);
+    bool copyStashToFile(const QUrl &src, const QUrl &dest, KIO::JobFlags flags);
+    bool copyStashToStash(const QUrl &src, const QUrl &dest, KIO::JobFlags flags);
     QStringList setFileList(const QUrl &url);
     QString setFileInfo(const QUrl &url);
     FileStash::dirList createDirListItem(QString fileInfo);

@@ -263,9 +263,8 @@ void FileStash::mkdir(const QUrl &url, int permissions)
     }
 }
 
-bool FileStash::copyFileToStash(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
+bool FileStash::copyFileToStash(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
 {
-    Q_UNUSED(permissions)
     Q_UNUSED(flags)
 
     NodeType fileType;
@@ -296,10 +295,8 @@ bool FileStash::copyFileToStash(const QUrl &src, const QUrl &dest, int permissio
     }
 }
 
-bool FileStash::copyStashToFile(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
+bool FileStash::copyStashToFile(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
 {
-    Q_UNUSED(permissions)
-
     const QString destInfo = setFileInfo(src);
     const FileStash::dirList fileItem = createDirListItem(destInfo);
 
@@ -317,9 +314,8 @@ bool FileStash::copyStashToFile(const QUrl &src, const QUrl &dest, int permissio
     return false;
 }
 
-bool FileStash::copyStashToStash(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
+bool FileStash::copyStashToStash(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
 {
-    Q_UNUSED(permissions)
     Q_UNUSED(flags)
 
     const dirList item = createDirListItem(setFileInfo(src));
@@ -353,19 +349,19 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
 {
     qDebug() << "copy of" << src << dest;
     if (src.scheme() == "file" && dest.scheme() == "stash") {
-        if (copyFileToStash(src, dest, permissions, flags)) {
+        if (copyFileToStash(src, dest, flags)) {
             finished();
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not copy."));
         }
     } else if (src.scheme() == "stash" && dest.scheme() == "file") {
-        if (copyStashToFile(src, dest, permissions, flags)) {
+        if (copyStashToFile(src, dest, flags)) {
             finished();
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not copy."));
         }
     } else if (src.scheme() == "stash" && dest.scheme() == "stash") {
-        if (copyStashToStash(src, dest, permissions, flags)) {
+        if (copyStashToStash(src, dest, flags)) {
             finished();
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not copy."));
@@ -405,7 +401,7 @@ void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) /
     qDebug() << "rename" << src << dest;
     KIO::UDSEntry entry;
     if (src.scheme() == "stash" && dest.scheme() == "stash") {
-        if (copyStashToStash(src, dest, -1, flags)) {
+        if (copyStashToStash(src, dest, flags)) {
             if (statUrl(src, entry)) {
                 KFileItem item(entry, src);
                 del(src, item.isFile());
@@ -415,7 +411,7 @@ void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) /
         }
         return;
     } else if (src.scheme() == "file" && dest.scheme() == "stash") {
-        if (copyFileToStash(src, dest, -1, flags)) {
+        if (copyFileToStash(src, dest, flags)) {
             finished();
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not rename."));
@@ -423,7 +419,7 @@ void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) /
         return;
         //don't do anything to the src
     } else if (src.scheme() == "stash" && dest.scheme() == "file") {
-        if (copyStashToFile(src, dest, -1, flags)) {
+        if (copyStashToFile(src, dest, flags)) {
             if (statUrl(src, entry)) {
                 KFileItem item(entry, src);
                 del(src, item.isFile());
