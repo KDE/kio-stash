@@ -247,12 +247,14 @@ void FileStash::listDir(const QUrl &url)
 
 void FileStash::mkdir(const QUrl &url, int permissions)
 {
-    QDBusMessage msg = QDBusMessage::createMethodCall(
+    QDBusMessage replyMessage;
+    QDBusMessage msg;
+    msg = QDBusMessage::createMethodCall(
                            m_daemonService, m_daemonPath, "", "addPath");
     QString destinationPath = url.path();
     msg << "" << destinationPath << NodeType::DirectoryNode;
-    bool queued = QDBusConnection::sessionBus().send(msg);
-    if (queued) {
+    replyMessage = QDBusConnection::sessionBus().call(msg);
+    if (replyMessage.type() != QDBusMessage::ErrorMessage) {
         finished();
     } else {
         error(KIO::ERR_SLAVE_DEFINED, QString("Could not create a directory"));
@@ -275,16 +277,19 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not determine file type."));
         }
-        QDBusMessage msg = QDBusMessage::createMethodCall(
+
+        QDBusMessage replyMessage;
+        QDBusMessage msg;
+        msg = QDBusMessage::createMethodCall(
                                m_daemonService, m_daemonPath, "", "addPath");
         QString destinationPath = dest.path();
         //qDebug() << src.path() << destinationPath << (int) fileType;
         msg << src.path() << destinationPath << (int) fileType;
-        bool queued = QDBusConnection::sessionBus().send(msg);
-        if (queued) {
+        replyMessage = QDBusConnection::sessionBus().call(msg);
+        if (replyMessage.type() != QDBusMessage::ErrorMessage) {
             finished();
         } else {
-            error(KIO::ERR_SLAVE_DEFINED, QString("Cannot reach the stash daemon."));
+            error(KIO::ERR_SLAVE_DEFINED, QString("Could not reach the stash daemon."));
         }
     } else if (src.scheme() == "stash" && dest.scheme() == "file") {
         const QString destInfo = setFileInfo(src);
@@ -308,14 +313,16 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not determine file type."));
         }
 
-        QDBusMessage msg = QDBusMessage::createMethodCall(
+        QDBusMessage replyMessage;
+        QDBusMessage msg;
+        msg = QDBusMessage::createMethodCall(
                                m_daemonService, m_daemonPath, "", "addPath");
         msg << item.source << dest.path() << fileType;
-        bool queued = QDBusConnection::sessionBus().send(msg);
-        if (queued) {
+        replyMessage = QDBusConnection::sessionBus().call(msg);
+        if (replyMessage.type() != QDBusMessage::ErrorMessage) {
             finished();
         } else {
-            error(KIO::ERR_SLAVE_DEFINED, QString("Copy failed."));
+            error(KIO::ERR_SLAVE_DEFINED, QString("Could not reach the stash daemon."));
         }
     } else {
         KIO::ForwardingSlaveBase::copy(src, dest, permissions, flags);
@@ -328,19 +335,23 @@ void FileStash::del(const QUrl &url, bool isFile)
 {
     Q_UNUSED(isFile)
     qDebug() << "deleting file" << url;
-    QDBusMessage msg = QDBusMessage::createMethodCall(
+
+    QDBusMessage replyMessage;
+    QDBusMessage msg;
+    msg = QDBusMessage::createMethodCall(
                            m_daemonService, m_daemonPath, "", "removePath");
-    if (isRoot(currentDir)) {
+
+    if (isRoot(currentDir)) { //surely there's a better way around this.
         msg << url.fileName();
     } else {
         msg << url.path();
     }
 
-    bool queued = QDBusConnection::sessionBus().send(msg);
-    if (queued) {
+    replyMessage = QDBusConnection::sessionBus().call(msg);
+    if (replyMessage.type() != QDBusMessage::ErrorMessage) {
         finished();
     } else {
-        error(KIO::ERR_CANNOT_DELETE, url.path());
+        error(KIO::ERR_SLAVE_DEFINED, QString("Could not reach the stash daemon."));
     }
 }
 
