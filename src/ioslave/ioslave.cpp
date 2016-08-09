@@ -247,6 +247,8 @@ void FileStash::listDir(const QUrl &url)
 
 void FileStash::mkdir(const QUrl &url, int permissions)
 {
+    Q_UNUSED(permissions)
+
     QDBusMessage replyMessage;
     QDBusMessage msg;
     msg = QDBusMessage::createMethodCall(
@@ -261,68 +263,112 @@ void FileStash::mkdir(const QUrl &url, int permissions)
     }
 }
 
+bool FileStash::copyFileToStash(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
+{
+    Q_UNUSED(permissions)
+    Q_UNUSED(flags)
+
+    NodeType fileType;
+    QFileInfo fileInfo = QFileInfo(src.path());
+    if (fileInfo.isFile()) {
+        fileType = NodeType::FileNode;
+    } else if (fileInfo.isSymLink()) {
+        fileType = NodeType::SymlinkNode;
+    } else if (fileInfo.isDir()) { // if I'm not wrong, this can never happen, but we should handle it anyway
+        fileType = NodeType::DirectoryNode;
+        qDebug() << "DirectoryNode...created?";
+    } else {
+        return false;
+    }
+
+    QDBusMessage replyMessage;
+    QDBusMessage msg;
+    msg = QDBusMessage::createMethodCall(
+                           m_daemonService, m_daemonPath, "", "addPath");
+    QString destinationPath = dest.path();
+
+    msg << src.path() << destinationPath << (int) fileType;
+    replyMessage = QDBusConnection::sessionBus().call(msg);
+    if (replyMessage.type() != QDBusMessage::ErrorMessage) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool FileStash::copyStashToFile(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
+{
+    Q_UNUSED(permissions)
+
+    const QString destInfo = setFileInfo(src);
+    const FileStash::dirList fileItem = createDirListItem(destInfo);
+
+    KIO::UDSEntry entry;
+
+    if (fileItem.type != NodeType::DirectoryNode) {
+        if (statUrl(src, entry)) {
+            QUrl newDestPath = QUrl::fromLocalFile(fileItem.source);
+            KFileItem item(entry, src);
+            int permissionsValue = QFile(item.targetUrl().path()).permissions();
+            KIO::ForwardingSlaveBase::copy(newDestPath, dest, permissionsValue, flags); //use the same trick as before
+            return true;
+        }
+    }
+    return false;
+}
+
+bool FileStash::copyStashToStash(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
+{
+    Q_UNUSED(permissions)
+    Q_UNUSED(flags)
+
+    const dirList item = createDirListItem(setFileInfo(src));
+    NodeType fileType;
+    QFileInfo fileInfo = QFileInfo(item.source);
+    if (fileInfo.isFile()) {
+        fileType = NodeType::FileNode;
+    } else if (fileInfo.isSymLink()) {
+        fileType = NodeType::SymlinkNode;
+    } else if (fileInfo.isDir()) { // if I'm not wrong, this can never happen, but we should handle it anyway
+        fileType = NodeType::DirectoryNode;
+        qDebug() << "DirectoryNode...created?";
+    } else {
+        return false;
+    }
+
+    QDBusMessage replyMessage;
+    QDBusMessage msg;
+    msg = QDBusMessage::createMethodCall(
+                           m_daemonService, m_daemonPath, "", "addPath");
+    msg << item.source << dest.path() << fileType;
+    replyMessage = QDBusConnection::sessionBus().call(msg);
+    if (replyMessage.type() != QDBusMessage::ErrorMessage) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
 {
     qDebug() << "copy of" << src << dest;
     if (src.scheme() == "file" && dest.scheme() == "stash") {
-        NodeType fileType;
-        QFileInfo fileInfo = QFileInfo(src.path());
-        if (fileInfo.isFile()) {
-            fileType = NodeType::FileNode;
-        } else if (fileInfo.isSymLink()) {
-            fileType = NodeType::SymlinkNode;
-        } else if (fileInfo.isDir()) { // if I'm not wrong, this can never happen, but we should handle it anyway
-            fileType = NodeType::DirectoryNode;
-            qDebug() << "DirectoryNode...created?";
-        } else {
-            error(KIO::ERR_SLAVE_DEFINED, QString("Could not determine file type."));
-        }
-
-        QDBusMessage replyMessage;
-        QDBusMessage msg;
-        msg = QDBusMessage::createMethodCall(
-                               m_daemonService, m_daemonPath, "", "addPath");
-        QString destinationPath = dest.path();
-        //qDebug() << src.path() << destinationPath << (int) fileType;
-        msg << src.path() << destinationPath << (int) fileType;
-        replyMessage = QDBusConnection::sessionBus().call(msg);
-        if (replyMessage.type() != QDBusMessage::ErrorMessage) {
+        if (copyFileToStash(src, dest, permissions, flags)) {
             finished();
         } else {
-            error(KIO::ERR_SLAVE_DEFINED, QString("Could not reach the stash daemon."));
+            error(KIO::ERR_SLAVE_DEFINED, QString("Could not copy."));
         }
     } else if (src.scheme() == "stash" && dest.scheme() == "file") {
-        const QString destInfo = setFileInfo(src);
-        const FileStash::dirList fileItem = createDirListItem(destInfo);
-        if (fileItem.type != NodeType::DirectoryNode) {
-            QUrl newDestPath = QUrl::fromLocalFile(fileItem.source);
-            ForwardingSlaveBase::copy(newDestPath, dest, -1, flags); //permissions is a bit wonky
-        }
-    } else if (src.scheme() == "stash" && dest.scheme() == "stash") {
-        const dirList item = createDirListItem(setFileInfo(src));
-        NodeType fileType;
-        QFileInfo fileInfo = QFileInfo(item.source);
-        if (fileInfo.isFile()) {
-            fileType = NodeType::FileNode;
-        } else if (fileInfo.isSymLink()) {
-            fileType = NodeType::SymlinkNode;
-        } else if (fileInfo.isDir()) { // if I'm not wrong, this can never happen, but we should handle it anyway
-            fileType = NodeType::DirectoryNode;
-            qDebug() << "DirectoryNode...created?";
-        } else {
-            error(KIO::ERR_SLAVE_DEFINED, QString("Could not determine file type."));
-        }
-
-        QDBusMessage replyMessage;
-        QDBusMessage msg;
-        msg = QDBusMessage::createMethodCall(
-                               m_daemonService, m_daemonPath, "", "addPath");
-        msg << item.source << dest.path() << fileType;
-        replyMessage = QDBusConnection::sessionBus().call(msg);
-        if (replyMessage.type() != QDBusMessage::ErrorMessage) {
+        if (copyStashToFile(src, dest, permissions, flags)) {
             finished();
         } else {
-            error(KIO::ERR_SLAVE_DEFINED, QString("Could not reach the stash daemon."));
+            error(KIO::ERR_SLAVE_DEFINED, QString("Could not copy."));
+        }
+    } else if (src.scheme() == "stash" && dest.scheme() == "stash") {
+        if (copyStashToStash(src, dest, permissions, flags)) {
+            finished();
+        } else {
+            error(KIO::ERR_SLAVE_DEFINED, QString("Could not copy."));
         }
     } else {
         KIO::ForwardingSlaveBase::copy(src, dest, permissions, flags);
@@ -375,7 +421,7 @@ void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) /
     } else if (src.scheme() == "stash" && dest.scheme() == "file") {
         if (statUrl(src, entry)) {
             KFileItem item(entry, src);
-            KIO::ForwardingSlaveBase::copy(item.targetUrl(), dest, QFile(item.targetUrl().path()).permissions(), flags);
+            KIO::ForwardingSlaveBase::copy(item.targetUrl(), dest, -1, flags);
             del(src, item.isFile());
             return;
         } else {
