@@ -123,7 +123,7 @@ QString StashNotifier::encodeString(StashFileSystem::StashNodeData nodeData, con
         encodedString += "::";
     }
 
-    qDebug() << "ENCODED STRING4stats" << encodedString;
+//    qDebug() << "ENCODED STRING4stats" << encodedString;
     return encodedString;
 }
 
@@ -152,7 +152,7 @@ QString StashNotifier::fileInfo(const QString &path) //forwards data of a single
 void StashNotifier::addPath(const QString &source, const QString &stashPath, const int &fileType)
 {
     QString processedPath = processString(stashPath);
-    qDebug() << "adding new" << source << processedPath << fileType;
+//    qDebug() << "adding new" << source << processedPath << fileType;
     if (fileSystem->findNode(stashPath).type == StashFileSystem::NodeType::InvalidNode) { //only folders not already exisiting are added
         if (fileType == StashFileSystem::NodeType::DirectoryNode) {
             dirWatch->addDir(processedPath);
@@ -179,7 +179,7 @@ QString StashNotifier::processString(const QString &path) //removes trailing sla
 
 void StashNotifier::removePath(const QString &path)
 {
-    qDebug() << "delete request called for " << path;
+//    qDebug() << "delete request called for " << path;
     StashFileSystem::NodeType fileType;
     QString processedPath = processString(path);
     if (fileType == StashFileSystem::NodeType::DirectoryNode) {
