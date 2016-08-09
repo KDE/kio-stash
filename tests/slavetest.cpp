@@ -69,15 +69,8 @@ void SlaveTest::createTestFiles() //also find a way to reset the directory prior
 void SlaveTest::cleanupTestCase()
 {
     nukeStash();
-    //delete all test files
-    QString path = tmpDirPath();
-    QDir dir(path);
-    dir.setNameFilters(QStringList() << "*.*");
-    dir.setFilter(QDir::Files);
-    foreach(QString dirFile, dir.entryList()) {
-        dir.remove(dirFile);
-    }
-    //qDebug() << dir.rmdir(path);
+    QDir dir(tmpDirPath());
+    dir.removeRecursively();
     stashDaemonProcess->terminate();
 }
 
@@ -304,21 +297,19 @@ void SlaveTest::copySymlinkFromStashToFile() //create test case
     QUrl src("stash:/" + m_stashTestSymlink);
     QUrl dest = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFolder + "/" + m_stashTestSymlink);
 
-    KIO::UDSEntry entry;
-    statUrl(src, entry);
-    KFileItem item(entry, src);
-    stashCopy(item.targetUrl(), dest);
+    stashCopy(src, dest);
     QVERIFY(QFile::exists(dest.path()));
 }
 
 void SlaveTest::copyStashToFile()
 {
     QUrl src("stash:/" + m_stashTestFile);
-//    QUrl dest = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFolder + "/" + m_stashTestFile);
-    QUrl dest = QUrl::fromLocalFile("/home/nic/" + m_stashTestFile);
+    QUrl dest = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFolder + "/" + m_stashTestFile);
+//    QUrl dest = QUrl::fromLocalFile("/home/nic/" + m_stashTestFile);
     KIO::UDSEntry entry;
     stashCopy(src, dest);
     QVERIFY(QFile::exists(dest.toLocalFile()));
+    QFile(dest.path()).remove();
 }
 /*
 void SlaveTest::copyStashToStash()
@@ -332,7 +323,8 @@ void SlaveTest::copyStashToStash()
 void SlaveTest::moveToFileFromStash() //this is actually rather broken as of now
 {
     QUrl src("stash:/" + m_stashTestFile);
-    QUrl dest = QUrl::fromLocalFile("/home/nic/test/" + m_stashTestFile);
+//    QUrl dest = QUrl::fromLocalFile("/home/nic/test/" + m_stashTestFile);
+    QUrl dest = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFolder + "/" + m_stashTestFile);
 
     moveFromStash(src, dest);
     //QVERIFY(!QFile::exists(item.url().path()));
@@ -340,6 +332,7 @@ void SlaveTest::moveToFileFromStash() //this is actually rather broken as of now
     statUrl(src, entry);
     KFileItem item(entry, src);
     QVERIFY(item.name() != m_stashTestFile);
+    qDebug() << dest.toLocalFile();
     QVERIFY(QFile::exists(dest.toLocalFile()));
     //match properties also
 }
@@ -402,6 +395,8 @@ void SlaveTest::init()
 
 void SlaveTest::cleanup()
 {
+    QDir dir(tmpDirPath());
+    //dir.removeRecursively();
     //qDebug() << "Cleaning up this test case";
     //nukeStash();
 }
