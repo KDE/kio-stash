@@ -166,7 +166,7 @@ void SlaveTest::moveFromStash(const QUrl &src, const QUrl &dest) //make this wor
     bool ok = job->exec();
     //qDebug() << src << dest << ok;
     QVERIFY(ok);
-    QVERIFY(QFile::exists(dest.toString()));
+    QVERIFY(QFile::exists(dest.path()));
 }
 
 void SlaveTest::deleteFromStash(const QUrl &url)
@@ -332,13 +332,14 @@ void SlaveTest::copyStashToStash()
 void SlaveTest::moveToFileFromStash() //this is actually rather broken as of now
 {
     QUrl src("stash:/" + m_stashTestFile);
-    QUrl dest(QUrl::fromLocalFile(tmpDirPath() + m_stashTestFolder + "/" + m_stashTestFile));
-    //moveFromStash(src, dest);
+    QUrl dest = QUrl::fromLocalFile("/home/nic/test/" + m_stashTestFile);
+
+    moveFromStash(src, dest);
+    //QVERIFY(!QFile::exists(item.url().path()));
     KIO::UDSEntry entry;
     statUrl(src, entry);
     KFileItem item(entry, src);
-    moveFromStash(item.targetUrl(), dest);
-    QVERIFY(!QFile::exists(item.targetUrl().path()));
+    QVERIFY(item.name() != m_stashTestFile);
     QVERIFY(QFile::exists(dest.toLocalFile()));
     //match properties also
 }

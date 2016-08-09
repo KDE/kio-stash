@@ -344,26 +344,30 @@ void FileStash::del(const QUrl &url, bool isFile)
     }
 }
 
-void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
+void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) //not exactly correct - finished gets called twice
 {
     qDebug() << "rename" << src << dest;
     KIO::UDSEntry entry;
     if (src.scheme() == "stash" && dest.scheme() == "stash") {
         if (statUrl(src, entry)) {
             KFileItem item(entry, src);
-            copy(item.targetUrl(), dest, -1, flags);
+            copy(item.url(), dest, -1, flags);
             del(src, item.isFile());
+            return;
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not stat."));
             return;
         }
     } else if (src.scheme() == "file" && dest.scheme() == "stash") {
         copy(src, dest, -1, flags);
+        return;
         //don't do anything to the src
     } else if (src.scheme() == "stash" && dest.scheme() == "file") {
         if (statUrl(src, entry)) {
             KFileItem item(entry, src);
             KIO::ForwardingSlaveBase::copy(item.targetUrl(), dest, -1, flags);
+            del(src, item.isFile());
+            return;
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not stat."));
             return;
