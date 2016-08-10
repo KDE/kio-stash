@@ -348,27 +348,34 @@ bool FileStash::copyStashToStash(const QUrl &src, const QUrl &dest, KIO::JobFlag
 void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
 {
     qDebug() << "copy of" << src << dest;
+
+    KIO::UDSEntry entry;
+    statUrl(src, entry);
+    KFileItem item(entry, src);
+    QUrl newDestPath;
+    newDestPath = QUrl(dest.adjusted(QUrl::RemoveFilename).toString() + item.name());
+    qDebug() << "adjusted path" << newDestPath;
     if (src.scheme() == "file" && dest.scheme() == "stash") {
-        if (copyFileToStash(src, dest, flags)) {
+        if (copyFileToStash(src, newDestPath, flags)) {
             finished();
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not copy."));
         }
     } else if (src.scheme() == "stash" && dest.scheme() == "file") {
-        if (copyStashToFile(src, dest, flags)) {
+        if (copyStashToFile(src, newDestPath, flags)) {
 //            finished();
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not copy."));
         }
     } else if (src.scheme() == "stash" && dest.scheme() == "stash") {
-        if (copyStashToStash(src, dest, flags)) {
+        if (copyStashToStash(src, newDestPath, flags)) {
             finished();
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not copy."));
         }
     } else {
-        KIO::ForwardingSlaveBase::copy(src, dest, permissions, flags);
-        finished();
+        KIO::ForwardingSlaveBase::copy(item.targetUrl(), newDestPath, permissions, flags);
+//        finished();
         //error(KIO::ERR_UNSUPPORTED_ACTION, QString("Copying between these protocols is not supported."));
     }
 }
@@ -408,7 +415,7 @@ bool FileStash::deletePath(const QUrl &url)
 void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
 /*TO DO:
     folder rename
-    targetUrl rename
+    targetUrl rename DONE!
 */
 {
     qDebug() << "rename" << src << dest;
