@@ -356,7 +356,7 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
         }
     } else if (src.scheme() == "stash" && dest.scheme() == "file") {
         if (copyStashToFile(src, dest, flags)) {
-            finished();
+//            finished();
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not copy."));
         }
