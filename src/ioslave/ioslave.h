@@ -69,6 +69,8 @@ private:
     bool copyFileToStash(const QUrl &src, const QUrl &dest, KIO::JobFlags flags);
     bool copyStashToFile(const QUrl &src, const QUrl &dest, KIO::JobFlags flags);
     bool copyStashToStash(const QUrl &src, const QUrl &dest, KIO::JobFlags flags);
+    bool deletePath(const QUrl &src);
+
     QStringList setFileList(const QUrl &url);
     QString setFileInfo(const QUrl &url);
     FileStash::dirList createDirListItem(QString fileInfo);

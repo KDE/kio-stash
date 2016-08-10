@@ -377,6 +377,15 @@ void FileStash::del(const QUrl &url, bool isFile)
 {
     Q_UNUSED(isFile)
 
+    if (deletePath(url)) {
+        finished();
+    } else {
+        error(KIO::ERR_SLAVE_DEFINED, QString("Could not reach the stash daemon"));
+    }
+}
+
+bool FileStash::deletePath(const QUrl &url)
+{
     QDBusMessage replyMessage;
     QDBusMessage msg;
     msg = QDBusMessage::createMethodCall(
@@ -390,9 +399,9 @@ void FileStash::del(const QUrl &url, bool isFile)
 
     replyMessage = QDBusConnection::sessionBus().call(msg);
     if (replyMessage.type() != QDBusMessage::ErrorMessage) {
-        finished();
+        return true;
     } else {
-        error(KIO::ERR_SLAVE_DEFINED, QString("Could not reach the stash daemon."));
+        return false;
     }
 }
 
@@ -408,7 +417,9 @@ void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
         if (copyStashToStash(src, dest, flags)) {
             if (statUrl(src, entry)) {
                 KFileItem item(entry, src);
-                del(src, item.isFile());
+                if (deletePath(src)) {
+                    finished();
+                }
             }
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not rename."));
@@ -426,7 +437,9 @@ void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
         if (copyStashToFile(src, dest, flags)) {
             if (statUrl(src, entry)) {
                 KFileItem item(entry, src);
-                del(src, item.isFile());
+                if (deletePath(src)) {
+                    return;
+                }
             }
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not rename."));
