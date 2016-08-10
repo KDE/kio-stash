@@ -360,6 +360,17 @@ void SlaveTest::moveToFileFromStash() //this is actually rather broken as of now
     //match properties also
 }
 
+void SlaveTest::copyStashToStash()
+{
+    QUrl src("stash:/" + m_stashTestFile);
+    QUrl dest("stash:/" + m_stashTestFolder + "/" + m_stashTestFile);
+    stashCopy(src, dest);
+    KIO::UDSEntry entry;
+    statUrl(src, entry);
+    KFileItem item(entry, src);
+    QVERIFY(item.name() == m_stashTestFile);
+}
+
 void SlaveTest::renameFileInStash()
 {
     QUrl src("stash:/" + m_stashFileForRename);
