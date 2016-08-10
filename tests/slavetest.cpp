@@ -31,7 +31,6 @@ void SlaveTest::initTestCase()
     //enclose a check statement around this block to see if kded5 is not already there
     QDBusMessage msg;
     QDBusMessage replyMessage;
-    bool queued;
 
     msg = QDBusMessage::createMethodCall(
                            "org.kde.kio.StashNotifier", "/StashNotifier", "", "pingDaemon");
@@ -335,15 +334,7 @@ void SlaveTest::copyStashToFile()
     QVERIFY(QFile::exists(dest.toLocalFile()));
     QFile(dest.path()).remove();
 }
-/*
-void SlaveTest::copyStashToStash()
-{
-    QUrl src("stash:/" + m_stashTestFile);
-    QUrl dest("stash:/" + m_stashTestFolder + "/" + m_stashTestFile);
-    stashCopy(src, dest);
-    statItem(dest, NodeType::FileNode);
-}
-*/
+
 void SlaveTest::moveToFileFromStash() //this is actually rather broken as of now
 {
     QUrl src("stash:/" + m_stashTestFile);
@@ -389,14 +380,6 @@ void SlaveTest::renameFileInStash()
     QVERIFY(item.name() == m_newStashFileName);
 }
 
-/*void SlaveTest::moveToStashFromStash()
-{
-    QUrl src("stash:/" + m_stashTestFile);
-    QUrl dest("stash:/" + m_stashTestFolder + "/" + m_stashTestFile);
-    //moveFromStash(src, dest);
-    QVERIFY(QFile(dest.path()).exists()); //use kio::stat
-    QVERIFY(!QFile(src.path()).exists()); //use kio::stat
-}*/
 
 void SlaveTest::delRootFile()
 {
