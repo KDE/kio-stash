@@ -57,7 +57,7 @@ class SlaveTest : public QObject
 
         void moveToFileFromStash();
 
-        void renameFileInStash(); //currently fails
+        void renameFileInStash();
         void statRoot();
         void statFileInRoot();
         void statDirectoryInRoot();

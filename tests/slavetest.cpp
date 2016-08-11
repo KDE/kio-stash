@@ -124,7 +124,6 @@ void SlaveTest::statItem(const QUrl &url, const int &type)
 
 void SlaveTest::stashFile(const QString &realPath, const QString &stashPath)
 {
-    //do something naughty and add D-Bus messages to the stashnotifier?
     QDBusMessage msg = QDBusMessage::createMethodCall(
                            "org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
     msg << realPath << stashPath << NodeType::FileNode;
@@ -173,7 +172,6 @@ void SlaveTest::stashCopy(const QUrl &src, const QUrl &dest)
 {
     KIO::CopyJob *job = KIO::copy(src, dest, KIO::HideProgressInfo);
     bool ok = job->exec();
-    //qDebug() << src << dest << ok;
     QVERIFY(ok);
 }
 
@@ -181,7 +179,6 @@ void SlaveTest::moveFromStash(const QUrl &src, const QUrl &dest) //make this wor
 {
     KIO::Job *job = KIO::move(src, dest, KIO::HideProgressInfo);
     bool ok = job->exec();
-    //qDebug() << src << dest << ok;
     QVERIFY(ok);
 }
 
@@ -189,13 +186,11 @@ void SlaveTest::deleteFromStash(const QUrl &url)
 {
     KIO::Job *delJob = KIO::del(url, KIO::HideProgressInfo);
     bool ok = delJob->exec();
-    //qDebug() << "delete" << url << ok;
     QVERIFY(ok);
 }
 
 void SlaveTest::listRootDir()
 {
-    //write qcompare cases
     KIO::ListJob *job = KIO::listDir(QUrl(QStringLiteral("stash:/")), KIO::HideProgressInfo);
     connect(job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)),
             SLOT(slotEntries(KIO::Job*,KIO::UDSEntryList)));
@@ -205,7 +200,6 @@ void SlaveTest::listRootDir()
 
 void SlaveTest::listSubDir()
 {
-    //write qcompare cases
     KIO::ListJob *job = KIO::listDir(QUrl("stash:/" + m_stashTestFolder), KIO::HideProgressInfo);
     connect(job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)),
             SLOT(slotEntries(KIO::Job*,KIO::UDSEntryList)));
@@ -249,9 +243,8 @@ void SlaveTest::statFileInRoot()
     QVERIFY(!item.isLink());
     QVERIFY(item.isReadable());
     QVERIFY(!item.isHidden());
-//    QCOMPARE(item.text(), m_stashTestFile);
 }
-//use kio::stat
+
 void SlaveTest::statDirectoryInRoot()
 {
     QUrl url("stash:/" + m_stashTestFolder);
@@ -264,7 +257,6 @@ void SlaveTest::statDirectoryInRoot()
     QVERIFY(!item.isLink());
     QVERIFY(item.isReadable());
     QVERIFY(!item.isHidden());
-//    QCOMPARE(item.text(), QStringLiteral(m_stastTestFolder));
 }
 
 void SlaveTest::statSymlinkInRoot()
@@ -276,10 +268,8 @@ void SlaveTest::statSymlinkInRoot()
     KFileItem item(entry, url);
     QVERIFY(item.isFile());
     QVERIFY(!item.isDir());
-    //QVERIFY(item.isLink()); //i don't know how to create a SL in the first place, so we'll just comment this out till i do
     QVERIFY(item.isReadable());
     QVERIFY(!item.isHidden());
-//    QCOMPARE(item.text(), QStringLiteral(m_stashTestSymlink));
 }
 
 void SlaveTest::statFileInDirectory()
@@ -293,7 +283,6 @@ void SlaveTest::statFileInDirectory()
     QVERIFY(!item.isLink());
     QVERIFY(item.isReadable());
     QVERIFY(!item.isHidden());
-//    QCOMPARE(item.text(), QStringLiteral(m_stashTestFileInSubDirectory));
 }
 
 void SlaveTest::copyFileToStash()
@@ -306,12 +295,6 @@ void SlaveTest::copyFileToStash()
     stashCopy(src, dest);
     QVERIFY(testFile.exists());
     statItem(dest, NodeType::FileNode);
-/*
-    QUrl destDirectory("stash:/copyTestCase");
-    destinationFileName = QUrl(src).fileName();
-    stashCopy(src, destDirectory);
-    QVERIFY(stashFile.exists());
-    QVERIFY(QFile(dest + destinationFileName).exists());*/
 }
 
 void SlaveTest::copySymlinkFromStashToFile() //create test case
@@ -328,21 +311,18 @@ void SlaveTest::copyStashToFile()
 {
     QUrl src("stash:/" + m_stashTestFile);
     QUrl dest = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFolder + "/" + m_stashTestFile);
-//    QUrl dest = QUrl::fromLocalFile("/home/nic/" + m_stashTestFile);
     KIO::UDSEntry entry;
     stashCopy(src, dest);
     QVERIFY(QFile::exists(dest.toLocalFile()));
     QFile(dest.path()).remove();
 }
 
-void SlaveTest::moveToFileFromStash() //this is actually rather broken as of now
+void SlaveTest::moveToFileFromStash()
 {
     QUrl src("stash:/" + m_stashTestFile);
-//    QUrl dest = QUrl::fromLocalFile("/home/nic/test/" + m_stashTestFile);
     QUrl dest = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFolder + "/" + m_stashTestFile);
 
     moveFromStash(src, dest);
-    //QVERIFY(!QFile::exists(item.url().path()));
     KIO::UDSEntry entry;
     statUrl(src, entry);
     KFileItem item(entry, src);
@@ -383,30 +363,22 @@ void SlaveTest::renameFileInStash()
 
 void SlaveTest::delRootFile()
 {
-    QUrl url("stash:/" + m_stashTestFile); //url
-    //////qDebug() << url;
+    QUrl url("stash:/" + m_stashTestFile);
     deleteFromStash(url);
     KIO::UDSEntry entry;
     QVERIFY(statUrl(url, entry));
     KFileItem item(entry, url);
-    ////qDebug() << "item name" << item.name();
-    //qDebug() << "stash test file name" << m_stashTestFile;
     QVERIFY(item.name() != m_stashTestFile);
-//    QCOMPARE(QFile(url.path()).exists(), false); //use kio::stat
 }
 
 void SlaveTest::delFileInDirectory()
 {
-    QUrl url("stash:/" + m_stashTestFolder + "/" + m_stashTestFileInSubDirectory); //url
-    //qDebug() << url;
+    QUrl url("stash:/" + m_stashTestFolder + "/" + m_stashTestFileInSubDirectory);
     deleteFromStash(url);
     KIO::UDSEntry entry;
     QVERIFY(statUrl(url, entry));
     KFileItem item(entry, url);
-    //qDebug() << "item name" << item.name();
-    //qDebug() << "stash test file name" << m_stashTestFileInSubDirectory;
     QVERIFY(item.name() != m_stashTestFileInSubDirectory);
-//    QCOMPARE(QFile(url).exists(), false); //use kio::stat
 }
 
 void SlaveTest::delDirectory()
@@ -416,15 +388,11 @@ void SlaveTest::delDirectory()
     KIO::UDSEntry entry;
     QVERIFY(statUrl(url, entry));
     KFileItem item(entry, url);
-    //qDebug() << "item name" << item.name();
-    //qDebug() << "stash test file name" << m_stashTestFolder;
     QVERIFY(item.name() != m_stashTestFolder);
-//    QCOMPARE(QFile(url).exists(), false); //use kio::stat
 }
 
 void SlaveTest::init()
 {
-    //qDebug() << "calling init";
     createTestFiles();
 }
 
@@ -432,7 +400,6 @@ void SlaveTest::cleanup()
 {
     QDir dir(tmpDirPath());
     dir.removeRecursively();
-    //qDebug() << "Cleaning up this test case";
     //nukeStash();
 }
 
