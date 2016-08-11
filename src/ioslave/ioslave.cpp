@@ -214,7 +214,6 @@ void FileStash::put(const QUrl &url, int permissions, KIO::JobFlags flags)
 
 void FileStash::listDir(const QUrl &url)
 {
-    currentDir = url.path();
     QStringList fileList = setFileList(url);
     if (!fileList.size()) {
         finished();
@@ -398,7 +397,7 @@ bool FileStash::deletePath(const QUrl &url)
     msg = QDBusMessage::createMethodCall(
                            m_daemonService, m_daemonPath, "", "removePath");
 
-    if (isRoot(currentDir)) { //surely there's a better way around this.
+    if (isRoot(url.adjusted(QUrl::RemoveFilename).toString())) { //surely there's a better way around this.
         msg << url.fileName();
     } else {
         msg << url.path();
