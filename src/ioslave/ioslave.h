@@ -75,8 +75,6 @@ private:
     QString setFileInfo(const QUrl &url);
     FileStash::dirList createDirListItem(QString fileInfo);
 
-
-    QString currentDir;
     const QString m_daemonService;
     const QString m_daemonPath;
 
