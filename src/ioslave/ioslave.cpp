@@ -143,7 +143,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
         entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
         break;
     case NodeType::InvalidNode:
-        entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.filePath); // TODO: find a generic mimetype for broken files
+        entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.filePath);
         break;
     default:
         QByteArray physicalPath_c = QFile::encodeName(fileItem.source);
@@ -195,20 +195,11 @@ FileStash::dirList FileStash::createDirListItem(QString fileInfo)
 
 void FileStash::get(const QUrl &url) //leaving this in for special handling if needed later on
 {
-    //qDebug() << "get called for" << url;
-/*    const QString fileInfo = setFileInfo(url);
-    const dirList item = createDirListItem(fileInfo);
-    qDebug() << QUrl::fromLocalFile(item.source);
-    KIO::ForwardingSlaveBase::get(QUrl::fromLocalFile(item.source));*/
     KIO::ForwardingSlaveBase::get(url);
 }
 
 void FileStash::put(const QUrl &url, int permissions, KIO::JobFlags flags)
 {
-/*    const QString fileInfo = setFileInfo(url);
-    const dirList item = createDirListItem(fileInfo);
-    qDebug() << "putting at" << QUrl::fromLocalFile(item.source);
-    KIO::ForwardingSlaveBase::put(QUrl::fromLocalFile(item.source), permissions, flags);*/
     KIO::ForwardingSlaveBase::put(url, permissions, flags);
 }
 
@@ -306,7 +297,7 @@ bool FileStash::copyStashToFile(const QUrl &src, const QUrl &dest, KIO::JobFlags
             QUrl newDestPath = QUrl::fromLocalFile(fileItem.source);
             KFileItem item(entry, src);
             int permissionsValue = QFile(item.targetUrl().path()).permissions();
-            KIO::ForwardingSlaveBase::copy(newDestPath, dest, permissionsValue, flags); //use the same trick as before
+            KIO::ForwardingSlaveBase::copy(newDestPath, dest, permissionsValue, flags);
             return true;
         }
     }
@@ -360,22 +351,19 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not copy."));
         }
+        return;
     } else if (src.scheme() == "stash" && dest.scheme() == "file") {
-        if (copyStashToFile(src, newDestPath, flags)) {
-//            finished();
-        } else {
-            error(KIO::ERR_SLAVE_DEFINED, QString("Could not copy."));
-        }
+        copyStashToFile(src, newDestPath, flags);
+        return;
     } else if (src.scheme() == "stash" && dest.scheme() == "stash") {
         if (copyStashToStash(src, newDestPath, flags)) {
             finished();
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not copy."));
         }
+        return;
     } else {
         KIO::ForwardingSlaveBase::copy(item.targetUrl(), newDestPath, permissions, flags);
-//        finished();
-        //error(KIO::ERR_UNSUPPORTED_ACTION, QString("Copying between these protocols is not supported."));
     }
 }
 
@@ -397,7 +385,7 @@ bool FileStash::deletePath(const QUrl &url)
     msg = QDBusMessage::createMethodCall(
                            m_daemonService, m_daemonPath, "", "removePath");
 
-    if (isRoot(url.adjusted(QUrl::RemoveFilename).toString())) { //surely there's a better way around this.
+    if (isRoot(url.adjusted(QUrl::RemoveFilename).toString())) {
         msg << url.fileName();
     } else {
         msg << url.path();
@@ -438,7 +426,6 @@ void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not rename."));
         }
         return;
-        //don't do anything to the src
     } else if (src.scheme() == "stash" && dest.scheme() == "file") {
         if (copyStashToFile(src, dest, flags)) {
             if (statUrl(src, entry)) {
