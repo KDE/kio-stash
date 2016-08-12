@@ -45,8 +45,8 @@ private:
 
 public:
     StashNotifier(QObject* parent, const QList<QVariant>&,
-                const QString daemonService = "org.kde.kio.StashNotifier",
-                const QString daemonPath = "/StashNotifier");
+                  const QString daemonService = "org.kde.kio.StashNotifier",
+                  const QString daemonPath = "/StashNotifier");
     ~StashNotifier();
 
 Q_SIGNALS:

@@ -55,10 +55,10 @@ extern "C" {
 }
 
 FileStash::FileStash(const QByteArray &pool, const QByteArray &app,
-                    const QString daemonService, const QString daemonPath) :
-                    KIO::ForwardingSlaveBase("stash", pool, app),
-                    m_daemonService(daemonService),
-                    m_daemonPath(daemonPath)
+                     const QString daemonService, const QString daemonPath) :
+    KIO::ForwardingSlaveBase("stash", pool, app),
+    m_daemonService(daemonService),
+    m_daemonPath(daemonPath)
 {}
 
 FileStash::~FileStash()
@@ -149,7 +149,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
         QByteArray physicalPath_c = QFile::encodeName(fileItem.source);
         QT_STATBUF buff;
         if (QT_LSTAT(physicalPath_c, &buff) == -1) {
-    //        return false;
+            //        return false;
         }
 
         QFileInfo entryInfo;
@@ -242,7 +242,7 @@ void FileStash::mkdir(const QUrl &url, int permissions)
     QDBusMessage replyMessage;
     QDBusMessage msg;
     msg = QDBusMessage::createMethodCall(
-                           m_daemonService, m_daemonPath, "", "addPath");
+              m_daemonService, m_daemonPath, "", "addPath");
     QString destinationPath = url.path();
     msg << "" << destinationPath << NodeType::DirectoryNode;
     replyMessage = QDBusConnection::sessionBus().call(msg);
@@ -273,7 +273,7 @@ bool FileStash::copyFileToStash(const QUrl &src, const QUrl &dest, KIO::JobFlags
     QDBusMessage replyMessage;
     QDBusMessage msg;
     msg = QDBusMessage::createMethodCall(
-                           m_daemonService, m_daemonPath, "", "addPath");
+              m_daemonService, m_daemonPath, "", "addPath");
     QString destinationPath = dest.path();
 
     msg << src.path() << destinationPath << (int) fileType;
@@ -325,7 +325,7 @@ bool FileStash::copyStashToStash(const QUrl &src, const QUrl &dest, KIO::JobFlag
     QDBusMessage replyMessage;
     QDBusMessage msg;
     msg = QDBusMessage::createMethodCall(
-                           m_daemonService, m_daemonPath, "", "addPath");
+              m_daemonService, m_daemonPath, "", "addPath");
     msg << item.source << dest.path() << fileType;
     replyMessage = QDBusConnection::sessionBus().call(msg);
     if (replyMessage.type() != QDBusMessage::ErrorMessage) {
@@ -383,7 +383,7 @@ bool FileStash::deletePath(const QUrl &url)
     QDBusMessage replyMessage;
     QDBusMessage msg;
     msg = QDBusMessage::createMethodCall(
-                           m_daemonService, m_daemonPath, "", "removePath");
+              m_daemonService, m_daemonPath, "", "removePath");
 
     if (isRoot(url.adjusted(QUrl::RemoveFilename).toString())) {
         msg << url.fileName();

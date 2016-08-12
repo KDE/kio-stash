@@ -16,7 +16,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
- 
+
 #include "slavetest.h"
 
 #include <QTest>
@@ -35,14 +35,14 @@
 #include <KFileItem>
 
 SlaveTest::SlaveTest() : tmpFolder("SlaveTest"),
-                         m_fileTestFile("TestFile"),
-                         m_fileTestFolder("TestSubFolder"),
-                         m_stashTestFolder("StashTestFolder"),
-                         m_stashTestSymlink("StashTestSymlink"),
-                         m_stashTestFile("StashFile"),
-                         m_stashTestFileInSubDirectory("SubTestFile"),
-                         m_newStashFileName("NewStashFile"),
-                         m_stashFileForRename("StashRenameFile")
+    m_fileTestFile("TestFile"),
+    m_fileTestFolder("TestSubFolder"),
+    m_stashTestFolder("StashTestFolder"),
+    m_stashTestSymlink("StashTestSymlink"),
+    m_stashTestFile("StashFile"),
+    m_stashTestFileInSubDirectory("SubTestFile"),
+    m_newStashFileName("NewStashFile"),
+    m_stashFileForRename("StashRenameFile")
 {}
 
 void SlaveTest::initTestCase()
@@ -52,7 +52,7 @@ void SlaveTest::initTestCase()
     QDBusMessage replyMessage;
 
     msg = QDBusMessage::createMethodCall(
-                           "org.kde.kio.StashNotifier", "/StashNotifier", "", "pingDaemon");
+              "org.kde.kio.StashNotifier", "/StashNotifier", "", "pingDaemon");
     replyMessage = QDBusConnection::sessionBus().call(msg);
     if (replyMessage.type() == QDBusMessage::ErrorMessage) {
         qDebug() << "Launching fallback daemon";
@@ -211,8 +211,8 @@ void SlaveTest::deleteFromStash(const QUrl &url)
 void SlaveTest::listRootDir()
 {
     KIO::ListJob *job = KIO::listDir(QUrl(QStringLiteral("stash:/")), KIO::HideProgressInfo);
-    connect(job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)),
-            SLOT(slotEntries(KIO::Job*,KIO::UDSEntryList)));
+    connect(job, SIGNAL(entries(KIO::Job*, KIO::UDSEntryList)),
+            SLOT(slotEntries(KIO::Job*, KIO::UDSEntryList)));
     bool ok = job->exec();
     QVERIFY(ok);
 }
@@ -220,8 +220,8 @@ void SlaveTest::listRootDir()
 void SlaveTest::listSubDir()
 {
     KIO::ListJob *job = KIO::listDir(QUrl("stash:/" + m_stashTestFolder), KIO::HideProgressInfo);
-    connect(job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)),
-            SLOT(slotEntries(KIO::Job*,KIO::UDSEntryList)));
+    connect(job, SIGNAL(entries(KIO::Job*, KIO::UDSEntryList)),
+            SLOT(slotEntries(KIO::Job*, KIO::UDSEntryList)));
     bool ok = job->exec();
     QVERIFY(ok);
 }

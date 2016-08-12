@@ -30,8 +30,8 @@ class FileStash : public KIO::ForwardingSlaveBase
 
 public:
     FileStash(const QByteArray &pool, const QByteArray &app,
-                const QString daemonService = "org.kde.kio.StashNotifier",
-                const QString daemonPath = "/StashNotifier");
+              const QString daemonService = "org.kde.kio.StashNotifier",
+              const QString daemonPath = "/StashNotifier");
     ~FileStash();
 
     enum NodeType {
