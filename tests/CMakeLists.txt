@@ -1,6 +1,6 @@
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/.. )
+#build the target for the test casses for the ioslave
 
-########### next target ###############
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/.. )
 
 set(slavetest_SRCS
     slavetest.cpp

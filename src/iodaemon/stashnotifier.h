@@ -55,11 +55,11 @@ Q_SIGNALS:
 public Q_SLOTS:
     Q_SCRIPTABLE void addPath(const QString &source, const QString &stashPath, const int &fileType);
     Q_SCRIPTABLE void removePath(const QString &path);
-    Q_SCRIPTABLE QStringList fileList(const QString &path);
-    Q_SCRIPTABLE QString fileInfo(const QString &path);
-    Q_SCRIPTABLE bool copyWithStash(const QString &src, const QString &dest);
     Q_SCRIPTABLE void nukeStash();
     Q_SCRIPTABLE void pingDaemon();
+    Q_SCRIPTABLE bool copyWithStash(const QString &src, const QString &dest);
+    Q_SCRIPTABLE QStringList fileList(const QString &path);
+    Q_SCRIPTABLE QString fileInfo(const QString &path);
 
 private Q_SLOTS:
     void dirty(const QString &path);
