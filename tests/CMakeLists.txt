@@ -21,3 +21,20 @@ target_link_libraries(slavetest
     KF5::Solid
     Qt5::Test
 )
+
+# next target
+set(testdaemon_SRCS
+    testdaemon.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/iodaemon/stashnotifier.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/iodaemon/fs.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src/iodaemon/stash_adaptor.cpp
+)
+
+add_executable(testdaemon ${testdaemon_SRCS})
+
+target_link_libraries(testdaemon
+    KF5::KIOCore
+    KF5::DBusAddons
+    Qt5::DBus
+    Qt5::Core
+)

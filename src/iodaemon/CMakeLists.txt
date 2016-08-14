@@ -10,20 +10,3 @@ target_link_libraries(stashnotifier
 )
 
 install(TARGETS stashnotifier DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kded)
-
-# next target
-set(testdaemon_SRCS
-    testdaemon.cpp
-    stashnotifier.cpp
-    fs.cpp
-    stash_adaptor.cpp
-)
-
-add_executable(testdaemon ${testdaemon_SRCS})
-
-target_link_libraries(testdaemon
-    KF5::KIOCore
-    KF5::DBusAddons
-    Qt5::DBus
-    Qt5::Core
-)

@@ -401,7 +401,7 @@ bool FileStash::deletePath(const QUrl &url)
 
 void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
 /*TO DO:
-    folder rename
+    folder rename NOT NEEDED!
     targetUrl rename DONE!
 */
 {
