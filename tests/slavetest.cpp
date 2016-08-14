@@ -85,6 +85,7 @@ void SlaveTest::createTestFiles() //also find a way to reset the directory prior
     tmpFile.setFileName(src.path());
     QVERIFY(tmpFile.open(QIODevice::ReadWrite));
     tmpFile.close();
+
     //create a file to be stashed
     src = QUrl::fromLocalFile(tmpDirPath() + m_stashTestFile);
     tmpFile.setFileName(src.path());
@@ -98,7 +99,6 @@ void SlaveTest::createTestFiles() //also find a way to reset the directory prior
     tmpFile.close();
     stashFile(src.path(), "/" + m_stashFileForRename);
 
-    //create a file in a stash-subdir why do we need this?
     src = QUrl::fromLocalFile(tmpDirPath() + m_stashTestFileInSubDirectory);
     tmpFile.setFileName(src.path());
     QVERIFY(tmpFile.open(QIODevice::ReadWrite));
@@ -226,7 +226,7 @@ void SlaveTest::listSubDir()
     QVERIFY(ok);
 }
 
-void SlaveTest::createDirectory() //find ways for finding files
+void SlaveTest::createDirectory()
 {
     QUrl directoryPath = QUrl("");
     KIO::SimpleJob *job = KIO::mkdir(directoryPath);

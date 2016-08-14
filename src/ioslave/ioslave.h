@@ -47,11 +47,11 @@ public:
         QString source;
         FileStash::NodeType type;
         dirList()
-        {
-        }
+        {}
+
         ~dirList()
-        {
-        }
+        {}
+
         dirList(const dirList &obj)
         {
             filePath = obj.filePath;

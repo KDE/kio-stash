@@ -1,4 +1,4 @@
-#build the target for the test casses for the ioslave
+#build the target for the test cases for the ioslave
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/.. )
 
