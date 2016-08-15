@@ -22,7 +22,7 @@ target_link_libraries(slavetest
     Qt5::Test
 )
 
-# next target
+#next target
 set(testdaemon_SRCS
     testdaemon.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../src/iodaemon/stashnotifier.cpp
