@@ -80,14 +80,12 @@ void SlaveTest::createTestFiles() //also find a way to reset the directory prior
     QFile tmpFile;
     stashDirectory("/" + m_stashTestFolder);
 
-    //at file protocol
     QUrl src = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFile); //creates a file to be tested
     tmpFile.setFileName(src.path());
     QVERIFY(tmpFile.open(QIODevice::ReadWrite));
     tmpFile.close();
 
-    //create a file to be stashed
-    src = QUrl::fromLocalFile(tmpDirPath() + m_stashTestFile);
+    src = QUrl::fromLocalFile(tmpDirPath() + m_stashTestFile); //creates a file to be stashed
     tmpFile.setFileName(src.path());
     QVERIFY(tmpFile.open(QIODevice::ReadWrite));
     tmpFile.close();
@@ -105,16 +103,12 @@ void SlaveTest::createTestFiles() //also find a way to reset the directory prior
     tmpFile.close();
 
     stashFile(src.path(), "/" + m_stashTestFolder + "/" + m_stashTestFileInSubDirectory);
-    //qDebug() << src.path() << "/" + m_stashTestFolder + "/" + m_stashTestFileInSubDirectory;
-
 }
 
 void SlaveTest::cleanupTestCase()
 {
-//    nukeStash();
     QDir dir(tmpDirPath());
     dir.removeRecursively();
-//    stashDaemonProcess->terminate();
 }
 
 QString SlaveTest::tmpDirPath()
@@ -347,7 +341,6 @@ void SlaveTest::moveToFileFromStash()
     KFileItem item(entry, src);
     QVERIFY(item.name() != m_stashTestFile);
     QVERIFY(QFile::exists(dest.toLocalFile()));
-    //match properties also
 }
 
 void SlaveTest::copyStashToStash()
@@ -419,7 +412,6 @@ void SlaveTest::cleanup()
 {
     QDir dir(tmpDirPath());
     dir.removeRecursively();
-    //nukeStash();
 }
 
 QTEST_MAIN(SlaveTest)
