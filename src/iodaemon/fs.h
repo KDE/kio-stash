@@ -80,25 +80,9 @@ public:
     StashNodeData findNode(QString path);
     StashNodeData findNode(QStringList path);
 
-    void displayNode(StashNode *node)
-    {
-        for (auto it = node->begin(); it != node->end(); it++)
-        {
-            qDebug() << "stashpath" << it.key();
-            qDebug() << "filepath" << it.value().source;
-            qDebug() << "filetype" << it.value().type;
-            if (it.value().type == DirectoryNode) {
-                qDebug() << "parent" << it.key();
-                displayNode(it.value().children);
-            }
-        }
-        return;
-    }
-
-    void displayRoot()
-    {
-        displayNode(root.children);
-    }
+    //for debug purposes
+    void displayNode(StashNode *node);
+    void displayRoot();
 
 private:
     StashNodeData root;

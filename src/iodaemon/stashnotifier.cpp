@@ -152,7 +152,7 @@ void StashNotifier::addPath(const QString &source, const QString &stashPath, con
 {
     QString processedPath = processString(stashPath);
 
-    if (fileSystem->findNode(stashPath).type == StashFileSystem::NodeType::InvalidNode) { //only folders not already exisiting are added
+    if (fileSystem->findNode(stashPath).type == StashFileSystem::NodeType::InvalidNode) {
         if (fileType == StashFileSystem::NodeType::DirectoryNode) {
             dirWatch->addDir(processedPath);
             fileSystem->addFolder(processedPath);
@@ -167,7 +167,7 @@ void StashNotifier::addPath(const QString &source, const QString &stashPath, con
     }
 }
 
-QString StashNotifier::processString(const QString &path) //removes trailing slash and strips newline character
+QString StashNotifier::processString(const QString &path)
 {
     QString processedPath = path.simplified();
     if (processedPath.at(processedPath.size() - 1) == '/') {

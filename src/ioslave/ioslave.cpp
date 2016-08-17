@@ -136,7 +136,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
     QString stringFilePath = fileItem.filePath;
 
     switch (fileItem.type) {
-    case NodeType::DirectoryNode: // TODO: add logic for number of children by modifying SFS
+    case NodeType::DirectoryNode:
         entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0040000);
         entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, QString("inode/directory"));
         entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
@@ -148,9 +148,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
     default:
         QByteArray physicalPath_c = QFile::encodeName(fileItem.source);
         QT_STATBUF buff;
-        if (QT_LSTAT(physicalPath_c, &buff) == -1) {
-            //        return false;
-        }
+        QT_LSTAT(physicalPath_c, &buff);
 
         QFileInfo entryInfo;
         entryInfo = QFileInfo(fileItem.source);
@@ -193,16 +191,6 @@ FileStash::dirList FileStash::createDirListItem(QString fileInfo)
     return item;
 }
 
-void FileStash::get(const QUrl &url) //leaving this in for special handling if needed later on
-{
-    KIO::ForwardingSlaveBase::get(url);
-}
-
-void FileStash::put(const QUrl &url, int permissions, KIO::JobFlags flags)
-{
-    KIO::ForwardingSlaveBase::put(url, permissions, flags);
-}
-
 void FileStash::listDir(const QUrl &url)
 {
     QStringList fileList = setFileList(url);
@@ -217,7 +205,6 @@ void FileStash::listDir(const QUrl &url)
         listEntry(entry);
     }
     if (fileList.at(0) == "error::error::InvalidNode") {
-        qDebug() << "error URL" << url;
         error(KIO::ERR_SLAVE_DEFINED, QString("The file either does not exist or has not been stashed yet."));
     } else {
         for (auto it = fileList.begin(); it != fileList.end(); it++) {
@@ -227,7 +214,6 @@ void FileStash::listDir(const QUrl &url)
                 listEntry(entry);
             } else {
                 error(KIO::ERR_SLAVE_DEFINED, QString("The UDS Entry could not be created."));
-                qDebug() << "Failed URL" << item.filePath << item.source << item.type;
                 return;
             }
         }
@@ -315,9 +301,8 @@ bool FileStash::copyStashToStash(const QUrl &src, const QUrl &dest, KIO::JobFlag
         fileType = NodeType::FileNode;
     } else if (fileInfo.isSymLink()) {
         fileType = NodeType::SymlinkNode;
-    } else if (fileInfo.isDir()) { // if I'm not wrong, this can never happen, but we should handle it anyway
+    } else if (fileInfo.isDir()) {
         fileType = NodeType::DirectoryNode;
-        qDebug() << "DirectoryNode...created?";
     } else {
         return false;
     }
@@ -337,14 +322,12 @@ bool FileStash::copyStashToStash(const QUrl &src, const QUrl &dest, KIO::JobFlag
 
 void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
 {
-    qDebug() << "copy of" << src << dest;
-
     KIO::UDSEntry entry;
     statUrl(src, entry);
     KFileItem item(entry, src);
     QUrl newDestPath;
     newDestPath = QUrl(dest.adjusted(QUrl::RemoveFilename).toString() + item.name());
-    qDebug() << "adjusted path" << newDestPath;
+
     if (src.scheme() == "file" && dest.scheme() == "stash") {
         if (copyFileToStash(src, newDestPath, flags)) {
             finished();
@@ -400,12 +383,7 @@ bool FileStash::deletePath(const QUrl &url)
 }
 
 void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
-/*TO DO:
-    folder rename NOT NEEDED!
-    targetUrl rename DONE!
-*/
 {
-    qDebug() << "rename" << src << dest;
     KIO::UDSEntry entry;
     if (src.scheme() == "stash" && dest.scheme() == "stash") {
         if (copyStashToStash(src, dest, flags)) {

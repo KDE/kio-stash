@@ -157,7 +157,27 @@ StashFileSystem::StashNodeData StashFileSystem::findNode(QStringList path)
     }
 }
 
-void StashFileSystem::deleteAllItems() //nuking an empty root messes it up
+void StashFileSystem::deleteAllItems()
 {
     deleteChildren(root);
+}
+
+void StashFileSystem::displayNode(StashNode *node)
+{
+    for (auto it = node->begin(); it != node->end(); it++)
+    {
+        qDebug() << "stashpath" << it.key();
+        qDebug() << "filepath" << it.value().source;
+        qDebug() << "filetype" << it.value().type;
+        if (it.value().type == DirectoryNode) {
+            qDebug() << "parent" << it.key();
+            displayNode(it.value().children);
+        }
+    }
+    return;
+}
+
+void StashFileSystem::displayRoot()
+{
+    displayNode(root.children);
 }
