@@ -149,6 +149,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
         QByteArray physicalPath_c = QFile::encodeName(fileItem.source);
         QT_STATBUF buff;
         QT_LSTAT(physicalPath_c, &buff);
+        mode_t access = buff.st_mode & 07777;
 
         QFileInfo entryInfo;
         entryInfo = QFileInfo(fileItem.source);
@@ -157,7 +158,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
         entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, fileMimetype.name());
         entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
         entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
-        entry.insert(KIO::UDSEntry::UDS_ACCESS, entryInfo.permissions());
+        entry.insert(KIO::UDSEntry::UDS_ACCESS, access);
         entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
         entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, buff.st_mtime);
         entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
@@ -279,13 +280,12 @@ bool FileStash::copyStashToFile(const QUrl &src, const QUrl &dest, KIO::JobFlags
     KIO::UDSEntry entry;
 
     if (fileItem.type != NodeType::DirectoryNode) {
-        if (statUrl(src, entry)) {
-            QUrl newDestPath = QUrl::fromLocalFile(fileItem.source);
-            KFileItem item(entry, src);
-            int permissionsValue = QFile(item.targetUrl().path()).permissions();
-            KIO::ForwardingSlaveBase::copy(newDestPath, dest, permissionsValue, flags);
-            return true;
-        }
+        QByteArray physicalPath_c = QFile::encodeName(fileItem.source);
+        QT_STATBUF buff;
+        QT_LSTAT(physicalPath_c, &buff);
+        mode_t access = buff.st_mode & 07777;
+        KIO::ForwardingSlaveBase::copy(QUrl::fromLocalFile(fileItem.source), dest, access, flags);
+        return true;
     }
     return false;
 }
