@@ -294,14 +294,18 @@ bool FileStash::copyStashToStash(const QUrl &src, const QUrl &dest, KIO::JobFlag
 {
     Q_UNUSED(flags)
 
+    KIO::UDSEntry entry;
+
+    statUrl(src, entry);
+    KFileItem fileItem(entry, src);
+
     const dirList item = createDirListItem(setFileInfo(src));
     NodeType fileType;
-    QFileInfo fileInfo = QFileInfo(item.source);
-    if (fileInfo.isFile()) {
+    if (fileItem.isFile()) {
         fileType = NodeType::FileNode;
-    } else if (fileInfo.isSymLink()) {
+    } else if (fileItem.isLink()) {
         fileType = NodeType::SymlinkNode;
-    } else if (fileInfo.isDir()) {
+    } else if (fileItem.isDir()) {
         fileType = NodeType::DirectoryNode;
     } else {
         return false;
