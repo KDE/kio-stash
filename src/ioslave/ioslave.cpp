@@ -391,11 +391,8 @@ void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
     KIO::UDSEntry entry;
     if (src.scheme() == "stash" && dest.scheme() == "stash") {
         if (copyStashToStash(src, dest, flags)) {
-            if (statUrl(src, entry)) {
-                KFileItem item(entry, src);
-                if (deletePath(src)) {
-                    finished();
-                }
+            if (deletePath(src)) {
+                finished();
             }
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not rename."));
@@ -410,11 +407,8 @@ void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
         return;
     } else if (src.scheme() == "stash" && dest.scheme() == "file") {
         if (copyStashToFile(src, dest, flags)) {
-            if (statUrl(src, entry)) {
-                KFileItem item(entry, src);
-                if (deletePath(src)) {
-                    return;
-                }
+            if (deletePath(src)) {
+                return;
             }
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not rename."));
