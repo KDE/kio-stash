@@ -349,6 +349,8 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not copy."));
         }
         return;
+    } else if (dest.scheme() == "mtp") {
+        error(KIO::ERR_SLAVE_DEFINED, QString("Copying to mtp slaves is still under development!"));
     } else {
         KIO::ForwardingSlaveBase::copy(item.targetUrl(), newDestPath, permissions, flags);
     }
