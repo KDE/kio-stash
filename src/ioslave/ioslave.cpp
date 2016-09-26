@@ -332,14 +332,14 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
     QUrl newDestPath;
     newDestPath = QUrl(dest.adjusted(QUrl::RemoveFilename).toString() + item.name());
 
-    if (src.scheme() == "file" && dest.scheme() == "stash") {
+    if (src.scheme() != "stash" && dest.scheme() == "stash") {
         if (copyFileToStash(src, newDestPath, flags)) {
             finished();
         } else {
             error(KIO::ERR_SLAVE_DEFINED, QString("Could not copy."));
         }
         return;
-    } else if (src.scheme() == "stash" && dest.scheme() == "file") {
+    } else if (src.scheme() == "stash" && dest.scheme() != "stash") {
         copyStashToFile(src, newDestPath, flags);
         return;
     } else if (src.scheme() == "stash" && dest.scheme() == "stash") {
