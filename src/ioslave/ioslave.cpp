@@ -340,7 +340,9 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
         }
         return;
     } else if (src.scheme() == "stash" && dest.scheme() != "stash") {
-        copyStashToFile(src, newDestPath, flags);
+        if (!copyStashToFile(src, newDestPath, flags)) {
+            error(KIO::ERR_SLAVE_DEFINED, QString("Could not copy."));
+        }
         return;
     } else if (src.scheme() == "stash" && dest.scheme() == "stash") {
         if (copyStashToStash(src, newDestPath, flags)) {
