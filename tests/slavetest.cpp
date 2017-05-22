@@ -78,7 +78,7 @@ void SlaveTest::createTestFiles() //also find a way to reset the directory prior
     tmpDir.mkdir(tmpDirPath() + m_fileTestFolder);
 
     QFile tmpFile;
-    stashDirectory("/" + m_stashTestFolder);
+    stashDirectory('/' + m_stashTestFolder);
 
     QUrl src = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFile); //creates a file to be tested
     tmpFile.setFileName(src.path());
@@ -89,20 +89,20 @@ void SlaveTest::createTestFiles() //also find a way to reset the directory prior
     tmpFile.setFileName(src.path());
     QVERIFY(tmpFile.open(QIODevice::ReadWrite));
     tmpFile.close();
-    stashFile(src.path(), "/" + m_stashTestFile);
+    stashFile(src.path(), '/' + m_stashTestFile);
 
     src = QUrl::fromLocalFile(tmpDirPath() + m_stashFileForRename);
     tmpFile.setFileName(src.path());
     QVERIFY(tmpFile.open(QIODevice::ReadWrite));
     tmpFile.close();
-    stashFile(src.path(), "/" + m_stashFileForRename);
+    stashFile(src.path(), '/' + m_stashFileForRename);
 
     src = QUrl::fromLocalFile(tmpDirPath() + m_stashTestFileInSubDirectory);
     tmpFile.setFileName(src.path());
     QVERIFY(tmpFile.open(QIODevice::ReadWrite));
     tmpFile.close();
 
-    stashFile(src.path(), "/" + m_stashTestFolder + "/" + m_stashTestFileInSubDirectory);
+    stashFile(src.path(), '/' + m_stashTestFolder + '/' + m_stashTestFileInSubDirectory);
 }
 
 void SlaveTest::cleanupTestCase()
@@ -113,7 +113,7 @@ void SlaveTest::cleanupTestCase()
 
 QString SlaveTest::tmpDirPath()
 {
-    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/" + tmpFolder + "/";
+    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + '/' + tmpFolder + "/";
 }
 
 void SlaveTest::statItem(const QUrl &url, const int &type)
@@ -287,7 +287,7 @@ void SlaveTest::statSymlinkInRoot()
 
 void SlaveTest::statFileInDirectory()
 {
-    QUrl url("stash:/" + m_stashTestFolder + "/" + m_stashTestFileInSubDirectory);
+    QUrl url("stash:/" + m_stashTestFolder + '/' + m_stashTestFileInSubDirectory);
     KIO::UDSEntry entry;
     QVERIFY(statUrl(url, entry));
     KFileItem item(entry, url);
@@ -312,9 +312,9 @@ void SlaveTest::copyFileToStash()
 
 void SlaveTest::copySymlinkFromStashToFile() //create test case
 {
-    stashSymlink(tmpDirPath() + m_fileTestFile, "/" + m_stashTestSymlink);
+    stashSymlink(tmpDirPath() + m_fileTestFile, '/' + m_stashTestSymlink);
     QUrl src("stash:/" + m_stashTestSymlink);
-    QUrl dest = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFolder + "/" + m_stashTestSymlink);
+    QUrl dest = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFolder + '/' + m_stashTestSymlink);
 
     stashCopy(src, dest);
     QVERIFY(QFile::exists(dest.path()));
@@ -323,7 +323,7 @@ void SlaveTest::copySymlinkFromStashToFile() //create test case
 void SlaveTest::copyStashToFile()
 {
     QUrl src("stash:/" + m_stashTestFile);
-    QUrl dest = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFolder + "/" + m_stashTestFile);
+    QUrl dest = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFolder + '/' + m_stashTestFile);
     KIO::UDSEntry entry;
     stashCopy(src, dest);
     QVERIFY(QFile::exists(dest.toLocalFile()));
@@ -333,7 +333,7 @@ void SlaveTest::copyStashToFile()
 void SlaveTest::moveToFileFromStash()
 {
     QUrl src("stash:/" + m_stashTestFile);
-    QUrl dest = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFolder + "/" + m_stashTestFile);
+    QUrl dest = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFolder + '/' + m_stashTestFile);
 
     moveFromStash(src, dest);
     KIO::UDSEntry entry;
@@ -346,7 +346,7 @@ void SlaveTest::moveToFileFromStash()
 void SlaveTest::copyStashToStash()
 {
     QUrl src("stash:/" + m_stashTestFile);
-    QUrl dest("stash:/" + m_stashTestFolder + "/" + m_stashTestFile);
+    QUrl dest("stash:/" + m_stashTestFolder + '/' + m_stashTestFile);
     stashCopy(src, dest);
     KIO::UDSEntry entry;
     statUrl(src, entry);
@@ -385,7 +385,7 @@ void SlaveTest::delRootFile()
 
 void SlaveTest::delFileInDirectory()
 {
-    QUrl url("stash:/" + m_stashTestFolder + "/" + m_stashTestFileInSubDirectory);
+    QUrl url("stash:/" + m_stashTestFolder + '/' + m_stashTestFileInSubDirectory);
     deleteFromStash(url);
     KIO::UDSEntry entry;
     QVERIFY(statUrl(url, entry));
