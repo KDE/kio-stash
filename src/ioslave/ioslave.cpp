@@ -208,7 +208,7 @@ void FileStash::listDir(const QUrl &url)
     if (fileList.at(0) == "error::error::InvalidNode") {
         error(KIO::ERR_SLAVE_DEFINED, QString("The file either does not exist or has not been stashed yet."));
     } else {
-        for (auto it = fileList.begin(); it != fileList.end(); it++) {
+        for (auto it = fileList.begin(); it != fileList.end(); ++it) {
             entry.clear();
             item = createDirListItem(*it);
             if (createUDSEntry(entry, item)) {

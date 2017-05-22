@@ -22,7 +22,6 @@
 
 #include "fs.h"
 
-#include <QtDBus>
 #include <QStringList>
 
 #include <KDEDModule>

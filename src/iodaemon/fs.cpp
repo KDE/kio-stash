@@ -137,7 +137,7 @@ StashFileSystem::StashNodeData StashFileSystem::findNode(QStringList path)
 {
     StashNode *node = root.children;
     StashNodeData data = StashNodeData(InvalidNode);
-    if (!path.size() || path.at(0) == "") {
+    if (!path.size() || path.at(0).isEmpty()) {
         return root;
     } else {
         for (int i = 0; i < path.size(); ++i) {
@@ -164,7 +164,7 @@ void StashFileSystem::deleteAllItems()
 
 void StashFileSystem::displayNode(StashNode *node)
 {
-    for (auto it = node->begin(); it != node->end(); it++)
+    for (auto it = node->begin(); it != node->end(); ++it)
     {
         qDebug() << "stashpath" << it.key();
         qDebug() << "filepath" << it.value().source;

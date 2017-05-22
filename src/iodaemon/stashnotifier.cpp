@@ -133,7 +133,7 @@ QStringList StashNotifier::fileList(const QString &path) //forwards list over QD
     if (node.type != StashFileSystem::NodeType::DirectoryNode) {
         contents.append("error::error::InvalidNode");
     } else {
-        for (auto it = node.children->begin(); it != node.children->end(); it++) {
+        for (auto it = node.children->begin(); it != node.children->end(); ++it) {
             contents.append(encodeString(it, path));
         }
     }

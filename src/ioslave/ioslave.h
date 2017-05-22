@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef KIO_FILESTASH_H
-#define KIO_FILESTASH_H
+#ifndef IOSLAVE_H
+#define IOSLAVE_H
 
 #include <QObject>
 
