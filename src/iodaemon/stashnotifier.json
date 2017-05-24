@@ -1,7 +1,19 @@
 {
     "KPlugin": {
         "Description": "Monitors directories for changes",
+        "Description[es]": "Monitoriza cambios en directorios",
+        "Description[nl]": "Mappen monitoren op wijzigingen",
+        "Description[pt]": "Vigia modificações nas pastas",
+        "Description[sv]": "Övervakar om kataloger ändras",
+        "Description[uk]": "Спостереження за змінами у каталогах",
+        "Description[x-test]": "xxMonitors directories for changesxx",
         "Name": "Stash KIO slave watcher",
+        "Name[es]": "Esclavo KIO observador de Stash",
+        "Name[nl]": "KIO-slavebewaker opslaan",
+        "Name[pt]": "Monitor do KIO slave para repositórios temporários",
+        "Name[sv]": "Stash I/O-slav övervakare",
+        "Name[uk]": "Допоміжний засіб KIO для спостереження за схованками",
+        "Name[x-test]": "xxStash KIO slave watcherxx",
         "ServiceTypes": [
             "KDEDModule"
         ]
