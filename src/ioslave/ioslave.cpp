@@ -252,7 +252,6 @@ bool FileStash::copyFileToStash(const QUrl &src, const QUrl &dest, KIO::JobFlags
         fileType = NodeType::SymlinkNode;
     } else if (fileInfo.isDir()) { // if I'm not wrong, this can never happen, but we should handle it anyway
         fileType = NodeType::DirectoryNode;
-        qDebug() << "DirectoryNode...created?";
     } else {
         return false;
     }
@@ -371,15 +370,28 @@ void FileStash::del(const QUrl &url, bool isFile)
 
 bool FileStash::deletePath(const QUrl &url)
 {
+    NodeType fileType;
+    QFileInfo fileInfo = QFileInfo(url.path());
+
+    if (fileInfo.isFile()) {
+        fileType = NodeType::FileNode;
+    } else if (fileInfo.isSymLink()) {
+        fileType = NodeType::SymlinkNode;
+    } else if (fileInfo.isDir()) {
+        fileType = NodeType::DirectoryNode;
+    } else {
+        fileType = NodeType::InvalidNode;
+    }
+
     QDBusMessage replyMessage;
     QDBusMessage msg;
     msg = QDBusMessage::createMethodCall(
               m_daemonService, m_daemonPath, "", "removePath");
 
     if (isRoot(url.adjusted(QUrl::RemoveFilename).toString())) {
-        msg << url.fileName();
+        msg << url.fileName() << (int) fileType;
     } else {
-        msg << url.path();
+        msg << url.path() << (int) fileType;
     }
 
     replyMessage = QDBusConnection::sessionBus().call(msg);
