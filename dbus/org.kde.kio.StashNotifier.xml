@@ -10,7 +10,6 @@
     </method>
     <method name="removePath">
       <arg name="path" type="s" direction="in"/>
-      <arg name="fileType" type="i" direction="in"/>
     </method>
     <method name="nukeStash">
     </method>
