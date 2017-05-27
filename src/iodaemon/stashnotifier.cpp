@@ -176,8 +176,9 @@ QString StashNotifier::processString(const QString &path)
     return processedPath;
 }
 
-void StashNotifier::removePath(const QString &path, const int &fileType)
+void StashNotifier::removePath(const QString &path)
 {
+    StashFileSystem::NodeType fileType;
     QString processedPath = processString(path);
     if (fileType == StashFileSystem::NodeType::DirectoryNode) {
         dirWatch->removeDir(processedPath);

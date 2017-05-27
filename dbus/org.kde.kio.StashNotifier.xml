@@ -10,6 +10,16 @@
     </method>
     <method name="removePath">
       <arg name="path" type="s" direction="in"/>
+      <arg name="fileType" type="i" direction="in"/>
+    </method>
+    <method name="nukeStash">
+    </method>
+    <method name="pingDaemon">
+    </method>
+    <method name="copyWithStash">
+      <arg type="b" direction="out"/>
+      <arg name="src" type="s" direction="in"/>
+      <arg name="dest" type="s" direction="in"/>
     </method>
     <method name="fileList">
       <arg type="as" direction="out"/>
@@ -18,15 +28,6 @@
     <method name="fileInfo">
       <arg type="s" direction="out"/>
       <arg name="path" type="s" direction="in"/>
-    </method>
-    <method name="copyWithStash">
-      <arg type="b" direction="out"/>
-      <arg name="src" type="s" direction="in"/>
-      <arg name="dest" type="s" direction="in"/>
-    </method>
-    <method name="nukeStash">
-    </method>
-    <method name="pingDaemon">
     </method>
   </interface>
 </node>
