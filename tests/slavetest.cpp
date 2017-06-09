@@ -51,6 +51,8 @@ void SlaveTest::initTestCase()
     QDBusMessage msg;
     QDBusMessage replyMessage;
 
+    stashDaemonProcess = nullptr;
+
     msg = QDBusMessage::createMethodCall(
               "org.kde.kio.StashNotifier", "/StashNotifier", "", "pingDaemon");
     replyMessage = QDBusConnection::sessionBus().call(msg);
@@ -412,6 +414,10 @@ void SlaveTest::cleanup()
 {
     QDir dir(tmpDirPath());
     dir.removeRecursively();
+
+    if (stashDaemonProcess != nullptr) {
+        stashDaemonProcess->kill();
+    }
 }
 
 QTEST_MAIN(SlaveTest)
