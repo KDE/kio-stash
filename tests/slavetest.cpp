@@ -63,7 +63,7 @@ void SlaveTest::initTestCase()
         stashDaemonProcess->start(program);
     }
 
-    replyMessage = QDBusConnection::sessionBus().call(msg);
+    replyMessage = QDBusConnection::sessionBus().call(msg, QDBus::Block, 2000);
 
     if (replyMessage.type() != QDBusMessage::ErrorMessage) {
         qDebug() << "Test case initialised";
