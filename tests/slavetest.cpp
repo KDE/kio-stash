@@ -83,6 +83,7 @@ void SlaveTest::createTestFiles() //also find a way to reset the directory prior
     stashDirectory('/' + m_stashTestFolder);
 
     QUrl src = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFile); //creates a file to be tested
+    qDebug() << src;
     tmpFile.setFileName(src.path());
     QVERIFY(tmpFile.open(QIODevice::ReadWrite));
     tmpFile.close();
