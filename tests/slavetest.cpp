@@ -63,7 +63,7 @@ void SlaveTest::initTestCase()
         stashDaemonProcess->start(program);
     }
 
-    replyMessage = QDBusConnection::sessionBus().call(msg, QDBus::Block, 2000);
+    replyMessage = QDBusConnection::sessionBus().call(msg);
 
     if (replyMessage.type() != QDBusMessage::ErrorMessage) {
         qDebug() << "Test case initialised";
@@ -83,7 +83,6 @@ void SlaveTest::createTestFiles() //also find a way to reset the directory prior
     stashDirectory('/' + m_stashTestFolder);
 
     QUrl src = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFile); //creates a file to be tested
-    qDebug() << src;
     tmpFile.setFileName(src.path());
     QVERIFY(tmpFile.open(QIODevice::ReadWrite));
     tmpFile.close();
@@ -112,10 +111,6 @@ void SlaveTest::cleanupTestCase()
 {
     QDir dir(tmpDirPath());
     dir.removeRecursively();
-
-    if (stashDaemonProcess != nullptr) {
-        stashDaemonProcess->kill();
-    }
 }
 
 QString SlaveTest::tmpDirPath()
@@ -419,6 +414,10 @@ void SlaveTest::cleanup()
 {
     QDir dir(tmpDirPath());
     dir.removeRecursively();
+
+    if (stashDaemonProcess != nullptr) {
+        stashDaemonProcess
+    }
 }
 
 QTEST_MAIN(SlaveTest)
