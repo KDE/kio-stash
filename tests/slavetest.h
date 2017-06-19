@@ -65,6 +65,7 @@ private:
     const QString m_stashTestFileInSubDirectory;
     const QString m_newStashFileName;
     const QString m_stashFileForRename;
+    const QString m_absolutePath;
 
 private slots:
     void initTestCase();
