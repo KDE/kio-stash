@@ -414,10 +414,6 @@ void SlaveTest::cleanup()
 {
     QDir dir(tmpDirPath());
     dir.removeRecursively();
-
-    if (stashDaemonProcess != nullptr) {
-        stashDaemonProcess
-    }
 }
 
 QTEST_MAIN(SlaveTest)
