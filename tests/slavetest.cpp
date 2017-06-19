@@ -71,8 +71,8 @@ void SlaveTest::initTestCase()
         qDebug() << "Something is wrong!";
     }
     QFile myNewFile;
-    QVERIFY(myNewFile.setFileName("atestfile"));
-    myNewFile.open(QIODevice::ReadWrite);
+    myNewFile.setFileName("atestfile");
+    QVERIFY(myNewFile.open(QIODevice::ReadWrite));
     myNewFile.close();
     QVERIFY(myNewFile.remove());
     createTestFiles();
