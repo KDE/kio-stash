@@ -70,8 +70,7 @@ void SlaveTest::initTestCase()
     } else {
         qDebug() << "Something is wrong!";
     }
-    QDir aFolder;
-    QVERIFY(aFolder.mkdir("MyNewFolder"));
+
     createTestFiles();
 }
 
@@ -118,7 +117,7 @@ void SlaveTest::cleanupTestCase()
 QString SlaveTest::tmpDirPath()
 {
 //    qDebug() << QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + '/' + tmpFolder + "/";
-//    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + '/' + tmpFolder + "/";
+   // return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + '/' + tmpFolder + "/";
     return tmpFolder + '/';
 }
 
