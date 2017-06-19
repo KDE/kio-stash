@@ -70,6 +70,11 @@ void SlaveTest::initTestCase()
     } else {
         qDebug() << "Something is wrong!";
     }
+    QFile myNewFile;
+    QVERIFY(myNewFile.setFileName("atestfile"));
+    myNewFile.open(QIODevice::ReadWrite);
+    myNewFile.close();
+    QVERIFY(myNewFile.remove());
     createTestFiles();
 }
 
