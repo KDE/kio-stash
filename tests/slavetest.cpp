@@ -79,6 +79,7 @@ void SlaveTest::createTestFiles() //also find a way to reset the directory prior
     QDir tmpDir;
     tmpDir.mkdir(tmpDirPath()); //creates test dir
     tmpDir.mkdir(tmpDirPath() + m_fileTestFolder);
+
     QFile tmpFile;
     stashDirectory('/' + m_stashTestFolder);
 
@@ -115,8 +116,6 @@ void SlaveTest::cleanupTestCase()
 
 QString SlaveTest::tmpDirPath()
 {
-   // qDebug() << QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + '/' + tmpFolder + "/";
-    // return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + '/' + tmpFolder + "/";
     return m_absolutePath + '/' + tmpFolder + '/';
 }
 
@@ -304,7 +303,7 @@ void SlaveTest::statFileInDirectory()
 
 void SlaveTest::copyFileToStash()
 {
-    QUrl src = QUrl(tmpDirPath() + m_fileTestFile);
+    QUrl src = QUrl::fromLocalFile(tmpDirPath() + m_fileTestFile);
     QFile testFile(src.path());
     QVERIFY(testFile.open(QIODevice::WriteOnly));
     QUrl dest("stash:/" + m_fileTestFile);
