@@ -70,11 +70,8 @@ void SlaveTest::initTestCase()
     } else {
         qDebug() << "Something is wrong!";
     }
-    QFile myNewFile;
-    myNewFile.setFileName("atestfile");
-    QVERIFY(myNewFile.open(QIODevice::ReadWrite));
-    myNewFile.close();
-    QVERIFY(myNewFile.remove());
+    QDir aFolder;
+    QVERIFY(aFolder.mkdir("MyNewFolder"));
     createTestFiles();
 }
 
@@ -120,7 +117,9 @@ void SlaveTest::cleanupTestCase()
 
 QString SlaveTest::tmpDirPath()
 {
-    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + '/' + tmpFolder + "/";
+//    qDebug() << QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + '/' + tmpFolder + "/";
+//    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + '/' + tmpFolder + "/";
+    return tmpFolder + '/';
 }
 
 void SlaveTest::statItem(const QUrl &url, const int &type)
