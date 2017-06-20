@@ -1,6 +1,8 @@
-# GSoC 2016 File Stash project for KDE
+# File Stash KIOSlave
 
 ## Introduction
+
+*This is a GSoC 2016 project by Arnav Dhamija, mentored by Boudhayan Gupta and Pinak Ahuja.*
 
 Selecting multiple files in any file manager for copying and pasting has never been a pleasant experience, especially if the files are in a non-continuous order. Often, when selecting files using Ctrl+A or the selection tool, we find that we need to select only a subset of the required files we have selected. This leads to the unwieldy operation of removing files from our selection. Of course, the common workaround is to create a new folder and to put all the items in this folder prior to copying, but this is a very inefficient and very slow process if large files need to be copied. Moreover Ctrl+Click requires fine motor skills to not lose the entire selection of files.
 
