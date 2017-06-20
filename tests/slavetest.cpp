@@ -52,7 +52,7 @@ void SlaveTest::initTestCase()
     QDBusMessage msg;
     QDBusMessage replyMessage;
 
-    stashDaemonProcess = nullptr;
+    stashDaemonProcess = new QProcess();
 
     msg = QDBusMessage::createMethodCall(
               "org.kde.kio.StashNotifier", "/StashNotifier", "", "pingDaemon");
@@ -60,7 +60,6 @@ void SlaveTest::initTestCase()
     if (replyMessage.type() == QDBusMessage::ErrorMessage) {
         qDebug() << "Launching fallback daemon";
         const QString program = "./testdaemon";
-        stashDaemonProcess = new QProcess();
         stashDaemonProcess->start(program);
     }
 
@@ -112,6 +111,7 @@ void SlaveTest::cleanupTestCase()
 {
     QDir dir(tmpDirPath());
     dir.removeRecursively();
+    stashDaemonProcess->terminate();
 }
 
 QString SlaveTest::tmpDirPath()
