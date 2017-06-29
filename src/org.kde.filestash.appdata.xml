@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>org.kde.filestash.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license> see https://www.freedesktop.org/software/appstream/docs/chap-Metadata.html#tag-metadata_license </project_license>
+  <name>FileStash</name>
+  <summary> see https://www.freedesktop.org/software/appstream/docs/chap-Metadata.html#tag-summary </summary>
+  <description>
+    <p> see https://www.freedesktop.org/software/appstream/docs/chap-Metadata.html#tag-description </p>
+    <p>And see.</p>
+    <p>And see:</p>
+    <ul>
+      <li>this</li>
+      <li>that</li>
+    </ul>
+  </description>
+  <url type="homepage">https://www.kde.org</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=filestash</url>
+  <url type="donation">https://www.kde.org/community/donations/?app=filestash</url>
+  <screenshots>
+    <screenshot type="default">
+      <image>
+        see https://www.freedesktop.org/software/appstream/docs/chap-Metadata.html#tag-screenshots
+        Central hosting for uploading at https://phabricator.kde.org/source/websites-product-screenshots/
+        Central URL to use here https://cdn.kde.org/screenshots/...
+      </image>
+    </screenshot>
+  </screenshots>
+  <provides>
+    <binary>filestash</binary>
+  </provides>
+  <project_group>KDE</project_group>
+</component> 
