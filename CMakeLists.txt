@@ -18,6 +18,7 @@ include(ECMSetupVersion)
 include(FeatureSummary)
 
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING) #prevents implicit conversion of QString to QUrl
+add_definitions(-DTRANSLATION_DOMAIN=\"kio5_stash\")
 
 find_package(Qt5 ${QT5_MIN_VERSION} REQUIRED COMPONENTS
     Core
