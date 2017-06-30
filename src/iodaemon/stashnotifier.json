@@ -10,6 +10,7 @@
         "Description[pt]": "Vigia modificações nas pastas",
         "Description[sk]": "Sleduje zmeny v adresároch",
         "Description[sv]": "Övervakar om kataloger ändras",
+        "Description[tr]": "Dizin değişikliklerini izler",
         "Description[uk]": "Спостереження за змінами у каталогах",
         "Description[x-test]": "xxMonitors directories for changesxx",
         "Name": "Stash KIO slave watcher",
@@ -20,6 +21,7 @@
         "Name[pt]": "Monitor do KIO slave para repositórios temporários",
         "Name[sk]": "Stash KIO slave sledovač",
         "Name[sv]": "Stash I/O-slav övervakare",
+        "Name[tr]": "Stash KIO slave izleyici",
         "Name[uk]": "Допоміжний засіб KIO для спостереження за схованками",
         "Name[x-test]": "xxStash KIO slave watcherxx",
         "ServiceTypes": [
