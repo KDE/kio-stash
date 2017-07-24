@@ -70,6 +70,8 @@ public:
     explicit StashFileSystem(QObject *parent = 0);
     virtual ~StashFileSystem();
 
+    QStringList findNodesFromPath(const QString &path);
+
     bool delEntry(const QString &path);
     bool addFile(const QString &src, const QString &dest);
     bool addFolder(const QString &dest);
@@ -77,18 +79,23 @@ public:
     bool copyFile(const QString &src, const QString &dest);
     void deleteAllItems();
 
+    // Finds the node object for the given path in the SFS
     StashNodeData findNode(QString path);
     StashNodeData findNode(QStringList path);
 
-    //for debug purposes
+    StashNodeData getRoot();
+    void findPathFromSource(const QString &path, QString dir, QStringList &fileList, StashNode *node);
+
+    // For debug purposes
     void displayNode(StashNode *node);
     void displayRoot();
 
+
 private:
-    StashNodeData root;
     bool addNode(const QString &location, const StashNodeData &data);
     void deleteChildren(StashNodeData nodeData);
     QStringList splitPath(const QString &path);
+    StashNodeData root;
 };
 
 #endif

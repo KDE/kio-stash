@@ -42,6 +42,23 @@ StashFileSystem::~StashFileSystem()
     deleteChildren(root);
 }
 
+StashFileSystem::StashNodeData StashFileSystem::getRoot()
+{
+    return root;
+}
+
+void StashFileSystem::findPathFromSource(const QString &path, QString dir, QStringList &fileList, StashNode *node)
+{
+    for (auto it = node->begin(); it != node->end(); ++it) {
+        if (it.value().source == path) {
+            fileList.append(dir + '/' + it.key());
+        }
+        if (it.value().type == DirectoryNode) {
+            findPathFromSource(path, dir + '/' + it.key(), fileList, it.value().children);
+        }
+    }
+}
+
 void StashFileSystem::deleteChildren(StashNodeData nodeData)
 {
     if (nodeData.children != nullptr) {
@@ -71,7 +88,6 @@ bool StashFileSystem::delEntry(const QString &location)
     QStringList path = splitPath(location);
     QString name = path.takeLast();
     StashNodeData baseData = findNode(path);
-
     if (!(baseData.type == DirectoryNode)) {
         return false;
     }
@@ -166,11 +182,11 @@ void StashFileSystem::displayNode(StashNode *node)
 {
     for (auto it = node->begin(); it != node->end(); ++it)
     {
-        qDebug() << "stashpath" << it.key();
-        qDebug() << "filepath" << it.value().source;
-        qDebug() << "filetype" << it.value().type;
+        qDebug() << "Stash Path" << it.key();
+        qDebug() << "File Path" << it.value().source;
+        qDebug() << "File Type" << it.value().type;
         if (it.value().type == DirectoryNode) {
-            qDebug() << "parent" << it.key();
+            qDebug() << "Parent" << it.key();
             displayNode(it.value().children);
         }
     }

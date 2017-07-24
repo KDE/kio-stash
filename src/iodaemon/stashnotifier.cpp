@@ -52,7 +52,7 @@ StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var,
 
     connect(dirWatch, &KDirWatch::dirty, this, &StashNotifier::dirty);
     connect(dirWatch, &KDirWatch::created, this, &StashNotifier::created);
-    connect(dirWatch, &KDirWatch::deleted, this, &StashNotifier::removePath);
+    connect(dirWatch, &KDirWatch::deleted, this, &StashNotifier::removeWatchedPath);
     connect(this, &StashNotifier::listChanged, this, &StashNotifier::displayRoot);
 }
 
@@ -174,6 +174,16 @@ QString StashNotifier::processString(const QString &path)
         processedPath.chop(1);
     }
     return processedPath;
+}
+
+void StashNotifier::removeWatchedPath(const QString &filePath)
+{
+    qDebug() << filePath;
+    QStringList matchedFiles;
+    fileSystem->findPathFromSource(filePath, "", matchedFiles, fileSystem->getRoot().children);
+    foreach(QString file, matchedFiles) {
+        fileSystem->delEntry(file);
+    }
 }
 
 void StashNotifier::removePath(const QString &path)
