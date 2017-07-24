@@ -63,6 +63,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void dirty(const QString &path);
     void created(const QString &path);
+    void removeWatchedPath(const QString &filePath);
     void displayRoot() //function to the contents of the SFS for testing
     {
         //fileSystem->displayRoot();

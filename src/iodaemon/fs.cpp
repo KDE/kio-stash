@@ -42,6 +42,18 @@ StashFileSystem::~StashFileSystem()
     deleteChildren(root);
 }
 
+void StashFileSystem::findPathFromSource(const QString &path, QStringList &fileList, StashNode *node)
+{
+    for (auto it = node->begin(); it != node->end(); ++it) {
+        if (it.value().source == path) {
+            fileList.append(it.key())
+        }
+        if (it.value().type == DirectoryNode) {
+            findNodesFromPath(path, fileList, it.value().children)
+        }
+    }
+}
+
 void StashFileSystem::deleteChildren(StashNodeData nodeData)
 {
     if (nodeData.children != nullptr) {
@@ -71,7 +83,7 @@ bool StashFileSystem::delEntry(const QString &location)
     QStringList path = splitPath(location);
     QString name = path.takeLast();
     StashNodeData baseData = findNode(path);
-
+    qDebug() << path << ' ' << location;
     if (!(baseData.type == DirectoryNode)) {
         return false;
     }
