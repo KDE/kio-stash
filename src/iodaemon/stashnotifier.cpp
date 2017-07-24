@@ -180,7 +180,10 @@ void StashNotifier::removeWatchedPath(const QString &filePath)
 {
     qDebug() << filePath;
     QStringList matchedFiles;
-    fileSystem->findPathFromSource(filePath, matchedFiles, fileSystem->root)
+    fileSystem->findPathFromSource(filePath, "", matchedFiles, fileSystem->getRoot().children);
+    foreach(QString file, matchedFiles) {
+        fileSystem->delEntry(file);
+    }
 }
 
 void StashNotifier::removePath(const QString &path)

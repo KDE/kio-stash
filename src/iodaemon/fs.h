@@ -83,15 +83,19 @@ public:
     StashNodeData findNode(QString path);
     StashNodeData findNode(QStringList path);
 
+    StashNodeData getRoot();
+    void findPathFromSource(const QString &path, QString dir, QStringList &fileList, StashNode *node);
+
     // For debug purposes
     void displayNode(StashNode *node);
     void displayRoot();
-    StashNodeData root;
+
 
 private:
     bool addNode(const QString &location, const StashNodeData &data);
     void deleteChildren(StashNodeData nodeData);
     QStringList splitPath(const QString &path);
+    StashNodeData root;
 };
 
 #endif
