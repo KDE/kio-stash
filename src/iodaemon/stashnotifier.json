@@ -14,6 +14,7 @@
         "Description[tr]": "Dizin değişikliklerini izler",
         "Description[uk]": "Спостереження за змінами у каталогах",
         "Description[x-test]": "xxMonitors directories for changesxx",
+        "Description[zh_CN]": "监视目录的更改",
         "Name": "Stash KIO slave watcher",
         "Name[ca@valencia]": "Vigilant de l'esclau KIO Stash",
         "Name[ca]": "Vigilant de l'esclau KIO Stash",
