@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<component>
+<component type="addon">
   <id>org.kde.filestash.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0</project_license>
@@ -100,4 +100,8 @@
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>
+  <categories>
+    <category>System</category>
+  </categories>
+  <icon type="stock">folder-temp</icon>
 </component>
