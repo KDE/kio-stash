@@ -34,6 +34,12 @@
   <name xml:lang="x-test">xxFileStashxx</name>
   <name xml:lang="zh-TW">FileStash</name>
   <summary>A lightweight solution for virtual folder support in KDE Applications</summary>
+  <summary xml:lang="ca">Una solució lleugera per permetre carpetes virtuals a les aplicacions KDE</summary>
+  <summary xml:lang="nl">Een lichtgewicht oplossing voor ondersteuning van virtuele mappen in KDE Applications</summary>
+  <summary xml:lang="pt">Uma solução leve para o suporte de pastas virtuais nas Aplicações do KDE</summary>
+  <summary xml:lang="sv">En lättviktig lösning för stöd av virtuella kataloger i KDE-program</summary>
+  <summary xml:lang="uk">Невибагливий до ресурсів інструмент підтримки віртуальних тек у програмах KDE</summary>
+  <summary xml:lang="x-test">xxA lightweight solution for virtual folder support in KDE Applicationsxx</summary>
   <description>
     <p>Selecting multiple files in any file manager for copying and pasting has never been a pleasant experience, especially if the files are in a non-continuous order. Often, when selecting files using Ctrl+A or the selection tool, we find that we need to select only a subset of the required files we have selected. This leads to the unwieldy operation of removing files from our selection. Of course, the common workaround is to create a new folder and to put all the items in this folder prior to copying, but this is a very inefficient and very slow process if large files need to be copied. Moreover Ctrl+Click requires fine motor skills to not lose the entire selection of files.</p>
     <p xml:lang="ca">La selecció de diversos fitxers en qualsevol gestor de fitxers per copiar i enganxar mai ha estat una experiència agradable, especialment si els fitxers estan en un ordre no contigu. Sovint, en seleccionar fitxers usant Ctrl+A o l'eina de selecció, ens trobem que cal seleccionar només un subconjunt dels fitxers requerits que hem seleccionat. Això porta a la tasca pesada d'eliminar fitxers de la selecció. Per descomptat, l'alternativa més freqüent és crear una carpeta nova i posar tots els elements en aquesta carpeta abans de copiar-hi, però això és un procés molt ineficient i molt lent si cal copiar fitxers grans. A més, Ctrl+Clic requereix habilitats motores fines per no perdre tota la selecció de fitxers.</p>
