@@ -67,7 +67,7 @@ public:
         StashFileSystem::StashNode *children;
     };
 
-    explicit StashFileSystem(QObject *parent = 0);
+    explicit StashFileSystem(QObject *parent = nullptr);
     virtual ~StashFileSystem();
 
     QStringList findNodesFromPath(const QString &path);
@@ -84,7 +84,7 @@ public:
     StashNodeData findNode(QStringList path);
 
     StashNodeData getRoot();
-    void findPathFromSource(const QString &path, QString dir, QStringList &fileList, StashNode *node);
+    void findPathFromSource(const QString &path, const QString &dir, QStringList &fileList, StashNode *node);
 
     // For debug purposes
     void displayNode(StashNode *node);

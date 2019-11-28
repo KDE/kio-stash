@@ -55,7 +55,7 @@ extern "C" {
 }
 
 FileStash::FileStash(const QByteArray &pool, const QByteArray &app,
-                     const QString daemonService, const QString daemonPath) :
+                     const QString &daemonService, const QString &daemonPath) :
     KIO::ForwardingSlaveBase("stash", pool, app),
     m_daemonService(daemonService),
     m_daemonPath(daemonPath)
@@ -174,7 +174,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
     return true;
 }
 
-FileStash::dirList FileStash::createDirListItem(QString fileInfo)
+FileStash::dirList FileStash::createDirListItem(const QString &fileInfo)
 {
     QStringList strings = fileInfo.split("::", QString::KeepEmptyParts);
     FileStash::dirList item;

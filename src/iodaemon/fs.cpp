@@ -47,14 +47,14 @@ StashFileSystem::StashNodeData StashFileSystem::getRoot()
     return root;
 }
 
-void StashFileSystem::findPathFromSource(const QString &path, QString dir, QStringList &fileList, StashNode *node)
+void StashFileSystem::findPathFromSource(const QString &path, const QString &dir, QStringList &fileList, StashNode *node)
 {
     for (auto it = node->begin(); it != node->end(); ++it) {
         if (it.value().source == path) {
-            fileList.append(dir + '/' + it.key());
+            fileList.append(dir + QLatin1Char('/') + it.key());
         }
         if (it.value().type == DirectoryNode) {
-            findPathFromSource(path, dir + '/' + it.key(), fileList, it.value().children);
+            findPathFromSource(path, dir + QLatin1Char('/') + it.key(), fileList, it.value().children);
         }
     }
 }
@@ -73,14 +73,14 @@ void StashFileSystem::deleteChildren(StashNodeData nodeData)
 QStringList StashFileSystem::splitPath(const QString &path)
 {
     QString filePath = path;
-    if (filePath.startsWith('/')) {
+    if (filePath.startsWith(QLatin1Char('/'))) {
         filePath = filePath.right(filePath.size() - 1);
     }
 
-    if (filePath.endsWith('/')) {
+    if (filePath.endsWith(QLatin1Char('/'))) {
         filePath = filePath.left(filePath.size() - 1);
     }
-    return filePath.split('/');
+    return filePath.split(QLatin1Char('/'));
 }
 
 bool StashFileSystem::delEntry(const QString &location)

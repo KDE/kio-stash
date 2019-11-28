@@ -34,8 +34,8 @@
 K_PLUGIN_FACTORY_WITH_JSON(StashNotifierFactory, "stashnotifier.json", registerPlugin<StashNotifier>();)
 
 StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var,
-                             const QString daemonService,
-                             const QString daemonPath) :
+                             const QString &daemonService,
+                             const QString &daemonPath) :
     KDEDModule(parent),
     m_daemonService(daemonService),
     m_daemonPath(daemonPath)

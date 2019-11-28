@@ -21,7 +21,7 @@
 #define IOSLAVE_H
 
 #include <QObject>
-
+#include <QString>
 #include <KIO/ForwardingSlaveBase>
 
 class FileStash : public KIO::ForwardingSlaveBase
@@ -30,8 +30,8 @@ class FileStash : public KIO::ForwardingSlaveBase
 
 public:
     FileStash(const QByteArray &pool, const QByteArray &app,
-              const QString daemonService = "org.kde.kio.StashNotifier",
-              const QString daemonPath = "/StashNotifier");
+              const QString &daemonService = "org.kde.kio.StashNotifier",
+              const QString &daemonPath = "/StashNotifier");
     ~FileStash();
 
     enum NodeType {
@@ -74,7 +74,7 @@ private:
 
     QStringList setFileList(const QUrl &url);
     QString setFileInfo(const QUrl &url);
-    FileStash::dirList createDirListItem(QString fileInfo);
+    FileStash::dirList createDirListItem(const QString &fileInfo);
 
     const QString m_daemonService;
     const QString m_daemonPath;
