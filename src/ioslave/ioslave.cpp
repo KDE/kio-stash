@@ -78,10 +78,10 @@ bool FileStash::rewriteUrl(const QUrl &url, QUrl &newUrl)
 void FileStash::createTopLevelDirEntry(KIO::UDSEntry &entry)
 {
     entry.clear();
-    entry.insert(KIO::UDSEntry::UDS_NAME, QStringLiteral("."));
-    entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0040000);
-    entry.insert(KIO::UDSEntry::UDS_ACCESS, 0700);
-    entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, QStringLiteral("inode/directory"));
+    entry.fastInsert(KIO::UDSEntry::UDS_NAME, QStringLiteral("."));
+    entry.fastInsert(KIO::UDSEntry::UDS_FILE_TYPE, 0040000);
+    entry.fastInsert(KIO::UDSEntry::UDS_ACCESS, 0700);
+    entry.fastInsert(KIO::UDSEntry::UDS_MIME_TYPE, QStringLiteral("inode/directory"));
 }
 
 QStringList FileStash::setFileList(const QUrl &url)
@@ -137,13 +137,13 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
 
     switch (fileItem.type) {
     case NodeType::DirectoryNode:
-        entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0040000);
-        entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, QString("inode/directory"));
-        entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
-        entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
+        entry.fastInsert(KIO::UDSEntry::UDS_FILE_TYPE, 0040000);
+        entry.fastInsert(KIO::UDSEntry::UDS_MIME_TYPE, QString("inode/directory"));
+        entry.fastInsert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
+        entry.fastInsert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
         break;
     case NodeType::InvalidNode:
-        entry.insert(KIO::UDSEntry::UDS_NAME, fileItem.filePath);
+        entry.fastInsert(KIO::UDSEntry::UDS_NAME, fileItem.filePath);
         break;
     default:
         QByteArray physicalPath_c = QFile::encodeName(fileItem.source);
@@ -154,19 +154,19 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
         QFileInfo entryInfo;
         entryInfo = QFileInfo(fileItem.source);
         fileMimetype = mimeDatabase.mimeTypeForFile(fileItem.source);
-        entry.insert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
-        entry.insert(KIO::UDSEntry::UDS_MIME_TYPE, fileMimetype.name());
-        entry.insert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
-        entry.insert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
-        entry.insert(KIO::UDSEntry::UDS_ACCESS, access);
-        entry.insert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
-        entry.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME, buff.st_mtime);
-        entry.insert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
+        entry.fastInsert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
+        entry.fastInsert(KIO::UDSEntry::UDS_MIME_TYPE, fileMimetype.name());
+        entry.fastInsert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
+        entry.fastInsert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
+        entry.fastInsert(KIO::UDSEntry::UDS_ACCESS, access);
+        entry.fastInsert(KIO::UDSEntry::UDS_SIZE, entryInfo.size());
+        entry.fastInsert(KIO::UDSEntry::UDS_MODIFICATION_TIME, buff.st_mtime);
+        entry.fastInsert(KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime);
 
         if (fileItem.type == NodeType::FileNode) {
-            entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0100000);
+            entry.fastInsert(KIO::UDSEntry::UDS_FILE_TYPE, 0100000);
         } else if (fileItem.type == NodeType::SymlinkNode) {
-            entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, 0120000);
+            entry.fastInsert(KIO::UDSEntry::UDS_FILE_TYPE, 0120000);
         } else {
             return false;
         }
