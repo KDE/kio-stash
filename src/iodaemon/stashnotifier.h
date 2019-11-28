@@ -52,7 +52,7 @@ Q_SIGNALS:
     Q_SCRIPTABLE void listChanged();
 
 public Q_SLOTS:
-    Q_SCRIPTABLE void addPath(const QString &source, const QString &stashPath, const int &fileType);
+    Q_SCRIPTABLE void addPath(const QString &source, const QString &stashPath, int fileType);
     Q_SCRIPTABLE void removePath(const QString &path);
     Q_SCRIPTABLE void nukeStash();
     Q_SCRIPTABLE void pingDaemon();

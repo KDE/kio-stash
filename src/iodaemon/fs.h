@@ -80,8 +80,8 @@ public:
     void deleteAllItems();
 
     // Finds the node object for the given path in the SFS
-    StashNodeData findNode(QString path);
-    StashNodeData findNode(QStringList path);
+    StashNodeData findNode(const QString &path);
+    StashNodeData findNode(const QStringList &path);
 
     StashNodeData getRoot();
     void findPathFromSource(const QString &path, const QString &dir, QStringList &fileList, StashNode *node);

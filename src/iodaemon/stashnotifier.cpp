@@ -148,7 +148,7 @@ QString StashNotifier::fileInfo(const QString &path) //forwards data of a single
     return fileData;
 }
 
-void StashNotifier::addPath(const QString &source, const QString &stashPath, const int &fileType)
+void StashNotifier::addPath(const QString &source, const QString &stashPath, int fileType)
 {
     QString processedPath = processString(stashPath);
 

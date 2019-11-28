@@ -144,12 +144,12 @@ bool StashFileSystem::copyFile(const QString &src, const QString &dest)
     return addNode(dest, fileToCopy);
 }
 
-StashFileSystem::StashNodeData StashFileSystem::findNode(QString path)
+StashFileSystem::StashNodeData StashFileSystem::findNode(const QString &path)
 {
     return findNode(splitPath(path));
 }
 
-StashFileSystem::StashNodeData StashFileSystem::findNode(QStringList path)
+StashFileSystem::StashNodeData StashFileSystem::findNode(const QStringList &path)
 {
     StashNode *node = root.children;
     StashNodeData data = StashNodeData(InvalidNode);
