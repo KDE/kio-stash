@@ -27,6 +27,7 @@
         "Description[sv]": "Övervakar om kataloger ändras",
         "Description[tr]": "Dizin değişikliklerini izler",
         "Description[uk]": "Спостереження за змінами у каталогах",
+        "Description[x-test]": "xxMonitors directories for changesxx",
         "Description[zh_CN]": "监视目录的更改",
         "Description[zh_TW]": "監視目錄變更",
         "Name": "Stash KIO slave watcher",
@@ -53,6 +54,7 @@
         "Name[sv]": "Stash I/O-slav övervakare",
         "Name[tr]": "Stash KIO slave izleyici",
         "Name[uk]": "Допоміжний засіб KIO для спостереження за схованками",
+        "Name[x-test]": "xxStash KIO slave watcherxx",
         "ServiceTypes": [
             "KDEDModule"
         ]
