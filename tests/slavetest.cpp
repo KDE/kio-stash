@@ -418,4 +418,3 @@ void SlaveTest::cleanup()
 }
 
 QTEST_MAIN(SlaveTest)
-#include "slavetest.moc"
