@@ -30,6 +30,7 @@
   <name xml:lang="pl">PrzechowalniaPlików</name>
   <name xml:lang="pt">FileStash</name>
   <name xml:lang="pt-BR">FileStash</name>
+  <name xml:lang="ro">FileStash</name>
   <name xml:lang="ru">FileStash</name>
   <name xml:lang="sk">FileStash</name>
   <name xml:lang="sl">FileStash</name>
@@ -58,6 +59,7 @@
   <summary xml:lang="nn">Enkel løysing for støtte av virtuelle mapper i program frå KDE</summary>
   <summary xml:lang="pt">Uma solução leve para o suporte de pastas virtuais nas Aplicações do KDE</summary>
   <summary xml:lang="pt-BR">Uma solução leve para suporte a pastas virtuais no KDE Applications</summary>
+  <summary xml:lang="ro">Soluție simplă pentru susținerea dosarelor virtuale în aplicații KDE</summary>
   <summary xml:lang="sk">Jednoduché riešenie pre podporu virtuálnych priečinkov v KDE aplikáciách.</summary>
   <summary xml:lang="sl">Lahka rešitev za podporo virtualne mape v aplikacijah KDE</summary>
   <summary xml:lang="sv">En lättviktig lösning för stöd av virtuella kataloger i KDE-program</summary>
