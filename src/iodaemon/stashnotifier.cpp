@@ -20,16 +20,8 @@
 #include "stashnotifier.h"
 #include "stash_adaptor.h"
 
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QMetaType>
-#include <QDBusMetaType>
-
 #include <KDirWatch>
 #include <KPluginFactory>
-#include <KPluginLoader>
-#include <kdirnotify.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(StashNotifierFactory, "stashnotifier.json", registerPlugin<StashNotifier>();)
 
