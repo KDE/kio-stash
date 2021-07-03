@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Monitors directories for changes",
+        "Description[ar]": "يراقب تغييرات الأدلة",
         "Description[ca@valencia]": "Controla els canvis en els directoris",
         "Description[ca]": "Controla els canvis en els directoris",
         "Description[cs]": "Monitoruje změny v adresáři",
@@ -34,6 +35,7 @@
         "Description[zh_CN]": "监视目录的更改",
         "Description[zh_TW]": "監視目錄變更",
         "Name": "Stash KIO slave watcher",
+        "Name[ar]": "مراقب بريمج التخزين المؤقت لـ KIO",
         "Name[ca@valencia]": "Vigilant de l'esclau KIO Stash",
         "Name[ca]": "Vigilant de l'esclau KIO Stash",
         "Name[da]": "Overvågning af Stash-KIO-slave",
