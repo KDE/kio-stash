@@ -65,6 +65,7 @@
         "Name[tr]": "Stash KIO slave izleyici",
         "Name[uk]": "Допоміжний засіб KIO для спостереження за схованками",
         "Name[x-test]": "xxStash KIO slave watcherxx",
+        "Name[zh_CN]": "Stash KIO 从属程序监视程序",
         "ServiceTypes": [
             "KDEDModule"
         ]
