@@ -32,7 +32,7 @@ The Stash File System runs in the KDE Daemon (kded5) container process. An objec
 
 ## Installation
 
-Make sure you have KF5 backports with all the [KDE dependency libraries](https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source/Install_the_dependencies) installed before you build!
+Make sure you have KF5 with all the [KDE dependency libraries](https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source/Install_the_dependencies) installed before you build!
 
 Clone master to your favorite folder and run:
 
