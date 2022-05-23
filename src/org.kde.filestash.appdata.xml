@@ -25,6 +25,7 @@
   <name xml:lang="hi">फ़ाइल-स्टेश</name>
   <name xml:lang="id">FileStash</name>
   <name xml:lang="it">FileStash</name>
+  <name xml:lang="ka">FileStash</name>
   <name xml:lang="ko">FileStash</name>
   <name xml:lang="nl">FileStash</name>
   <name xml:lang="nn">FileStash</name>
@@ -57,6 +58,7 @@
   <summary xml:lang="hi">एक हलका साधन जो केडीई अनुप्रयोगों के लिए वर्चुअल फ़ोल्डर का समर्थन देता है।</summary>
   <summary xml:lang="id">Sebuah solusi yang ringan untuk dukungan folder virtual dalam Aplikasi KDE</summary>
   <summary xml:lang="it">Una soluzione leggera per il supporto delle cartelle virtuali nelle applicazioni KDE</summary>
+  <summary xml:lang="ka">ვირტუალური საქაღალდეების მხარდაჭერა KDE-ის აპლიკაციებში</summary>
   <summary xml:lang="ko">KDE 프로그램의 가벼운 가상 폴더 지원</summary>
   <summary xml:lang="nl">Een lichtgewicht oplossing voor ondersteuning van virtuele mappen in KDE Applications</summary>
   <summary xml:lang="nn">Enkel løysing for støtte av virtuelle mapper i program frå KDE</summary>
