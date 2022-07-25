@@ -23,6 +23,7 @@
 #include "fs.h"
 
 #include <QStringList>
+#include <QVariant>
 
 #include <KDEDModule>
 
