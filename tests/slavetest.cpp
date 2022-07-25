@@ -60,7 +60,7 @@ void SlaveTest::initTestCase()
     if (replyMessage.type() == QDBusMessage::ErrorMessage) {
         qDebug() << "Launching fallback daemon";
         const QString program = "./testdaemon";
-        stashDaemonProcess->start(program);
+        stashDaemonProcess->start(program, QStringList{});
     }
 
     replyMessage = QDBusConnection::sessionBus().call(msg);
