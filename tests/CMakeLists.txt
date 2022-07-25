@@ -14,12 +14,12 @@ add_test(slavetest slavetest)
 target_link_libraries(slavetest
     KF5::KIOCore
     KF5::DBusAddons
-    Qt5::Core
+    Qt::Core
     KF5::I18n
-    Qt5::DBus
+    Qt::DBus
     KF5::KIOCore
     KF5::Solid
-    Qt5::Test
+    Qt::Test
 )
 
 #next target
@@ -35,6 +35,6 @@ add_executable(testdaemon ${testdaemon_SRCS})
 target_link_libraries(testdaemon
     KF5::KIOCore
     KF5::DBusAddons
-    Qt5::DBus
-    Qt5::Core
+    Qt::DBus
+    Qt::Core
 )

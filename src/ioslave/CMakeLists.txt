@@ -3,7 +3,7 @@
 add_library(kio_filestash MODULE ioslave.cpp)
 
 target_link_libraries (kio_filestash
-    Qt5::DBus
+    Qt::DBus
     KF5::KIOCore
     KF5::I18n
     KF5::ConfigCore
