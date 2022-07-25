@@ -1,6 +1,6 @@
 project(KIOFileStash)
 cmake_minimum_required(VERSION 3.5)
-set(QT5_MIN_VERSION "5.4.0")
+set(QT5_MIN_VERSION "5.15.0")
 set(KF5_MIN_VERSION "5.22.0")
 
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)

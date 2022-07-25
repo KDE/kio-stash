@@ -176,7 +176,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
 
 FileStash::dirList FileStash::createDirListItem(const QString &fileInfo)
 {
-    QStringList strings = fileInfo.split("::", QString::KeepEmptyParts);
+    QStringList strings = fileInfo.split("::", Qt::KeepEmptyParts);
     FileStash::dirList item;
     if (strings.at(0) == "dir") {
         item.type = FileStash::NodeType::DirectoryNode;

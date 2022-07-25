@@ -181,7 +181,7 @@ void StashNotifier::removeWatchedPath(const QString &filePath)
 void StashNotifier::removePath(const QString &path)
 {
     QString encodedName = fileInfo(path);
-    QString filePath = encodedName.split("::", QString::KeepEmptyParts).at(2);
+    QString filePath = encodedName.split("::", Qt::KeepEmptyParts).at(2);
     dirWatch->removeFile(filePath);
     fileSystem->delEntry(path);
     emit listChanged();
