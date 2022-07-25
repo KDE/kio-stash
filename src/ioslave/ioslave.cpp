@@ -111,7 +111,7 @@ void FileStash::stat(const QUrl &url)
         QString fileInfo = setFileInfo(url);
         FileStash::dirList item = createDirListItem(fileInfo);
         if (!createUDSEntry(entry, item)) {
-            error(KIO::ERR_SLAVE_DEFINED, i18n("Could not stat."));
+            error(KIO::ERR_WORKER_DEFINED, i18n("Could not stat."));
             return;
         }
     }
@@ -206,7 +206,7 @@ void FileStash::listDir(const QUrl &url)
         listEntry(entry);
     }
     if (fileList.at(0) == "error::error::InvalidNode") {
-        error(KIO::ERR_SLAVE_DEFINED, i18n("The file either does not exist or has not been stashed yet."));
+        error(KIO::ERR_WORKER_DEFINED, i18n("The file either does not exist or has not been stashed yet."));
     } else {
         for (auto it = fileList.begin(); it != fileList.end(); ++it) {
             entry.clear();
@@ -214,7 +214,7 @@ void FileStash::listDir(const QUrl &url)
             if (createUDSEntry(entry, item)) {
                 listEntry(entry);
             } else {
-                error(KIO::ERR_SLAVE_DEFINED, i18n("The UDS Entry could not be created."));
+                error(KIO::ERR_WORKER_DEFINED, i18n("The UDS Entry could not be created."));
                 return;
             }
         }
@@ -236,7 +236,7 @@ void FileStash::mkdir(const QUrl &url, int permissions)
     if (replyMessage.type() != QDBusMessage::ErrorMessage) {
         finished();
     } else {
-        error(KIO::ERR_SLAVE_DEFINED, i18n("Could not create a directory"));
+        error(KIO::ERR_WORKER_DEFINED, i18n("Could not create a directory"));
     }
 }
 
@@ -335,23 +335,23 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
         if (copyFileToStash(src, newDestPath, flags)) {
             finished();
         } else {
-            error(KIO::ERR_SLAVE_DEFINED, i18n("Could not copy."));
+            error(KIO::ERR_WORKER_DEFINED, i18n("Could not copy."));
         }
         return;
     } else if (src.scheme() == "stash" && dest.scheme() != "stash") {
         if (!copyStashToFile(src, newDestPath, flags)) {
-            error(KIO::ERR_SLAVE_DEFINED, i18n("Could not copy."));
+            error(KIO::ERR_WORKER_DEFINED, i18n("Could not copy."));
         }
         return;
     } else if (src.scheme() == "stash" && dest.scheme() == "stash") {
         if (copyStashToStash(src, newDestPath, flags)) {
             finished();
         } else {
-            error(KIO::ERR_SLAVE_DEFINED, i18n("Could not copy."));
+            error(KIO::ERR_WORKER_DEFINED, i18n("Could not copy."));
         }
         return;
     } else if (dest.scheme() == "mtp") {
-        error(KIO::ERR_SLAVE_DEFINED, i18n("Copying to mtp slaves is still under development!"));
+        error(KIO::ERR_WORKER_DEFINED, i18n("Copying to mtp slaves is still under development!"));
     } else {
         KIO::ForwardingSlaveBase::copy(item.targetUrl(), newDestPath, permissions, flags);
     }
@@ -364,7 +364,7 @@ void FileStash::del(const QUrl &url, bool isFile)
     if (deletePath(url)) {
         finished();
     } else {
-        error(KIO::ERR_SLAVE_DEFINED, QString("Could not reach the stash daemon"));
+        error(KIO::ERR_WORKER_DEFINED, QString("Could not reach the stash daemon"));
     }
 }
 
@@ -400,14 +400,14 @@ void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
                 finished();
             }
         } else {
-            error(KIO::ERR_SLAVE_DEFINED, i18n("Could not rename."));
+            error(KIO::ERR_WORKER_DEFINED, i18n("Could not rename."));
         }
         return;
     } else if (src.scheme() == "file" && dest.scheme() == "stash") {
         if (copyFileToStash(src, dest, flags)) {
             finished();
         } else {
-            error(KIO::ERR_SLAVE_DEFINED, i18n("Could not rename."));
+            error(KIO::ERR_WORKER_DEFINED, i18n("Could not rename."));
         }
         return;
     } else if (src.scheme() == "stash" && dest.scheme() == "file") {
@@ -416,7 +416,7 @@ void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
                 return;
             }
         } else {
-            error(KIO::ERR_SLAVE_DEFINED, i18n("Could not rename."));
+            error(KIO::ERR_WORKER_DEFINED, i18n("Could not rename."));
         }
     }
 }
