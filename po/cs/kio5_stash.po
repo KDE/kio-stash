@@ -1,0 +1,53 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Vít Pelčák <vit@pelcak.org>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 02:53+0200\n"
+"PO-Revision-Date: 2017-07-03 16:04+0100\n"
+"Last-Translator: Vít Pelčák <vit@pelcak.org>\n"
+"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: ioslave/ioslave.cpp:114
+#, kde-format
+msgid "Could not stat."
+msgstr ""
+
+#: ioslave/ioslave.cpp:209
+#, kde-format
+msgid "The file either does not exist or has not been stashed yet."
+msgstr ""
+
+#: ioslave/ioslave.cpp:217
+#, kde-format
+msgid "The UDS Entry could not be created."
+msgstr ""
+
+#: ioslave/ioslave.cpp:239
+#, kde-format
+msgid "Could not create a directory"
+msgstr "Nelze vytvořit adresář."
+
+#: ioslave/ioslave.cpp:338 ioslave/ioslave.cpp:343 ioslave/ioslave.cpp:350
+#, kde-format
+msgid "Could not copy."
+msgstr "Nelze kopírovat."
+
+#: ioslave/ioslave.cpp:354
+#, kde-format
+msgid "Copying to mtp slaves is still under development!"
+msgstr ""
+
+#: ioslave/ioslave.cpp:403 ioslave/ioslave.cpp:410 ioslave/ioslave.cpp:419
+#, kde-format
+msgid "Could not rename."
+msgstr "Nelze přejmenovat."

@@ -1,0 +1,53 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# scootergrisen, 2017.
+msgid ""
+msgstr ""
+"Project-Id-Version: kio5_stash\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 02:53+0200\n"
+"PO-Revision-Date: 2017-11-12 11:12+0200\n"
+"Last-Translator: scootergrisen\n"
+"Language-Team: Danish\n"
+"Language: da\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: ioslave/ioslave.cpp:114
+#, kde-format
+msgid "Could not stat."
+msgstr "Kunne ikke stat."
+
+#: ioslave/ioslave.cpp:209
+#, kde-format
+msgid "The file either does not exist or has not been stashed yet."
+msgstr ""
+"Enten findes filen ikke eller også er den endnu ikke bliver lagt i "
+"gemmestedet."
+
+#: ioslave/ioslave.cpp:217
+#, kde-format
+msgid "The UDS Entry could not be created."
+msgstr "UDS-posten kunne ikke oprettes."
+
+#: ioslave/ioslave.cpp:239
+#, kde-format
+msgid "Could not create a directory"
+msgstr "Kunne ikke oprette en mappe"
+
+#: ioslave/ioslave.cpp:338 ioslave/ioslave.cpp:343 ioslave/ioslave.cpp:350
+#, kde-format
+msgid "Could not copy."
+msgstr "Kunne ikke kopiere."
+
+#: ioslave/ioslave.cpp:354
+#, kde-format
+msgid "Copying to mtp slaves is still under development!"
+msgstr "Kopiering til mtp-slaver er stadig under udvikling!"
+
+#: ioslave/ioslave.cpp:403 ioslave/ioslave.cpp:410 ioslave/ioslave.cpp:419
+#, kde-format
+msgid "Could not rename."
+msgstr "Kunne ikke omdøbe."

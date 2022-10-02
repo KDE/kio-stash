@@ -1,0 +1,53 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the kio-stash package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2018.
+msgid ""
+msgstr ""
+"Project-Id-Version: kio-stash\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 02:53+0200\n"
+"PO-Revision-Date: 2018-08-24 07:53+0100\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: ioslave/ioslave.cpp:114
+#, kde-format
+msgid "Could not stat."
+msgstr "Kunde inte hämta status."
+
+#: ioslave/ioslave.cpp:209
+#, kde-format
+msgid "The file either does not exist or has not been stashed yet."
+msgstr "Antingen finns inte filen, eller så har den ännu inte gömts undan."
+
+#: ioslave/ioslave.cpp:217
+#, kde-format
+msgid "The UDS Entry could not be created."
+msgstr "UDS-posten kunde inte skapas."
+
+#: ioslave/ioslave.cpp:239
+#, kde-format
+msgid "Could not create a directory"
+msgstr "Kunde inte skapa en katalog"
+
+#: ioslave/ioslave.cpp:338 ioslave/ioslave.cpp:343 ioslave/ioslave.cpp:350
+#, kde-format
+msgid "Could not copy."
+msgstr "Kunde inte kopiera."
+
+#: ioslave/ioslave.cpp:354
+#, kde-format
+msgid "Copying to mtp slaves is still under development!"
+msgstr "Kopiering till MTP-slavar är under utveckling."
+
+#: ioslave/ioslave.cpp:403 ioslave/ioslave.cpp:410 ioslave/ioslave.cpp:419
+#, kde-format
+msgid "Could not rename."
+msgstr "Kunde inte byta namn."

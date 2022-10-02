@@ -1,0 +1,56 @@
+# Translation of kio5_stash.po to Catalan
+# Copyright (C) 2017 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Josep M. Ferrer <txemaq@gmail.com>, 2017.
+msgid ""
+msgstr ""
+"Project-Id-Version: kio-stash\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 02:53+0200\n"
+"PO-Revision-Date: 2017-06-30 19:18+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: ioslave/ioslave.cpp:114
+#, kde-format
+msgid "Could not stat."
+msgstr "No s'ha pogut fer «stat»."
+
+#: ioslave/ioslave.cpp:209
+#, kde-format
+msgid "The file either does not exist or has not been stashed yet."
+msgstr "El fitxer no existeix o encara no s'ha reservat temporalment."
+
+#: ioslave/ioslave.cpp:217
+#, kde-format
+msgid "The UDS Entry could not be created."
+msgstr "No s'ha pogut crear l'entrada UDS."
+
+#: ioslave/ioslave.cpp:239
+#, kde-format
+msgid "Could not create a directory"
+msgstr "No s'ha pogut crear el directori"
+
+#: ioslave/ioslave.cpp:338 ioslave/ioslave.cpp:343 ioslave/ioslave.cpp:350
+#, kde-format
+msgid "Could not copy."
+msgstr "No s'ha pogut copiar."
+
+#: ioslave/ioslave.cpp:354
+#, kde-format
+msgid "Copying to mtp slaves is still under development!"
+msgstr "La còpia als esclaus MTP encara està en desenvolupament!"
+
+#: ioslave/ioslave.cpp:403 ioslave/ioslave.cpp:410 ioslave/ioslave.cpp:419
+#, kde-format
+msgid "Could not rename."
+msgstr "No s'ha pogut reanomenar."

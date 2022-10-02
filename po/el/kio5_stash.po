@@ -1,0 +1,53 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stelios <sstavra@gmail.com>, 2017.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 02:53+0200\n"
+"PO-Revision-Date: 2017-09-26 17:23+0200\n"
+"Last-Translator: Stelios <sstavra@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: ioslave/ioslave.cpp:114
+#, kde-format
+msgid "Could not stat."
+msgstr "Αδυναμία να τηρηθεί."
+
+#: ioslave/ioslave.cpp:209
+#, kde-format
+msgid "The file either does not exist or has not been stashed yet."
+msgstr "Το αρχείο ή δεν υπάρχει ή δεν έχει μπει ακόμη στην άκρη."
+
+#: ioslave/ioslave.cpp:217
+#, kde-format
+msgid "The UDS Entry could not be created."
+msgstr "Τα δεδομένα UDS δεν μπορούν να δημιουργηθούν."
+
+#: ioslave/ioslave.cpp:239
+#, kde-format
+msgid "Could not create a directory"
+msgstr "Αδυναμία δημιουργίας καταλόγου"
+
+#: ioslave/ioslave.cpp:338 ioslave/ioslave.cpp:343 ioslave/ioslave.cpp:350
+#, kde-format
+msgid "Could not copy."
+msgstr "Αδυναμία αντιγραφής."
+
+#: ioslave/ioslave.cpp:354
+#, kde-format
+msgid "Copying to mtp slaves is still under development!"
+msgstr "Η αντιγραφή σε mtp slaves είναι ακόμη υπό κατασκευή!"
+
+#: ioslave/ioslave.cpp:403 ioslave/ioslave.cpp:410 ioslave/ioslave.cpp:419
+#, kde-format
+msgid "Could not rename."
+msgstr "Αδυναμία μετονομασίας:"
