@@ -1,5 +1,7 @@
+cmake_minimum_required(VERSION 3.16)
+
 project(KIOFileStash)
-cmake_minimum_required(VERSION 3.5)
+
 set(QT_MIN_VERSION "5.15.0")
 set(KF5_MIN_VERSION "5.96.0")
 set(KDE_COMPILERSETTINGS_LEVEL "5.84.0")
