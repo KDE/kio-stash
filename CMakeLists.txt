@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 
 project(KIOFileStash)
 
-set(QT_MIN_VERSION "5.15.0")
-set(KF5_MIN_VERSION "5.96.0")
+set(QT_MIN_VERSION "5.15.2")
+set(KF5_MIN_VERSION "5.101.0")
 set(KDE_COMPILERSETTINGS_LEVEL "5.84.0")
 
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
