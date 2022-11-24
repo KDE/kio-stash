@@ -39,4 +39,6 @@ add_subdirectory(dbus)
 add_subdirectory(src)
 add_subdirectory(tests)
 
+ki18n_install(po)
+
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
