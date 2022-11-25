@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "ioslave.h"
+#include "filestash.h"
 
 #include <QDebug>
 #include <QMimeType>
@@ -41,7 +41,7 @@
 class KIOPluginForMetaData : public QObject
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.kde.kio.worker.filestash" FILE "ioslave.json")
+    Q_PLUGIN_METADATA(IID "org.kde.kio.worker.filestash" FILE "filestash.json")
 };
 
 extern "C" {
@@ -416,4 +416,4 @@ bool FileStash::isRoot(const QString &string)
     return false;
 }
 
-#include "ioslave.moc"
+#include "filestash.moc"

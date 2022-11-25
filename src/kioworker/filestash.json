@@ -2,7 +2,6 @@
     "KDE-KIO-Protocols" : {
         "stash": {
             "Class": ":local",
-            "X-DocPath": "kioslave5/kio_filestash.html",
 
             "listing": [
                 "Name",
@@ -13,7 +12,6 @@
                 "Link"
             ],
 
-            "exec": "kf5/kio/filestash",
             "input": "none",
             "fileNameUsedForCopying": "Name",
             "output": "filesystem",

@@ -1,6 +1,6 @@
-# build and install the staging ioslave
+# build and install the staging KIO worker
 
-add_library(kio_filestash MODULE ioslave.cpp)
+add_library(kio_filestash MODULE filestash.cpp)
 
 target_link_libraries (kio_filestash
     Qt::DBus

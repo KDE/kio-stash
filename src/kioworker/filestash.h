@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef IOSLAVE_H
-#define IOSLAVE_H
+#ifndef FILESTASH_H
+#define FILESTASH_H
 
 #include <QObject>
 #include <QString>
