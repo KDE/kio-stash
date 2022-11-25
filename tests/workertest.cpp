@@ -340,9 +340,7 @@ void WorkerTest::moveToFileFromStash()
 
     moveFromStash(src, dest);
     KIO::UDSEntry entry;
-    statUrl(src, entry);
-    KFileItem item(entry, src);
-    QVERIFY(item.name() != m_stashTestFile);
+    QVERIFY(!statUrl(src, entry));
     QVERIFY(QFile::exists(dest.toLocalFile()));
 }
 
@@ -366,12 +364,10 @@ void WorkerTest::renameFileInStash()
 
     moveFromStash(src, dest);
 
-    statUrl(src, entry);
-    KFileItem item(entry, src);
-    QVERIFY(item.name() != m_stashFileForRename);
+    QVERIFY(!statUrl(src, entry));
 
     statUrl(dest, entry);
-    item = KFileItem(entry, src);
+    KFileItem item(entry, src);
     QVERIFY(item.name() == m_newStashFileName);
 }
 
@@ -381,9 +377,7 @@ void WorkerTest::delRootFile()
     QUrl url("stash:/" + m_stashTestFile);
     deleteFromStash(url);
     KIO::UDSEntry entry;
-    QVERIFY(statUrl(url, entry));
-    KFileItem item(entry, url);
-    QVERIFY(item.name() != m_stashTestFile);
+    QVERIFY(!statUrl(url, entry));
 }
 
 void WorkerTest::delFileInDirectory()
@@ -391,9 +385,7 @@ void WorkerTest::delFileInDirectory()
     QUrl url("stash:/" + m_stashTestFolder + '/' + m_stashTestFileInSubDirectory);
     deleteFromStash(url);
     KIO::UDSEntry entry;
-    QVERIFY(statUrl(url, entry));
-    KFileItem item(entry, url);
-    QVERIFY(item.name() != m_stashTestFileInSubDirectory);
+    QVERIFY(!statUrl(url, entry));
 }
 
 void WorkerTest::delDirectory()
@@ -401,9 +393,7 @@ void WorkerTest::delDirectory()
     QUrl url("stash:/" + m_stashTestFolder);
     deleteFromStash(url);
     KIO::UDSEntry entry;
-    QVERIFY(statUrl(url, entry));
-    KFileItem item(entry, url);
-    QVERIFY(item.name() != m_stashTestFolder);
+    QVERIFY(!statUrl(url, entry));
 }
 
 void WorkerTest::init()
