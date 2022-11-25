@@ -118,7 +118,7 @@ QString StashNotifier::encodeString(StashFileSystem::StashNodeData nodeData, con
     return encodedString;
 }
 
-QStringList StashNotifier::fileList(const QString &path) //forwards list over QDBus to the KIO slave
+QStringList StashNotifier::fileList(const QString &path) //forwards list over QDBus to the KIO worker
 {
     QStringList contents;
     StashFileSystem::StashNodeData node = fileSystem->findNode(path);
@@ -132,7 +132,7 @@ QStringList StashNotifier::fileList(const QString &path) //forwards list over QD
     return contents;
 }
 
-QString StashNotifier::fileInfo(const QString &path) //forwards data of a single file to the KIO slave
+QString StashNotifier::fileInfo(const QString &path) //forwards data of a single file to the KIO worker
 {
     QString fileData;
     StashFileSystem::StashNodeData node = fileSystem->findNode(path);

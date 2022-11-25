@@ -1,4 +1,4 @@
-#build and install the daemon for the ioslave
+#build and install the daemon for the KIO worker
 
 add_library(stashnotifier MODULE stashnotifier.cpp fs.cpp stash_adaptor.cpp)
 
