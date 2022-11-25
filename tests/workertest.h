@@ -17,21 +17,21 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef SLAVETEST_H
-#define SLAVETEST_H
+#ifndef WORKERTEST_H
+#define WORKERTEST_H
 
 #include <QObject>
 #include <KIO/Job>
 #include <QProcess>
 #include <QString>
 
-class SlaveTest : public QObject
+class WorkerTest : public QObject
 {
     Q_OBJECT
 
 public:
-    SlaveTest();
-    ~SlaveTest() {}
+    WorkerTest();
+    ~WorkerTest() {}
 
     enum NodeType {
         DirectoryNode,

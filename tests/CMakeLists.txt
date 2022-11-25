@@ -1,17 +1,17 @@
-#build the target for the test cases for the ioslave
+#build the target for the test cases for the KIO worker
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/.. )
 
-set(slavetest_SRCS
-    slavetest.cpp
+set(workertest_SRCS
+    workertest.cpp
 )
 
 enable_testing()
 set(CMAKE_AUTOMOC_ON)
-add_executable(slavetest ${slavetest_SRCS})
-add_test(slavetest slavetest)
+add_executable(workertest ${workertest_SRCS})
+add_test(workertest workertest)
 
-target_link_libraries(slavetest
+target_link_libraries(workertest
     KF5::KIOCore
     KF5::DBusAddons
     Qt::Core
