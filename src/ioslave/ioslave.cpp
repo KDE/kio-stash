@@ -41,22 +41,22 @@
 class KIOPluginForMetaData : public QObject
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.kde.kio.slave.filestash" FILE "ioslave.json")
+    Q_PLUGIN_METADATA(IID "org.kde.kio.worker.filestash" FILE "ioslave.json")
 };
 
 extern "C" {
     int Q_DECL_EXPORT kdemain(int argc, char **argv)
     {
         QCoreApplication app(argc, argv);
-        FileStash slave(argv[2], argv[3]);
-        slave.dispatchLoop();
+        FileStash worker(argv[2], argv[3]);
+        worker.dispatchLoop();
         return 0;
     }
 }
 
 FileStash::FileStash(const QByteArray &pool, const QByteArray &app,
                      const QString &daemonService, const QString &daemonPath) :
-    KIO::ForwardingSlaveBase("stash", pool, app),
+    KIO::ForwardingWorkerBase("stash", pool, app),
     m_daemonService(daemonService),
     m_daemonPath(daemonPath)
 {}
@@ -102,7 +102,7 @@ QString FileStash::setFileInfo(const QUrl &url)
     return received.value();
 }
 
-void FileStash::stat(const QUrl &url)
+KIO::WorkerResult FileStash::stat(const QUrl &url)
 {
     KIO::UDSEntry entry;
     if (isRoot(url.path())) {
@@ -111,12 +111,11 @@ void FileStash::stat(const QUrl &url)
         QString fileInfo = setFileInfo(url);
         FileStash::dirList item = createDirListItem(fileInfo);
         if (!createUDSEntry(entry, item)) {
-            error(KIO::ERR_WORKER_DEFINED, i18n("Could not stat."));
-            return;
+            return KIO::WorkerResult::fail(KIO::ERR_DOES_NOT_EXIST, url.toDisplayString());
         }
     }
     statEntry(entry);
-    finished();
+    return KIO::WorkerResult::pass();
 }
 
 bool FileStash::statUrl(const QUrl &url, KIO::UDSEntry &entry)
@@ -143,8 +142,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
         entry.fastInsert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
         break;
     case NodeType::InvalidNode:
-        entry.fastInsert(KIO::UDSEntry::UDS_NAME, fileItem.filePath);
-        break;
+        return false;
     default:
         QByteArray physicalPath_c = QFile::encodeName(fileItem.source);
         QT_STATBUF buff;
@@ -192,12 +190,11 @@ FileStash::dirList FileStash::createDirListItem(const QString &fileInfo)
     return item;
 }
 
-void FileStash::listDir(const QUrl &url)
+KIO::WorkerResult FileStash::listDir(const QUrl &url)
 {
     QStringList fileList = setFileList(url);
     if (!fileList.size()) {
-        finished();
-        return;
+        return KIO::WorkerResult::pass();
     }
     FileStash::dirList item;
     KIO::UDSEntry entry;
@@ -206,23 +203,21 @@ void FileStash::listDir(const QUrl &url)
         listEntry(entry);
     }
     if (fileList.at(0) == "error::error::InvalidNode") {
-        error(KIO::ERR_WORKER_DEFINED, i18n("The file either does not exist or has not been stashed yet."));
-    } else {
-        for (auto it = fileList.begin(); it != fileList.end(); ++it) {
-            entry.clear();
-            item = createDirListItem(*it);
-            if (createUDSEntry(entry, item)) {
-                listEntry(entry);
-            } else {
-                error(KIO::ERR_WORKER_DEFINED, i18n("The UDS Entry could not be created."));
-                return;
-            }
-        }
-        finished();
+        return KIO::WorkerResult::fail(KIO::ERR_WORKER_DEFINED, i18n("The file either does not exist or has not been stashed yet."));
     }
+    for (auto it = fileList.begin(); it != fileList.end(); ++it) {
+        entry.clear();
+        item = createDirListItem(*it);
+        if (createUDSEntry(entry, item)) {
+            listEntry(entry);
+        } else {
+            return KIO::WorkerResult::fail(KIO::ERR_WORKER_DEFINED, i18n("The UDS Entry could not be created."));
+        }
+    }
+    return KIO::WorkerResult::pass();
 }
 
-void FileStash::mkdir(const QUrl &url, int permissions)
+KIO::WorkerResult FileStash::mkdir(const QUrl &url, int permissions)
 {
     Q_UNUSED(permissions)
 
@@ -233,11 +228,10 @@ void FileStash::mkdir(const QUrl &url, int permissions)
     QString destinationPath = url.path();
     msg << "" << destinationPath << NodeType::DirectoryNode;
     replyMessage = QDBusConnection::sessionBus().call(msg);
-    if (replyMessage.type() != QDBusMessage::ErrorMessage) {
-        finished();
-    } else {
-        error(KIO::ERR_WORKER_DEFINED, i18n("Could not create a directory"));
+    if (replyMessage.type() == QDBusMessage::ErrorMessage) {
+        return KIO::WorkerResult::fail(KIO::ERR_WORKER_DEFINED, i18n("Could not create a directory"));
     }
+    return KIO::WorkerResult::pass();
 }
 
 bool FileStash::copyFileToStash(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
@@ -276,15 +270,13 @@ bool FileStash::copyStashToFile(const QUrl &src, const QUrl &dest, KIO::JobFlags
     const QString destInfo = setFileInfo(src);
     const FileStash::dirList fileItem = createDirListItem(destInfo);
 
-    KIO::UDSEntry entry;
-
     if (fileItem.type != NodeType::DirectoryNode) {
         QByteArray physicalPath_c = QFile::encodeName(fileItem.source);
         QT_STATBUF buff;
         QT_LSTAT(physicalPath_c, &buff);
         mode_t access = buff.st_mode & 07777;
-        KIO::ForwardingSlaveBase::copy(QUrl::fromLocalFile(fileItem.source), dest, access, flags);
-        return true;
+        const auto result = KIO::ForwardingWorkerBase::copy(QUrl::fromLocalFile(fileItem.source), dest, access, flags);
+        return result.success();
     }
     return false;
 }
@@ -323,7 +315,7 @@ bool FileStash::copyStashToStash(const QUrl &src, const QUrl &dest, KIO::JobFlag
     }
 }
 
-void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
+KIO::WorkerResult FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags)
 {
     KIO::UDSEntry entry;
     statUrl(src, entry);
@@ -333,39 +325,37 @@ void FileStash::copy(const QUrl &src, const QUrl &dest, int permissions, KIO::Jo
 
     if (src.scheme() != "stash" && dest.scheme() == "stash") {
         if (copyFileToStash(src, newDestPath, flags)) {
-            finished();
-        } else {
-            error(KIO::ERR_WORKER_DEFINED, i18n("Could not copy."));
+            return KIO::WorkerResult::pass();
         }
-        return;
-    } else if (src.scheme() == "stash" && dest.scheme() != "stash") {
-        if (!copyStashToFile(src, newDestPath, flags)) {
-            error(KIO::ERR_WORKER_DEFINED, i18n("Could not copy."));
-        }
-        return;
-    } else if (src.scheme() == "stash" && dest.scheme() == "stash") {
-        if (copyStashToStash(src, newDestPath, flags)) {
-            finished();
-        } else {
-            error(KIO::ERR_WORKER_DEFINED, i18n("Could not copy."));
-        }
-        return;
-    } else if (dest.scheme() == "mtp") {
-        error(KIO::ERR_WORKER_DEFINED, i18n("Copying to mtp slaves is still under development!"));
-    } else {
-        KIO::ForwardingSlaveBase::copy(item.targetUrl(), newDestPath, permissions, flags);
+
+        return KIO::WorkerResult::fail(KIO::ERR_WORKER_DEFINED, i18n("Could not copy."));
     }
+    if (src.scheme() == "stash" && dest.scheme() != "stash") {
+        if (copyStashToFile(src, newDestPath, flags)) {
+            return KIO::WorkerResult::pass();
+        }
+        return KIO::WorkerResult::fail(KIO::ERR_WORKER_DEFINED, i18n("Could not copy."));
+    }
+    if (src.scheme() == "stash" && dest.scheme() == "stash") {
+        if (copyStashToStash(src, newDestPath, flags)) {
+            return KIO::WorkerResult::pass();
+        }
+        return KIO::WorkerResult::fail(KIO::ERR_WORKER_DEFINED, i18n("Could not copy."));
+    }
+    if (dest.scheme() == "mtp") {
+        return KIO::WorkerResult::fail(KIO::ERR_WORKER_DEFINED, i18n("Copying to mtp workers is still under development!"));
+    }
+    return KIO::ForwardingWorkerBase::copy(item.targetUrl(), newDestPath, permissions, flags);
 }
 
-void FileStash::del(const QUrl &url, bool isFile)
+KIO::WorkerResult FileStash::del(const QUrl &url, bool isFile)
 {
     Q_UNUSED(isFile)
 
     if (deletePath(url)) {
-        finished();
-    } else {
-        error(KIO::ERR_WORKER_DEFINED, QString("Could not reach the stash daemon"));
+        return KIO::WorkerResult::pass();
     }
+    return KIO::WorkerResult::fail(KIO::ERR_WORKER_DEFINED, QString("Could not reach the stash daemon"));
 }
 
 bool FileStash::deletePath(const QUrl &url)
@@ -391,34 +381,31 @@ bool FileStash::deletePath(const QUrl &url)
     }
 }
 
-void FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
+KIO::WorkerResult FileStash::rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags)
 {
-    KIO::UDSEntry entry;
     if (src.scheme() == "stash" && dest.scheme() == "stash") {
         if (copyStashToStash(src, dest, flags)) {
             if (deletePath(src)) {
-                finished();
+                return KIO::WorkerResult::pass();
             }
-        } else {
-            error(KIO::ERR_WORKER_DEFINED, i18n("Could not rename."));
         }
-        return;
-    } else if (src.scheme() == "file" && dest.scheme() == "stash") {
+        return KIO::WorkerResult::fail(KIO::ERR_WORKER_DEFINED, i18n("Could not rename."));
+    }
+    if (src.scheme() == "file" && dest.scheme() == "stash") {
         if (copyFileToStash(src, dest, flags)) {
-            finished();
-        } else {
-            error(KIO::ERR_WORKER_DEFINED, i18n("Could not rename."));
+            return KIO::WorkerResult::pass();
         }
-        return;
-    } else if (src.scheme() == "stash" && dest.scheme() == "file") {
+        return KIO::WorkerResult::fail(KIO::ERR_WORKER_DEFINED, i18n("Could not rename."));
+    }
+    if (src.scheme() == "stash" && dest.scheme() == "file") {
         if (copyStashToFile(src, dest, flags)) {
             if (deletePath(src)) {
-                return;
+                return KIO::WorkerResult::pass();
             }
-        } else {
-            error(KIO::ERR_WORKER_DEFINED, i18n("Could not rename."));
         }
+        return KIO::WorkerResult::fail(KIO::ERR_WORKER_DEFINED, i18n("Could not rename."));
     }
+    return KIO::WorkerResult::fail();
 }
 
 bool FileStash::isRoot(const QString &string)

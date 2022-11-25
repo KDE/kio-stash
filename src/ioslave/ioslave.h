@@ -22,9 +22,9 @@
 
 #include <QObject>
 #include <QString>
-#include <KIO/ForwardingSlaveBase>
+#include <KIO/ForwardingWorkerBase>
 
-class FileStash : public KIO::ForwardingSlaveBase
+class FileStash : public KIO::ForwardingWorkerBase
 {
     Q_OBJECT
 
@@ -79,14 +79,16 @@ private:
     const QString m_daemonService;
     const QString m_daemonPath;
 
+public:
+    KIO::WorkerResult listDir(const QUrl &url) override;
+    KIO::WorkerResult copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags) override;
+    KIO::WorkerResult mkdir(const QUrl &url, int permissions) override;
+    KIO::WorkerResult del(const QUrl &url, bool isFile) override;
+    KIO::WorkerResult stat(const QUrl &url) override;
+    KIO::WorkerResult rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) override;
+
 protected:
-    void listDir(const QUrl &url) override;
-    void copy(const QUrl &src, const QUrl &dest, int permissions, KIO::JobFlags flags) override;
-    void mkdir(const QUrl &url, int permissions) override;
     bool rewriteUrl(const QUrl &url, QUrl &newUrl) override;
-    void del(const QUrl &url, bool isFile) override;
-    void stat(const QUrl &url) override;
-    void rename(const QUrl &src, const QUrl &dest, KIO::JobFlags flags) override;
 };
 
 #endif
