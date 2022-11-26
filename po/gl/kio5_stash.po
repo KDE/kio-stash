@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2019-05-20 02:53+0200\n"
+"POT-Creation-Date: 2022-11-26 00:49+0000\n"
 "PO-Revision-Date: 2017-09-07 21:30+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <kde-i18n-doc@kde.org>\n"
@@ -16,38 +16,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: ioslave/ioslave.cpp:114
-#, kde-format
-msgid "Could not stat."
-msgstr "Non se puido executar «stat»."
-
-#: ioslave/ioslave.cpp:209
+#: kioworker/filestash.cpp:206
 #, kde-format
 msgid "The file either does not exist or has not been stashed yet."
 msgstr "O ficheiro non existe ou aínda non se reservou."
 
-#: ioslave/ioslave.cpp:217
+#: kioworker/filestash.cpp:214
 #, kde-format
 msgid "The UDS Entry could not be created."
 msgstr "Non se puido crear a entrada de UDS."
 
-#: ioslave/ioslave.cpp:239
+#: kioworker/filestash.cpp:232
 #, kde-format
 msgid "Could not create a directory"
 msgstr "Non se puido crear un directorio."
 
-#: ioslave/ioslave.cpp:338 ioslave/ioslave.cpp:343 ioslave/ioslave.cpp:350
+#: kioworker/filestash.cpp:331 kioworker/filestash.cpp:337
+#: kioworker/filestash.cpp:343
 #, kde-format
 msgid "Could not copy."
 msgstr "Non se puido copiar."
 
-#: ioslave/ioslave.cpp:354
-#, kde-format
-msgid "Copying to mtp slaves is still under development!"
+#: kioworker/filestash.cpp:346
+#, fuzzy, kde-format
+#| msgid "Copying to mtp slaves is still under development!"
+msgid "Copying to mtp workers is still under development!"
 msgstr ""
 "Aínda está en desenvolvemento a funcionalidade de copiar a escravos MTP."
 
-#: ioslave/ioslave.cpp:403 ioslave/ioslave.cpp:410 ioslave/ioslave.cpp:419
+#: kioworker/filestash.cpp:392 kioworker/filestash.cpp:398
+#: kioworker/filestash.cpp:406
 #, kde-format
 msgid "Could not rename."
 msgstr "Non se puido renomear."
+
+#~ msgid "Could not stat."
+#~ msgstr "Non se puido executar «stat»."

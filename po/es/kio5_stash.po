@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kio5_stash\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2019-05-20 02:53+0200\n"
+"POT-Creation-Date: 2022-11-26 00:49+0000\n"
 "PO-Revision-Date: 2017-07-23 21:39+0200\n"
 "Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -20,37 +20,38 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 2.0\n"
 
-#: ioslave/ioslave.cpp:114
-#, kde-format
-msgid "Could not stat."
-msgstr "No se ha podido hacer «stat»."
-
-#: ioslave/ioslave.cpp:209
+#: kioworker/filestash.cpp:206
 #, kde-format
 msgid "The file either does not exist or has not been stashed yet."
 msgstr "El archivo no existe o todavía no se ha añadido al almacén temporal."
 
-#: ioslave/ioslave.cpp:217
+#: kioworker/filestash.cpp:214
 #, kde-format
 msgid "The UDS Entry could not be created."
 msgstr "No se ha podido crear la entrada UDS."
 
-#: ioslave/ioslave.cpp:239
+#: kioworker/filestash.cpp:232
 #, kde-format
 msgid "Could not create a directory"
 msgstr "No se ha podido crear un directorio"
 
-#: ioslave/ioslave.cpp:338 ioslave/ioslave.cpp:343 ioslave/ioslave.cpp:350
+#: kioworker/filestash.cpp:331 kioworker/filestash.cpp:337
+#: kioworker/filestash.cpp:343
 #, kde-format
 msgid "Could not copy."
 msgstr "No se ha podido copiar."
 
-#: ioslave/ioslave.cpp:354
-#, kde-format
-msgid "Copying to mtp slaves is still under development!"
+#: kioworker/filestash.cpp:346
+#, fuzzy, kde-format
+#| msgid "Copying to mtp slaves is still under development!"
+msgid "Copying to mtp workers is still under development!"
 msgstr "La copia en esclavos mtp está todavía en desarrollo."
 
-#: ioslave/ioslave.cpp:403 ioslave/ioslave.cpp:410 ioslave/ioslave.cpp:419
+#: kioworker/filestash.cpp:392 kioworker/filestash.cpp:398
+#: kioworker/filestash.cpp:406
 #, kde-format
 msgid "Could not rename."
 msgstr "No se ha podido cambiar el nombre."
+
+#~ msgid "Could not stat."
+#~ msgstr "No se ha podido hacer «stat»."
