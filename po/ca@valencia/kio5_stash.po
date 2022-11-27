@@ -1,15 +1,15 @@
 # Translation of kio5_stash.po to Catalan (Valencian)
-# Copyright (C) 2017 This_file_is_part_of_KDE
+# Copyright (C) 2017-2022 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Josep M. Ferrer <txemaq@gmail.com>, 2017.
+# Josep M. Ferrer <txemaq@gmail.com>, 2017, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kio-stash\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:49+0000\n"
-"PO-Revision-Date: 2017-06-30 19:18+0100\n"
+"PO-Revision-Date: 2022-11-26 13:25+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 20.12.0\n"
 
 #: kioworker/filestash.cpp:206
 #, kde-format
@@ -42,16 +42,12 @@ msgid "Could not copy."
 msgstr "No s'ha pogut copiar."
 
 #: kioworker/filestash.cpp:346
-#, fuzzy, kde-format
-#| msgid "Copying to mtp slaves is still under development!"
+#, kde-format
 msgid "Copying to mtp workers is still under development!"
-msgstr "La còpia als esclaus MTP encara està en desenvolupament!"
+msgstr "La còpia als processos de treball MTP encara està en desenvolupament!"
 
 #: kioworker/filestash.cpp:392 kioworker/filestash.cpp:398
 #: kioworker/filestash.cpp:406
 #, kde-format
 msgid "Could not rename."
 msgstr "No s'ha pogut canviar de nom."
-
-#~ msgid "Could not stat."
-#~ msgstr "No s'ha pogut fer «stat»."

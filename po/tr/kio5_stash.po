@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kio5_stash\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:49+0000\n"
-"PO-Revision-Date: 2022-04-10 13:24+0300\n"
+"PO-Revision-Date: 2022-11-26 18:47+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -15,13 +15,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.08.3\n"
 "X-POOTLE-MTIME: 1502202353.000000\n"
 
 #: kioworker/filestash.cpp:206
 #, kde-format
 msgid "The file either does not exist or has not been stashed yet."
-msgstr "Dosya mevcut değil ya da henüz saklanmamış."
+msgstr "Dosya yok veya henüz zulalanmamış."
 
 #: kioworker/filestash.cpp:214
 #, kde-format
@@ -40,10 +40,9 @@ msgid "Could not copy."
 msgstr "Kopyalanamadı."
 
 #: kioworker/filestash.cpp:346
-#, fuzzy, kde-format
-#| msgid "Copying to mtp slaves is still under development!"
+#, kde-format
 msgid "Copying to mtp workers is still under development!"
-msgstr "MTB bağımlılarına kopyalama halen geliştirme aşamasındadır!"
+msgstr "MTP işçilerine kopyalama halen geliştirme aşamasındadır!"
 
 #: kioworker/filestash.cpp:392 kioworker/filestash.cpp:398
 #: kioworker/filestash.cpp:406

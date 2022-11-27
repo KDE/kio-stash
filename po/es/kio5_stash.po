@@ -3,22 +3,23 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Automatically generated, 2017.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2017.
+# Eloy Cuadra <ecuadra@eloihr.net>, 2017, 2022.
 # Sofia Priego <spriego@darksylvania.net>, 2017.
+# Sofía Priego <spriego@darksylvania.net>, %Y.
 msgid ""
 msgstr ""
 "Project-Id-Version: kio5_stash\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:49+0000\n"
-"PO-Revision-Date: 2017-07-23 21:39+0200\n"
-"Last-Translator: Sofia Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2022-11-26 18:07+0100\n"
+"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 22.11.80\n"
 
 #: kioworker/filestash.cpp:206
 #, kde-format
@@ -42,10 +43,9 @@ msgid "Could not copy."
 msgstr "No se ha podido copiar."
 
 #: kioworker/filestash.cpp:346
-#, fuzzy, kde-format
-#| msgid "Copying to mtp slaves is still under development!"
+#, kde-format
 msgid "Copying to mtp workers is still under development!"
-msgstr "La copia en esclavos mtp está todavía en desarrollo."
+msgstr "La copia en módulos de trabajo mtp está todavía en desarrollo."
 
 #: kioworker/filestash.cpp:392 kioworker/filestash.cpp:398
 #: kioworker/filestash.cpp:406

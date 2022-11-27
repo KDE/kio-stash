@@ -1,16 +1,16 @@
 # Translation for kio5_stash.po to Euskara/Basque (eu).
-# Copyright (C) 2020, This file is copyright:
+# Copyright (C) 2020-2022, This file is copyright:
 # This file is distributed under the same license as the kio-stash package.
-# KDE euskaratzeko proiektuko arduraduna <xalba@euskalnet.net>.
+# KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>.
 #
 # Translators:
-# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2020.
+# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2020, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: kio-stash\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:49+0000\n"
-"PO-Revision-Date: 2020-07-29 19:44+0200\n"
+"PO-Revision-Date: 2022-11-26 10:41+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 20.04.3\n"
+"X-Generator: Lokalize 22.08.3\n"
 
 #: kioworker/filestash.cpp:206
 #, kde-format
@@ -42,10 +42,9 @@ msgid "Could not copy."
 msgstr "Ezin izan da kopiatu."
 
 #: kioworker/filestash.cpp:346
-#, fuzzy, kde-format
-#| msgid "Copying to mtp slaves is still under development!"
+#, kde-format
 msgid "Copying to mtp workers is still under development!"
-msgstr "MTP morroietara kopiatzea oraindik garatzen ari da!"
+msgstr "MTP beharginetara kopiatzea oraindik garatze bidean dago!"
 
 #: kioworker/filestash.cpp:392 kioworker/filestash.cpp:398
 #: kioworker/filestash.cpp:406
