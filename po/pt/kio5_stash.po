@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kio5_stash\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:49+0000\n"
-"PO-Revision-Date: 2017-06-30 10:25+0100\n"
+"PO-Revision-Date: 2022-11-28 18:22+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -35,16 +35,12 @@ msgid "Could not copy."
 msgstr "Não foi possível copiar."
 
 #: kioworker/filestash.cpp:346
-#, fuzzy, kde-format
-#| msgid "Copying to mtp slaves is still under development!"
+#, kde-format
 msgid "Copying to mtp workers is still under development!"
-msgstr "A cópia para 'slaves' MTP ainda está em desenvolvimento!"
+msgstr "A cópia para módulos de MTP ainda está em desenvolvimento!"
 
 #: kioworker/filestash.cpp:392 kioworker/filestash.cpp:398
 #: kioworker/filestash.cpp:406
 #, kde-format
 msgid "Could not rename."
 msgstr "Não foi possível mudar o nome."
-
-#~ msgid "Could not stat."
-#~ msgstr "Não foi possível obter as estatísticas."
