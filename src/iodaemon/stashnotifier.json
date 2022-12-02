@@ -49,6 +49,7 @@
         "Name[tr]": "Stash KIO işçi izleyicisi",
         "Name[uk]": "Обробник KIO для спостереження за схованками",
         "Name[x-test]": "xxStash KIO worker watcherxx",
+        "Name[zh_CN]": "Stash KIO 工作程序监视程序",
         "ServiceTypes": [
             "KDEDModule"
         ]
