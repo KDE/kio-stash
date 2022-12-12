@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2017.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2017, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:49+0000\n"
-"PO-Revision-Date: 2017-07-13 11:07+0100\n"
+"PO-Revision-Date: 2022-12-11 07:53+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 22.08.3\n"
 
 #: kioworker/filestash.cpp:206
 #, kde-format
@@ -40,10 +40,9 @@ msgid "Could not copy."
 msgstr "Nie można skopiować."
 
 #: kioworker/filestash.cpp:346
-#, fuzzy, kde-format
-#| msgid "Copying to mtp slaves is still under development!"
+#, kde-format
 msgid "Copying to mtp workers is still under development!"
-msgstr "Kopiowanie na nośniki mtp jest w trakcie rozwoju!"
+msgstr "Kopiowanie na pracowników mtp jest w trakcie rozwoju!"
 
 #: kioworker/filestash.cpp:392 kioworker/filestash.cpp:398
 #: kioworker/filestash.cpp:406
