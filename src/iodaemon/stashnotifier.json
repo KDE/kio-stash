@@ -47,6 +47,7 @@
         "Name[nl]": "Bewaker van KIO-worker opslaan",
         "Name[pl]": "Obserwator pracownika KIO stosu",
         "Name[pt]": "Monitor do módulo do KIO para repositórios temporários",
+        "Name[pt_BR]": "Monitor do KIO worker para Stash",
         "Name[sl]": "Stash KIO worker watcher",
         "Name[tr]": "Stash KIO işçi izleyicisi",
         "Name[uk]": "Обробник KIO для спостереження за схованками",
