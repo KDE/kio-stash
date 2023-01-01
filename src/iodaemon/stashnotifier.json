@@ -39,6 +39,7 @@
         "Name[ar]": "مراقب بريمج التخزين المؤقت لـ KIO",
         "Name[ca@valencia]": "Vigilant del procés de treball KIO Stash",
         "Name[ca]": "Vigilant del procés de treball KIO Stash",
+        "Name[en_GB]": "Stash KIO worker watcher",
         "Name[es]": "Módulo de trabajo KIO observador de Stash",
         "Name[eu]": "«Stash» KIO beharginaren begiralea",
         "Name[fr]": "Cacher le moniteur des processus « KIO »",
