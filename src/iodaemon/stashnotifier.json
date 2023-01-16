@@ -2,6 +2,7 @@
     "KPlugin": {
         "Description": "Monitors directories for changes",
         "Description[ar]": "يراقب تغييرات الأدلة",
+        "Description[be]": "Назіранне за зменамі ў каталогах",
         "Description[ca@valencia]": "Controla els canvis en els directoris",
         "Description[ca]": "Controla els canvis en els directoris",
         "Description[cs]": "Monitoruje změny v adresáři",
@@ -37,6 +38,7 @@
         "Description[zh_TW]": "監視目錄變更",
         "Name": "Stash KIO worker watcher",
         "Name[ar]": "مراقب بريمج التخزين المؤقت لـ KIO",
+        "Name[be]": "Stash KIO - назіральнік за часовым буферам",
         "Name[ca@valencia]": "Vigilant del procés de treball KIO Stash",
         "Name[ca]": "Vigilant del procés de treball KIO Stash",
         "Name[en_GB]": "Stash KIO worker watcher",
