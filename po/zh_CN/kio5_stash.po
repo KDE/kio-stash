@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:49+0000\n"
-"PO-Revision-Date: 2023-02-07 11:01\n"
+"PO-Revision-Date: 2023-02-15 11:04\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -20,7 +20,7 @@ msgstr ""
 #: kioworker/filestash.cpp:206
 #, kde-format
 msgid "The file either does not exist or has not been stashed yet."
-msgstr "该文件不存在，或尚未被暂存。"
+msgstr "该文件要么不存在，要么还没有被暂存。"
 
 #: kioworker/filestash.cpp:214
 #, kde-format
@@ -41,7 +41,7 @@ msgstr "无法复制。"
 #: kioworker/filestash.cpp:346
 #, kde-format
 msgid "Copying to mtp workers is still under development!"
-msgstr "复制到 MTP 的工作程序仍在开发！"
+msgstr "复制到 MTP 的工作程序尚未完成开发。"
 
 #: kioworker/filestash.cpp:392 kioworker/filestash.cpp:398
 #: kioworker/filestash.cpp:406
