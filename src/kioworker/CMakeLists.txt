@@ -4,10 +4,10 @@ add_library(kio_filestash MODULE filestash.cpp)
 
 target_link_libraries (kio_filestash
     Qt::DBus
-    KF5::KIOCore
-    KF5::I18n
-    KF5::ConfigCore
-    KF5::ConfigGui
+    KF${QT_MAJOR_VERSION}::KIOCore
+    KF${QT_MAJOR_VERSION}::I18n
+    KF${QT_MAJOR_VERSION}::ConfigCore
+    KF${QT_MAJOR_VERSION}::ConfigGui
 )
 
 set_target_properties(kio_filestash PROPERTIES OUTPUT_NAME "filestash")

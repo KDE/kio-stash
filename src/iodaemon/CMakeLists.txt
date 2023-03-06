@@ -3,8 +3,8 @@
 add_library(stashnotifier MODULE stashnotifier.cpp fs.cpp stash_adaptor.cpp)
 
 target_link_libraries(stashnotifier
-    KF5::KIOCore
-    KF5::DBusAddons
+    KF${QT_MAJOR_VERSION}::KIOCore
+    KF${QT_MAJOR_VERSION}::DBusAddons
     Qt::DBus
     Qt::Core
 )
