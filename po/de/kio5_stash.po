@@ -1,14 +1,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 # Burkhard Lück <lueck@hube-lueck.de>, 2017.
-# Frederik Schwarzer <schwarzer@kde.org>, 2022.
+# Frederik Schwarzer <schwarzer@kde.org>, 2022, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:49+0000\n"
-"PO-Revision-Date: 2022-12-19 09:38+0100\n"
+"PO-Revision-Date: 2023-04-26 20:56+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 22.07.70\n"
 
 #: kioworker/filestash.cpp:206
 #, kde-format
 msgid "The file either does not exist or has not been stashed yet."
-msgstr ""
+msgstr "Die Datei existiert nicht oder wurde noch nicht gestasht."
 
 #: kioworker/filestash.cpp:214
 #, kde-format
