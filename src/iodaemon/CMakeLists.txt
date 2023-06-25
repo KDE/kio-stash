@@ -9,4 +9,4 @@ target_link_libraries(stashnotifier
     Qt::Core
 )
 
-install(TARGETS stashnotifier DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kded)
+install(TARGETS stashnotifier DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf${QT_MAJOR_VERSION}/kded)
