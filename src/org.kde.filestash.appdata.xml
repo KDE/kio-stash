@@ -17,6 +17,7 @@
   <name xml:lang="de">FileStash</name>
   <name xml:lang="el">FileStash</name>
   <name xml:lang="en-GB">FileStash</name>
+  <name xml:lang="eo">FileStash</name>
   <name xml:lang="es">FileStash</name>
   <name xml:lang="et">Faililadu</name>
   <name xml:lang="eu">FileStash</name>
@@ -51,6 +52,7 @@
   <summary xml:lang="de">Eine leichtgewichtige Lösung für die Unterstützung von virtuellen Ordner in KDE-Anwendungen</summary>
   <summary xml:lang="el">Μια ελαφριά λύση υποστήριξης εικονικών φακέλων στις KDE Εφαρμογές</summary>
   <summary xml:lang="en-GB">A lightweight solution for virtual folder support in KDE Applications</summary>
+  <summary xml:lang="eo">Malpeza solvo por subteni virtualajn dosierujojn en KDE-Aplikaĵoj</summary>
   <summary xml:lang="es">Una solución liviana para implementar carpetas virtuales en las aplicaciones de KDE</summary>
   <summary xml:lang="et">Lihtne lahendus virtuaalsete kataloogide toetuse pakkumiseks KDE rakendustes</summary>
   <summary xml:lang="eu">KDEren aplikazioetan alegiazko karpetak erabili ahal izateko irtenbide arin bat</summary>
