@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the kio-stash package.
 #
-# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2018.
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2018, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: kio-stash\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-26 00:49+0000\n"
-"PO-Revision-Date: 2018-08-24 07:53+0100\n"
+"PO-Revision-Date: 2023-07-31 09:37+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 20.08.1\n"
 
 #: kioworker/filestash.cpp:206
 #, kde-format
@@ -39,10 +39,9 @@ msgid "Could not copy."
 msgstr "Kunde inte kopiera."
 
 #: kioworker/filestash.cpp:346
-#, fuzzy, kde-format
-#| msgid "Copying to mtp slaves is still under development!"
+#, kde-format
 msgid "Copying to mtp workers is still under development!"
-msgstr "Kopiering till MTP-slavar är under utveckling."
+msgstr "Kopiering till MTP-arbetare är under utveckling."
 
 #: kioworker/filestash.cpp:392 kioworker/filestash.cpp:398
 #: kioworker/filestash.cpp:406
