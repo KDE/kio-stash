@@ -1,8 +1,13 @@
 {
-    "KDE-KIO-Protocols" : {
+    "KDE-KIO-Protocols": {
         "stash": {
             "Class": ":local",
-
+            "copyFromFile": true,
+            "copyToFile": true,
+            "deleteRecursive": true,
+            "deleting": true,
+            "fileNameUsedForCopying": "Name",
+            "input": "none",
             "listing": [
                 "Name",
                 "Type",
@@ -11,21 +16,14 @@
                 "Access",
                 "Link"
             ],
-
-            "input": "none",
-            "fileNameUsedForCopying": "Name",
+            "makedir": true,
+            "moving": true,
             "output": "filesystem",
             "protocol": "stash",
-            "copyFromFile": true,
-            "copyToFile": true,
+            "reading": true,
             "renameFromFile": true,
             "renameToFile": true,
-            "makedir": true,
-            "writing": true,
-            "moving": true,
-            "reading": true,
-            "deleting": true,
-            "deleteRecursive": true
+            "writing": true
         }
     }
 }
