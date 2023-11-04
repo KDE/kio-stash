@@ -32,7 +32,6 @@
 #include <QDBusReply>
 #include <QCoreApplication>
 
-#include <KProtocolManager>
 #include <KLocalizedString>
 #include <KConfigGroup>
 #include <KFileItem>
