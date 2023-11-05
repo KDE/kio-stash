@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kio-stash\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-26 00:49+0000\n"
+"POT-Creation-Date: 2023-11-05 12:40+0000\n"
 "PO-Revision-Date: 2019-02-14 21:26+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -17,35 +17,35 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Lokalize 18.12.2\n"
 
-#: kioworker/filestash.cpp:206
+#: kioworker/filestash.cpp:205
 #, kde-format
 msgid "The file either does not exist or has not been stashed yet."
 msgstr "檔案不存在或者尚未暫存。"
 
-#: kioworker/filestash.cpp:214
+#: kioworker/filestash.cpp:213
 #, kde-format
 msgid "The UDS Entry could not be created."
 msgstr "無法建立 UDS 項目。"
 
-#: kioworker/filestash.cpp:232
+#: kioworker/filestash.cpp:231
 #, kde-format
 msgid "Could not create a directory"
 msgstr "無法建立目錄"
 
-#: kioworker/filestash.cpp:331 kioworker/filestash.cpp:337
-#: kioworker/filestash.cpp:343
+#: kioworker/filestash.cpp:330 kioworker/filestash.cpp:336
+#: kioworker/filestash.cpp:342
 #, kde-format
 msgid "Could not copy."
 msgstr "無法複製。"
 
-#: kioworker/filestash.cpp:346
+#: kioworker/filestash.cpp:345
 #, fuzzy, kde-format
 #| msgid "Copying to mtp slaves is still under development!"
 msgid "Copying to mtp workers is still under development!"
 msgstr "「複製到 MTP 從屬」功能仍在開發當中！"
 
-#: kioworker/filestash.cpp:392 kioworker/filestash.cpp:398
-#: kioworker/filestash.cpp:406
+#: kioworker/filestash.cpp:391 kioworker/filestash.cpp:397
+#: kioworker/filestash.cpp:405
 #, kde-format
 msgid "Could not rename."
 msgstr "無法重命名。"

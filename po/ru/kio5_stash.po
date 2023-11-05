@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-26 00:49+0000\n"
+"POT-Creation-Date: 2023-11-05 12:40+0000\n"
 "PO-Revision-Date: 2017-11-03 16:00+0300\n"
 "Last-Translator: Alexander Potashev <aspotashev@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -18,28 +18,28 @@ msgstr ""
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 2.0\n"
 
-#: kioworker/filestash.cpp:206
+#: kioworker/filestash.cpp:205
 #, kde-format
 msgid "The file either does not exist or has not been stashed yet."
 msgstr "Файл либо не существует, либо ещё не помещён в каталог-запасник."
 
-#: kioworker/filestash.cpp:214
+#: kioworker/filestash.cpp:213
 #, kde-format
 msgid "The UDS Entry could not be created."
 msgstr "Не удалось создать объект UDS."
 
-#: kioworker/filestash.cpp:232
+#: kioworker/filestash.cpp:231
 #, kde-format
 msgid "Could not create a directory"
 msgstr "Не удалось создать каталог."
 
-#: kioworker/filestash.cpp:331 kioworker/filestash.cpp:337
-#: kioworker/filestash.cpp:343
+#: kioworker/filestash.cpp:330 kioworker/filestash.cpp:336
+#: kioworker/filestash.cpp:342
 #, kde-format
 msgid "Could not copy."
 msgstr "Не удалось скопировать объект."
 
-#: kioworker/filestash.cpp:346
+#: kioworker/filestash.cpp:345
 #, fuzzy, kde-format
 #| msgid "Copying to mtp slaves is still under development!"
 msgid "Copying to mtp workers is still under development!"
@@ -47,8 +47,8 @@ msgstr ""
 "На данный момент не поддерживается копирование на устройства по протоколу "
 "MTP."
 
-#: kioworker/filestash.cpp:392 kioworker/filestash.cpp:398
-#: kioworker/filestash.cpp:406
+#: kioworker/filestash.cpp:391 kioworker/filestash.cpp:397
+#: kioworker/filestash.cpp:405
 #, kde-format
 msgid "Could not rename."
 msgstr "Не удалось переименовать объект."
