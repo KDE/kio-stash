@@ -29,10 +29,13 @@
 #include <QStandardPaths>
 #include <QDebug>
 
-#include <KIO/Job>
+#include <KFileItem>
 #include <KIO/CopyJob>
 #include <KIO/DeleteJob>
-#include <KFileItem>
+#include <KIO/Job>
+#include <KIO/ListJob>
+#include <KIO/MkdirJob>
+#include <KIO/StatJob>
 
 WorkerTest::WorkerTest() : tmpFolder("WorkerTest"),
     m_fileTestFile("TestFile"),

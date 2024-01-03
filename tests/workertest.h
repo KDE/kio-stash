@@ -20,8 +20,9 @@
 #ifndef WORKERTEST_H
 #define WORKERTEST_H
 
-#include <QObject>
 #include <KIO/Job>
+#include <KIO/UDSEntry>
+#include <QObject>
 #include <QProcess>
 #include <QString>
 

@@ -32,10 +32,11 @@
 #include <QDBusReply>
 #include <QCoreApplication>
 
-#include <KLocalizedString>
 #include <KConfigGroup>
 #include <KFileItem>
 #include <KIO/Job>
+#include <KIO/StatJob>
+#include <KLocalizedString>
 
 class KIOPluginForMetaData : public QObject
 {
