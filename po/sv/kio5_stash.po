@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kio-stash\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:40+0000\n"
+"POT-Creation-Date: 2024-01-03 00:43+0000\n"
 "PO-Revision-Date: 2023-07-31 09:37+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -27,24 +27,24 @@ msgstr "Antingen finns inte filen, eller så har den ännu inte gömts undan."
 msgid "The UDS Entry could not be created."
 msgstr "UDS-posten kunde inte skapas."
 
-#: kioworker/filestash.cpp:231
+#: kioworker/filestash.cpp:230
 #, kde-format
 msgid "Could not create a directory"
 msgstr "Kunde inte skapa en katalog"
 
-#: kioworker/filestash.cpp:330 kioworker/filestash.cpp:336
-#: kioworker/filestash.cpp:342
+#: kioworker/filestash.cpp:327 kioworker/filestash.cpp:333
+#: kioworker/filestash.cpp:339
 #, kde-format
 msgid "Could not copy."
 msgstr "Kunde inte kopiera."
 
-#: kioworker/filestash.cpp:345
+#: kioworker/filestash.cpp:342
 #, kde-format
 msgid "Copying to mtp workers is still under development!"
 msgstr "Kopiering till MTP-arbetare är under utveckling."
 
-#: kioworker/filestash.cpp:391 kioworker/filestash.cpp:397
-#: kioworker/filestash.cpp:405
+#: kioworker/filestash.cpp:387 kioworker/filestash.cpp:393
+#: kioworker/filestash.cpp:401
 #, kde-format
 msgid "Could not rename."
 msgstr "Kunde inte byta namn."

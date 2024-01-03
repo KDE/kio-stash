@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kio-stash\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:40+0000\n"
+"POT-Creation-Date: 2024-01-03 00:43+0000\n"
 "PO-Revision-Date: 2021-06-27 13:08+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: kde-hindi\n"
@@ -28,25 +28,25 @@ msgstr "फ़ाइल या तो अस्तित्व में नह�
 msgid "The UDS Entry could not be created."
 msgstr "यूडीएस फाइल का सृजन नहीं हो सका।"
 
-#: kioworker/filestash.cpp:231
+#: kioworker/filestash.cpp:230
 #, kde-format
 msgid "Could not create a directory"
 msgstr "डिरेक्ट्री नहीं बना सके"
 
-#: kioworker/filestash.cpp:330 kioworker/filestash.cpp:336
-#: kioworker/filestash.cpp:342
+#: kioworker/filestash.cpp:327 kioworker/filestash.cpp:333
+#: kioworker/filestash.cpp:339
 #, kde-format
 msgid "Could not copy."
 msgstr "प्रतिलिपि नहीं बना सके।"
 
-#: kioworker/filestash.cpp:345
+#: kioworker/filestash.cpp:342
 #, fuzzy, kde-format
 #| msgid "Copying to mtp slaves is still under development!"
 msgid "Copying to mtp workers is still under development!"
 msgstr "एमटीपी स्लेव्स में प्रतिलिपियाँ बनाना अभी भी विकास में है!"
 
-#: kioworker/filestash.cpp:391 kioworker/filestash.cpp:397
-#: kioworker/filestash.cpp:405
+#: kioworker/filestash.cpp:387 kioworker/filestash.cpp:393
+#: kioworker/filestash.cpp:401
 #, kde-format
 msgid "Could not rename."
 msgstr "नाम नहीं बदल सके।"
