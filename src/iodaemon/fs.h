@@ -30,37 +30,37 @@
 #ifndef STASHFS_H
 #define STASHFS_H
 
+#include <QDebug>
+#include <QHash>
 #include <QObject>
 #include <QPointer>
-#include <QHash>
 #include <QString>
-#include <QDebug>
 
 class StashFileSystem : public QObject
 {
     Q_OBJECT
 
 public:
-
     enum NodeType {
         DirectoryNode,
         SymlinkNode,
         FileNode,
-        InvalidNode
+        InvalidNode,
     };
 
     struct StashNodeData;
 
     typedef QHash<QString, StashNodeData> StashNode;
 
-    struct StashNodeData
-    {
-        StashNodeData(NodeType ntype) :
-            type(ntype),
-            children(nullptr)
-        {}
+    struct StashNodeData {
+        StashNodeData(NodeType ntype)
+            : type(ntype)
+            , children(nullptr)
+        {
+        }
         ~StashNodeData()
-        {}
+        {
+        }
 
         NodeType type;
         QString source;
@@ -89,7 +89,6 @@ public:
     // For debug purposes
     void displayNode(StashNode *node);
     void displayRoot();
-
 
 private:
     bool addNode(const QString &location, const StashNodeData &data);

@@ -44,7 +44,8 @@ private:
     QString encodeString(StashFileSystem::StashNodeData nodeData, const QString &path);
 
 public:
-    StashNotifier(QObject* parent, const QList<QVariant>&,
+    StashNotifier(QObject *parent,
+                  const QList<QVariant> &,
                   const QString &daemonService = "org.kde.kio.StashNotifier",
                   const QString &daemonPath = "/StashNotifier");
     ~StashNotifier();
@@ -65,9 +66,9 @@ private Q_SLOTS:
     void dirty(const QString &path);
     void created(const QString &path);
     void removeWatchedPath(const QString &filePath);
-    void displayRoot() //function to the contents of the SFS for testing
+    void displayRoot() // function to the contents of the SFS for testing
     {
-        //fileSystem->displayRoot();
+        // fileSystem->displayRoot();
     }
 };
 

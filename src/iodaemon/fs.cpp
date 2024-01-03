@@ -29,9 +29,9 @@
 
 #include "fs.h"
 
-StashFileSystem::StashFileSystem(QObject *parent) :
-    QObject(parent),
-    root(DirectoryNode)
+StashFileSystem::StashFileSystem(QObject *parent)
+    : QObject(parent)
+    , root(DirectoryNode)
 {
     root.children = new StashNode();
     displayRoot();
@@ -180,8 +180,7 @@ void StashFileSystem::deleteAllItems()
 
 void StashFileSystem::displayNode(StashNode *node)
 {
-    for (auto it = node->begin(); it != node->end(); ++it)
-    {
+    for (auto it = node->begin(); it != node->end(); ++it) {
         qDebug() << "Stash Path" << it.key();
         qDebug() << "File Path" << it.value().source;
         qDebug() << "File Type" << it.value().type;

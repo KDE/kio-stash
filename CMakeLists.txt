@@ -17,6 +17,8 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMSetupVersion)
+include(KDEClangFormat)
+include(KDEGitCommitHooks)
 include(FeatureSummary)
 
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING) #prevents implicit conversion of QString to QUrl
@@ -40,5 +42,10 @@ add_subdirectory(src)
 add_subdirectory(tests)
 
 ki18n_install(po)
+
+file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h)
+kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
+
+kde_configure_git_pre_commit_hook(CHECKS CLANG_FORMAT)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

@@ -20,16 +20,17 @@
 #ifndef FILESTASH_H
 #define FILESTASH_H
 
+#include <KIO/ForwardingWorkerBase>
 #include <QObject>
 #include <QString>
-#include <KIO/ForwardingWorkerBase>
 
 class FileStash : public KIO::ForwardingWorkerBase
 {
     Q_OBJECT
 
 public:
-    FileStash(const QByteArray &pool, const QByteArray &app,
+    FileStash(const QByteArray &pool,
+              const QByteArray &app,
               const QString &daemonService = "org.kde.kio.StashNotifier",
               const QString &daemonPath = "/StashNotifier");
     ~FileStash();
@@ -38,20 +39,21 @@ public:
         DirectoryNode,
         SymlinkNode,
         FileNode,
-        InvalidNode
+        InvalidNode,
     };
 
-    struct dirList
-    {
+    struct dirList {
         QString filePath;
         QString source;
         FileStash::NodeType type;
 
         dirList()
-        {}
+        {
+        }
 
         ~dirList()
-        {}
+        {
+        }
 
         dirList(const dirList &obj)
         {
@@ -65,8 +67,7 @@ private:
     void createTopLevelDirEntry(KIO::UDSEntry &entry);
     bool isRoot(const QString &string);
     bool statUrl(const QUrl &url, KIO::UDSEntry &entry);
-    bool createUDSEntry(
-        KIO::UDSEntry &entry, const FileStash::dirList &fileItem);
+    bool createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &fileItem);
     bool copyFileToStash(const QUrl &src, const QUrl &dest, KIO::JobFlags flags);
     bool copyStashToFile(const QUrl &src, const QUrl &dest, KIO::JobFlags flags);
     bool copyStashToStash(const QUrl &src, const QUrl &dest, KIO::JobFlags flags);

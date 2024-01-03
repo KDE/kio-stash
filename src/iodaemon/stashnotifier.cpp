@@ -1,21 +1,21 @@
 /***************************************************************************
-*   Copyright (C) 2016 by Arnav Dhamija <arnav.dhamija@gmail.com>         *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-*   This program is distributed in the hope that it will be useful,       *
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-*   GNU General Public License for more details.                          *
-*                                                                         *
-*   You should have received a copy of the GNU General Public License     *
-*   along with this program; if not, write to the                         *
-*   Free Software Foundation, Inc.,                                       *
-*   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
-***************************************************************************/
+ *   Copyright (C) 2016 by Arnav Dhamija <arnav.dhamija@gmail.com>         *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
+ ***************************************************************************/
 
 #include "stashnotifier.h"
 #include "stash_adaptor.h"
@@ -25,12 +25,10 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(StashNotifierFactory, "stashnotifier.json", registerPlugin<StashNotifier>();)
 
-StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var,
-                             const QString &daemonService,
-                             const QString &daemonPath) :
-    KDEDModule(parent),
-    m_daemonService(daemonService),
-    m_daemonPath(daemonPath)
+StashNotifier::StashNotifier(QObject *parent, const QList<QVariant> &var, const QString &daemonService, const QString &daemonPath)
+    : KDEDModule(parent)
+    , m_daemonService(daemonService)
+    , m_daemonPath(daemonPath)
 {
     dirWatch = new KDirWatch(this);
     qDebug() << "Launching stash daemon.";
@@ -52,7 +50,7 @@ StashNotifier::~StashNotifier()
 {
 }
 
-QString StashNotifier::encodeString(StashFileSystem::StashNode::iterator node, const QString &path) //format type::stashpath::source
+QString StashNotifier::encodeString(StashFileSystem::StashNode::iterator node, const QString &path) // format type::stashpath::source
 {
     QString encodedString;
 
@@ -77,8 +75,7 @@ QString StashNotifier::encodeString(StashFileSystem::StashNode::iterator node, c
         encodedString += "::" + path + QStringLiteral("/") + node.key();
     }
 
-    if (node.value().type == StashFileSystem::NodeType::FileNode ||
-            node.value().type == StashFileSystem::NodeType::SymlinkNode) {
+    if (node.value().type == StashFileSystem::NodeType::FileNode || node.value().type == StashFileSystem::NodeType::SymlinkNode) {
         encodedString += "::" + node.value().source;
     } else {
         encodedString += "::";
@@ -108,8 +105,7 @@ QString StashNotifier::encodeString(StashFileSystem::StashNodeData nodeData, con
 
     encodedString += "::" + path;
 
-    if (nodeData.type == StashFileSystem::NodeType::FileNode ||
-            nodeData.type == StashFileSystem::NodeType::SymlinkNode) {
+    if (nodeData.type == StashFileSystem::NodeType::FileNode || nodeData.type == StashFileSystem::NodeType::SymlinkNode) {
         encodedString += "::" + nodeData.source;
     } else {
         encodedString += "::";
@@ -118,7 +114,7 @@ QString StashNotifier::encodeString(StashFileSystem::StashNodeData nodeData, con
     return encodedString;
 }
 
-QStringList StashNotifier::fileList(const QString &path) //forwards list over QDBus to the KIO worker
+QStringList StashNotifier::fileList(const QString &path) // forwards list over QDBus to the KIO worker
 {
     QStringList contents;
     StashFileSystem::StashNodeData node = fileSystem->findNode(path);
@@ -132,7 +128,7 @@ QStringList StashNotifier::fileList(const QString &path) //forwards list over QD
     return contents;
 }
 
-QString StashNotifier::fileInfo(const QString &path) //forwards data of a single file to the KIO worker
+QString StashNotifier::fileInfo(const QString &path) // forwards data of a single file to the KIO worker
 {
     QString fileData;
     StashFileSystem::StashNodeData node = fileSystem->findNode(path);
@@ -173,7 +169,7 @@ void StashNotifier::removeWatchedPath(const QString &filePath)
     qDebug() << filePath;
     QStringList matchedFiles;
     fileSystem->findPathFromSource(filePath, "", matchedFiles, fileSystem->getRoot().children);
-    foreach(QString file, matchedFiles) {
+    foreach (QString file, matchedFiles) {
         fileSystem->delEntry(file);
     }
 }
@@ -206,12 +202,12 @@ bool StashNotifier::copyWithStash(const QString &src, const QString &dest)
 
 void StashNotifier::dirty(const QString &path)
 {
-    //nothing to be done here
+    // nothing to be done here
 }
 
 void StashNotifier::created(const QString &path)
 {
-    //nothing to be done here
+    // nothing to be done here
 }
 
 #include "stashnotifier.moc"
