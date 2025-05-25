@@ -1,17 +1,16 @@
 # Spanish translations for kio5_stash.po package.
-# Copyright (C) 2017 This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-#
+# Copyright (C) 2017-2025 This file is copyright:
+# This file is distributed under the same license as the kio-stash package.
 # Automatically generated, 2017.
-# Eloy Cuadra <ecuadra@eloihr.net>, 2017, 2022.
-# Sofia Priego <spriego@darksylvania.net>, 2017.
-# Sofía Priego <spriego@darksylvania.net>, %Y.
+#
+# SPDX-FileCopyrightText: 2017, 2022 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2022, 2025 Sofía Priego <spriego@darksylvania.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: kio5_stash\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-03 00:43+0000\n"
-"PO-Revision-Date: 2022-11-26 18:07+0100\n"
+"PO-Revision-Date: 2025-05-24 18:26+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -52,6 +51,3 @@ msgstr "La copia en módulos de trabajo mtp está todavía en desarrollo."
 #, kde-format
 msgid "Could not rename."
 msgstr "No se ha podido cambiar el nombre."
-
-#~ msgid "Could not stat."
-#~ msgstr "No se ha podido hacer «stat»."
