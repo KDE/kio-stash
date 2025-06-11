@@ -12,13 +12,13 @@ add_executable(workertest ${workertest_SRCS})
 add_test(workertest workertest)
 
 target_link_libraries(workertest
-    KF${QT_MAJOR_VERSION}::KIOCore
-    KF${QT_MAJOR_VERSION}::DBusAddons
+    KF6::KIOCore
+    KF6::DBusAddons
     Qt::Core
-    KF${QT_MAJOR_VERSION}::I18n
+    KF6::I18n
     Qt::DBus
-    KF${QT_MAJOR_VERSION}::KIOCore
-    KF${QT_MAJOR_VERSION}::Solid
+    KF6::KIOCore
+    KF6::Solid
     Qt::Test
 )
 
@@ -33,8 +33,8 @@ set(testdaemon_SRCS
 add_executable(testdaemon ${testdaemon_SRCS})
 
 target_link_libraries(testdaemon
-    KF${QT_MAJOR_VERSION}::KIOCore
-    KF${QT_MAJOR_VERSION}::DBusAddons
+    KF6::KIOCore
+    KF6::DBusAddons
     Qt::DBus
     Qt::Core
 )

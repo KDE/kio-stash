@@ -3,10 +3,10 @@
 add_library(stashnotifier MODULE stashnotifier.cpp fs.cpp stash_adaptor.cpp)
 
 target_link_libraries(stashnotifier
-    KF${QT_MAJOR_VERSION}::KIOCore
-    KF${QT_MAJOR_VERSION}::DBusAddons
+    KF6::KIOCore
+    KF6::DBusAddons
     Qt::DBus
     Qt::Core
 )
 
-install(TARGETS stashnotifier DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf${QT_MAJOR_VERSION}/kded)
+install(TARGETS stashnotifier DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/kded)
