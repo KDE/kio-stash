@@ -9,7 +9,7 @@ set(workertest_SRCS
 enable_testing()
 set(CMAKE_AUTOMOC_ON)
 add_executable(workertest ${workertest_SRCS})
-add_test(workertest workertest)
+add_test(NAME workertest COMMAND workertest)
 
 target_link_libraries(workertest
     KF6::KIOCore
