@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-trunk/messages/kio-stash/kio5_stash.pot\n"
-"X-Crowdin-File-ID: 6201\n"
+"X-Crowdin-File: /kf6-trunk/messages/kio-stash/kio5_stash.pot\n"
+"X-Crowdin-File-ID: 57940\n"
 
 #: kioworker/filestash.cpp:205
 #, kde-format
