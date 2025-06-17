@@ -1,0 +1,50 @@
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the kio-stash package.
+#
+# SPDX-FileCopyrightText: 2025 Yaron Shahrabani <sh.yaron@gmail.com>
+msgid ""
+msgstr ""
+"Project-Id-Version: kio-stash\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2024-01-03 00:43+0000\n"
+"PO-Revision-Date: 2025-06-16 15:44+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.04.1\n"
+
+#: kioworker/filestash.cpp:205
+#, kde-format
+msgid "The file either does not exist or has not been stashed yet."
+msgstr "הקובץ לא קיים או שעדיין לא אופסן."
+
+#: kioworker/filestash.cpp:213
+#, kde-format
+msgid "The UDS Entry could not be created."
+msgstr "לא ניתן ליצור את רשימת ה־UDS (שירות תיקיות אוניברסלי)."
+
+#: kioworker/filestash.cpp:230
+#, kde-format
+msgid "Could not create a directory"
+msgstr "לא ניתן ליצור תיקייה"
+
+#: kioworker/filestash.cpp:327 kioworker/filestash.cpp:333
+#: kioworker/filestash.cpp:339
+#, kde-format
+msgid "Could not copy."
+msgstr "לא ניתן להעתיק."
+
+#: kioworker/filestash.cpp:342
+#, kde-format
+msgid "Copying to mtp workers is still under development!"
+msgstr "העתקה ל־mtp (התקני מדיה) עדיין בפיתוח"
+
+#: kioworker/filestash.cpp:387 kioworker/filestash.cpp:393
+#: kioworker/filestash.cpp:401
+#, kde-format
+msgid "Could not rename."
+msgstr "לא ניתן לשנות שם."
