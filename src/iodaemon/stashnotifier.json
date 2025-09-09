@@ -35,7 +35,6 @@
         "Description[sv]": "Övervakar om kataloger ändras",
         "Description[tr]": "Dizin değişikliklerini izler",
         "Description[uk]": "Спостереження за змінами у каталогах",
-        "Description[x-test]": "xxMonitors directories for changesxx",
         "Description[zh_CN]": "监视目录的更改",
         "Description[zh_TW]": "監視目錄變更",
         "Name": "Stash KIO worker watcher",
@@ -67,7 +66,6 @@
         "Name[sv]": "Övervakare av Stash I/O-arbetare",
         "Name[tr]": "Stash KIO işçi izleyicisi",
         "Name[uk]": "Обробник KIO для спостереження за схованками",
-        "Name[x-test]": "xxStash KIO worker watcherxx",
         "Name[zh_CN]": "Stash KIO 工作程序监视程序",
         "Name[zh_TW]": "暫存 KIO worker 監控器",
         "ServiceTypes": [
