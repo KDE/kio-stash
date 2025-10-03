@@ -30,6 +30,7 @@
   <name xml:lang="it">FileStash</name>
   <name xml:lang="ka">FileStash</name>
   <name xml:lang="ko">FileStash</name>
+  <name xml:lang="lt">FileStash</name>
   <name xml:lang="nl">FileStash</name>
   <name xml:lang="nn">FileStash</name>
   <name xml:lang="pl">PrzechowalniaPlików</name>
@@ -65,6 +66,7 @@
   <summary xml:lang="it">Una soluzione leggera per il supporto delle cartelle virtuali nelle applicazioni KDE</summary>
   <summary xml:lang="ka">ვირტუალური საქაღალდეების მხარდაჭერა KDE-ის აპლიკაციებში</summary>
   <summary xml:lang="ko">KDE 앱의 가벼운 가상 폴더 지원</summary>
+  <summary xml:lang="lt">Supaprastintas virtualių aplankų sprendimo palaikymas KDE programose</summary>
   <summary xml:lang="nl">Een lichtgewicht oplossing voor ondersteuning van virtuele mappen in KDE Applications</summary>
   <summary xml:lang="nn">Enkel løysing for støtte av virtuelle mapper i program frå KDE</summary>
   <summary xml:lang="pl">Lekkie rozwiązanie obsługi wirtualnych katalogów w Aplikacjach KDE</summary>
