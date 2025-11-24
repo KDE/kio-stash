@@ -2,20 +2,21 @@
 # This file is distributed under the same license as the kio-stash package.
 # SPDX-FileCopyrightText: 2017 Burkhard Lück <lueck@hube-lueck.de>
 # SPDX-FileCopyrightText: 2022, 2023 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2025 Philipp Kiemle <l10n.daphipz@fastmail.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: kio5_stash\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:55+0000\n"
-"PO-Revision-Date: 2023-04-26 20:56+0200\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"PO-Revision-Date: 2025-11-11 22:23+0100\n"
+"Last-Translator: Philipp Kiemle <l10n.daphipz@fastmail.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.07.70\n"
+"X-Generator: Lokalize 25.08.3\n"
 
 #: kioworker/filestash.cpp:205
 #, kde-format
@@ -41,7 +42,7 @@ msgstr "Kopieren ist nicht möglich."
 #: kioworker/filestash.cpp:342
 #, kde-format
 msgid "Copying to mtp workers is still under development!"
-msgstr ""
+msgstr "Das Kopieren via MTP befindet sich immer noch in der Entwickungsphase!"
 
 #: kioworker/filestash.cpp:387 kioworker/filestash.cpp:393
 #: kioworker/filestash.cpp:401
