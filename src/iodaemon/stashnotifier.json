@@ -68,7 +68,7 @@
         "Name[sv]": "Övervakare av Stash I/O-arbetare",
         "Name[tr]": "Stash KIO işçi izleyicisi",
         "Name[uk]": "Обробник KIO для спостереження за схованками",
-        "Name[zh_CN]": "Stash KIO 工作程序监视程序",
+        "Name[zh_CN]": "暂存 KIO 工作程序监视程序",
         "Name[zh_TW]": "暫存 KIO worker 監控器",
         "ServiceTypes": [
             "KDEDModule"
