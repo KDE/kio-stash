@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kio-stash\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:55+0000\n"
-"PO-Revision-Date: 2026-01-20 12:26+0100\n"
+"PO-Revision-Date: 2026-04-30 17:16+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: kioworker/filestash.cpp:205
 #, kde-format
@@ -25,7 +25,7 @@ msgstr "Le file o non existe o non ha essite ancora ponite in celario."
 #: kioworker/filestash.cpp:213
 #, kde-format
 msgid "The UDS Entry could not be created."
-msgstr "Le entrata de UDS nonpoteva esser create."
+msgstr "Le entrata de UDS non poteva esser create."
 
 #: kioworker/filestash.cpp:230
 #, kde-format
