@@ -18,6 +18,7 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 #include <QUrl>
+#include <unistd.h>
 
 #include <KConfigGroup>
 #include <KFileItem>
@@ -54,12 +55,17 @@ FileStash::~FileStash()
 
 bool FileStash::rewriteUrl(const QUrl &url, QUrl &newUrl)
 {
-    if (url.scheme() != "file") {
-        newUrl.setScheme("file");
-        newUrl.setPath(url.path());
-    } else {
-        newUrl = url;
+    if (url.scheme() != QLatin1String("stash")) {
+        return false;
     }
+
+    const QString fileInfo = setFileInfo(url);
+    const FileStash::dirList item = createDirListItem(fileInfo);
+    if (item.type == NodeType::InvalidNode || item.source.isEmpty()) {
+        return false;
+    }
+
+    newUrl = QUrl::fromLocalFile(item.source);
     return true;
 }
 
@@ -69,6 +75,7 @@ void FileStash::createTopLevelDirEntry(KIO::UDSEntry &entry)
     entry.fastInsert(KIO::UDSEntry::UDS_NAME, QStringLiteral("."));
     entry.fastInsert(KIO::UDSEntry::UDS_FILE_TYPE, 0040000);
     entry.fastInsert(KIO::UDSEntry::UDS_ACCESS, 0700);
+    entry.fastInsert(KIO::UDSEntry::UDS_LOCAL_USER_ID, ::getuid());
     entry.fastInsert(KIO::UDSEntry::UDS_MIME_TYPE, QStringLiteral("inode/directory"));
 }
 
@@ -123,6 +130,8 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
     switch (fileItem.type) {
     case NodeType::DirectoryNode:
         entry.fastInsert(KIO::UDSEntry::UDS_FILE_TYPE, 0040000);
+        entry.fastInsert(KIO::UDSEntry::UDS_ACCESS, 0700);
+        entry.fastInsert(KIO::UDSEntry::UDS_LOCAL_USER_ID, ::getuid());
         entry.fastInsert(KIO::UDSEntry::UDS_MIME_TYPE, QString("inode/directory"));
         entry.fastInsert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
         entry.fastInsert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
@@ -140,6 +149,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
         fileMimetype = mimeDatabase.mimeTypeForFile(fileItem.source);
         entry.fastInsert(KIO::UDSEntry::UDS_TARGET_URL, QUrl::fromLocalFile(fileItem.source).toString());
         entry.fastInsert(KIO::UDSEntry::UDS_MIME_TYPE, fileMimetype.name());
+        entry.fastInsert(KIO::UDSEntry::UDS_LOCAL_USER_ID, ::getuid());
         entry.fastInsert(KIO::UDSEntry::UDS_DISPLAY_NAME, QUrl(stringFilePath).fileName());
         entry.fastInsert(KIO::UDSEntry::UDS_NAME, QUrl(stringFilePath).fileName());
         entry.fastInsert(KIO::UDSEntry::UDS_ACCESS, access);
@@ -151,6 +161,7 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
             entry.fastInsert(KIO::UDSEntry::UDS_FILE_TYPE, 0100000);
         } else if (fileItem.type == NodeType::SymlinkNode) {
             entry.fastInsert(KIO::UDSEntry::UDS_FILE_TYPE, 0120000);
+            entry.fastInsert(KIO::UDSEntry::UDS_LINK_DEST, entryInfo.symLinkTarget());
         } else {
             return false;
         }
@@ -160,8 +171,12 @@ bool FileStash::createUDSEntry(KIO::UDSEntry &entry, const FileStash::dirList &f
 
 FileStash::dirList FileStash::createDirListItem(const QString &fileInfo)
 {
-    QStringList strings = fileInfo.split("::", Qt::KeepEmptyParts);
     FileStash::dirList item;
+    QStringList strings = fileInfo.split("::", Qt::KeepEmptyParts);
+    if (strings.size() < 3) {
+        item.type = FileStash::NodeType::InvalidNode;
+        return item;
+    }
     if (strings.at(0) == "dir") {
         item.type = FileStash::NodeType::DirectoryNode;
     } else if (strings.at(0) == "file") {
@@ -179,8 +194,8 @@ FileStash::dirList FileStash::createDirListItem(const QString &fileInfo)
 KIO::WorkerResult FileStash::listDir(const QUrl &url)
 {
     QStringList fileList = setFileList(url);
-    if (!fileList.size()) {
-        return KIO::WorkerResult::pass();
+    if (!fileList.isEmpty() && fileList.at(0) == "error::error::InvalidNode") {
+        return KIO::WorkerResult::fail(KIO::ERR_DOES_NOT_EXIST, url.toDisplayString());
     }
     FileStash::dirList item;
     KIO::UDSEntry entry;
@@ -189,7 +204,7 @@ KIO::WorkerResult FileStash::listDir(const QUrl &url)
         listEntry(entry);
     }
     if (fileList.at(0) == "error::error::InvalidNode") {
-        return KIO::WorkerResult::fail(KIO::ERR_WORKER_DEFINED, i18n("The file either does not exist or has not been stashed yet."));
+        return KIO::WorkerResult::fail(KIO::ERR_DOES_NOT_EXIST, url.toDisplayString());
     }
     for (auto it = fileList.begin(); it != fileList.end(); ++it) {
         entry.clear();

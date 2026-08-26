@@ -126,6 +126,7 @@ void StashNotifier::addPath(const QString &source, const QString &stashPath, int
 {
     QString processedPath = processString(stashPath);
 
+    fileSystem->delEntry(stashPath);
     if (fileSystem->findNode(stashPath).type == StashFileSystem::NodeType::InvalidNode) {
         if (fileType == StashFileSystem::NodeType::DirectoryNode) {
             dirWatch->addDir(processedPath);
@@ -158,13 +159,17 @@ void StashNotifier::removeWatchedPath(const QString &filePath)
     foreach (QString file, matchedFiles) {
         fileSystem->delEntry(file);
     }
+    dirWatch->removeFile(filePath);
+    emit listChanged();
 }
 
 void StashNotifier::removePath(const QString &path)
 {
     QString encodedName = fileInfo(path);
-    QString filePath = encodedName.split("::", Qt::KeepEmptyParts).at(2);
-    dirWatch->removeFile(filePath);
+    QStringList parts = encodedName.split("::", Qt::KeepEmptyParts);
+    if (parts.size() > 2) {
+        dirWatch->removeFile(parts.at(2));
+    }
     fileSystem->delEntry(path);
     emit listChanged();
 }
