@@ -10,6 +10,7 @@ enable_testing()
 set(CMAKE_AUTOMOC_ON)
 add_executable(workertest ${workertest_SRCS})
 add_test(NAME workertest COMMAND workertest)
+set_tests_properties(workertest PROPERTIES ENVIRONMENT "QT_PLUGIN_PATH=${CMAKE_BINARY_DIR}/bin:$ENV{QT_PLUGIN_PATH}")
 
 target_link_libraries(workertest
     KF6::KIOCore

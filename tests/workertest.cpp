@@ -50,11 +50,14 @@ void WorkerTest::initTestCase()
     replyMessage = QDBusConnection::sessionBus().call(msg);
     if (replyMessage.type() == QDBusMessage::ErrorMessage) {
         qDebug() << "Launching fallback daemon";
-        const QString program = "./testdaemon";
+        QString program = QCoreApplication::applicationDirPath() + QStringLiteral("/testdaemon");
+        if (!QFile::exists(program)) {
+            program = QStringLiteral("./testdaemon");
+        }
         stashDaemonProcess->start(program, QStringList{});
+        QVERIFY(stashDaemonProcess->waitForStarted(5000));
+        QTRY_VERIFY_WITH_TIMEOUT((replyMessage = QDBusConnection::sessionBus().call(msg)).type() != QDBusMessage::ErrorMessage, 3000);
     }
-
-    replyMessage = QDBusConnection::sessionBus().call(msg);
 
     if (replyMessage.type() != QDBusMessage::ErrorMessage) {
         qDebug() << "Test case initialised";
@@ -67,8 +70,8 @@ void WorkerTest::initTestCase()
 void WorkerTest::createTestFiles() // also find a way to reset the directory prior to use
 {
     QDir tmpDir;
-    tmpDir.mkdir(tmpDirPath()); // creates test dir
-    tmpDir.mkdir(tmpDirPath() + m_fileTestFolder);
+    tmpDir.mkpath(tmpDirPath()); // creates test dir
+    tmpDir.mkpath(tmpDirPath() + m_fileTestFolder);
 
     QFile tmpFile;
     stashDirectory('/' + m_stashTestFolder);
@@ -126,32 +129,32 @@ void WorkerTest::statItem(const QUrl &url, const int &type)
     }
     QVERIFY(item.isReadable());
     QVERIFY(!item.isHidden());
-    QCOMPARE(item.text(), url.fileName());
+    QCOMPARE(item.name(), url.fileName());
 }
 
 void WorkerTest::stashFile(const QString &realPath, const QString &stashPath)
 {
     QDBusMessage msg = QDBusMessage::createMethodCall("org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
-    msg << realPath << stashPath << NodeType::FileNode;
-    bool queued = QDBusConnection::sessionBus().send(msg);
-    QVERIFY(queued);
+    msg << realPath << stashPath << static_cast<int>(NodeType::FileNode);
+    QDBusMessage reply = QDBusConnection::sessionBus().call(msg);
+    QVERIFY(reply.type() != QDBusMessage::ErrorMessage);
 }
 
 void WorkerTest::stashDirectory(const QString &path)
 {
     QDBusMessage msg = QDBusMessage::createMethodCall("org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
     QString destinationPath = path;
-    msg << "" << destinationPath << NodeType::DirectoryNode;
-    bool queued = QDBusConnection::sessionBus().send(msg);
-    QVERIFY(queued);
+    msg << "" << destinationPath << static_cast<int>(NodeType::DirectoryNode);
+    QDBusMessage reply = QDBusConnection::sessionBus().call(msg);
+    QVERIFY(reply.type() != QDBusMessage::ErrorMessage);
 }
 
 void WorkerTest::stashSymlink(const QString &realPath, const QString &stashPath)
 {
     QDBusMessage msg = QDBusMessage::createMethodCall("org.kde.kio.StashNotifier", "/StashNotifier", "", "addPath");
-    msg << realPath << stashPath << NodeType::SymlinkNode;
-    bool queued = QDBusConnection::sessionBus().send(msg);
-    QVERIFY(queued);
+    msg << realPath << stashPath << static_cast<int>(NodeType::SymlinkNode);
+    QDBusMessage reply = QDBusConnection::sessionBus().call(msg);
+    QVERIFY(reply.type() != QDBusMessage::ErrorMessage);
 }
 
 bool WorkerTest::statUrl(const QUrl &url, KIO::UDSEntry &entry)
@@ -195,7 +198,6 @@ void WorkerTest::deleteFromStash(const QUrl &url)
 void WorkerTest::listRootDir()
 {
     KIO::ListJob *job = KIO::listDir(QUrl(QStringLiteral("stash:/")), KIO::HideProgressInfo);
-    connect(job, SIGNAL(entries(KIO::Job *, KIO::UDSEntryList)), SLOT(slotEntries(KIO::Job *, KIO::UDSEntryList)));
     bool ok = job->exec();
     QVERIFY(ok);
 }
@@ -203,7 +205,6 @@ void WorkerTest::listRootDir()
 void WorkerTest::listSubDir()
 {
     KIO::ListJob *job = KIO::listDir(QUrl("stash:/" + m_stashTestFolder), KIO::HideProgressInfo);
-    connect(job, SIGNAL(entries(KIO::Job *, KIO::UDSEntryList)), SLOT(slotEntries(KIO::Job *, KIO::UDSEntryList)));
     bool ok = job->exec();
     QVERIFY(ok);
 }
@@ -235,7 +236,7 @@ void WorkerTest::statFileInRoot()
 {
     QFile file;
     QUrl url("stash:/" + m_stashTestFile);
-    stashFile(url.path(), url.path());
+    stashFile(tmpDirPath() + m_stashTestFile, url.path());
     KIO::UDSEntry entry;
     QVERIFY(statUrl(url, entry));
     KFileItem item(entry, url);
@@ -263,7 +264,7 @@ void WorkerTest::statDirectoryInRoot()
 void WorkerTest::statSymlinkInRoot()
 {
     QUrl url("stash:/" + m_stashTestSymlink);
-    stashSymlink(url.path(), url.path());
+    stashSymlink(tmpDirPath() + m_fileTestFile, url.path());
     KIO::UDSEntry entry;
     QVERIFY(statUrl(url, entry));
     KFileItem item(entry, url);
