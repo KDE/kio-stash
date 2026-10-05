@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-17 00:50+0000\n"
+"POT-Creation-Date: 2026-10-05 00:51+0000\n"
 "PO-Revision-Date: 2023-01-06 19:18+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@nuug.no>\n"
@@ -19,34 +19,32 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 
-#: kioworker/filestash.cpp:192
-#, kde-format
-msgid "The file either does not exist or has not been stashed yet."
-msgstr "Fila finst ikkje eller er ikkje lagd på hylla enno."
-
-#: kioworker/filestash.cpp:200
+#: kioworker/filestash.cpp:215
 #, kde-format
 msgid "The UDS Entry could not be created."
 msgstr "Klarte ikkje oppretta UDS-oppføringa."
 
-#: kioworker/filestash.cpp:217
+#: kioworker/filestash.cpp:232
 #, kde-format
 msgid "Could not create a directory"
 msgstr "Klarte ikkje oppretta mappe"
 
-#: kioworker/filestash.cpp:314 kioworker/filestash.cpp:320
-#: kioworker/filestash.cpp:326
+#: kioworker/filestash.cpp:329 kioworker/filestash.cpp:335
+#: kioworker/filestash.cpp:341
 #, kde-format
 msgid "Could not copy."
 msgstr "Klarte ikkje kopiera."
 
-#: kioworker/filestash.cpp:329
+#: kioworker/filestash.cpp:344
 #, kde-format
 msgid "Copying to mtp workers is still under development!"
 msgstr "Støtte for kopiering av MTP-arbeidarar er framleis under utvikling."
 
-#: kioworker/filestash.cpp:374 kioworker/filestash.cpp:380
-#: kioworker/filestash.cpp:388
+#: kioworker/filestash.cpp:389 kioworker/filestash.cpp:395
+#: kioworker/filestash.cpp:403
 #, kde-format
 msgid "Could not rename."
 msgstr "Klarte ikkje endra namn."
+
+#~ msgid "The file either does not exist or has not been stashed yet."
+#~ msgstr "Fila finst ikkje eller er ikkje lagd på hylla enno."

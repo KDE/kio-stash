@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kio-stash\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-17 00:50+0000\n"
+"POT-Creation-Date: 2026-10-05 00:51+0000\n"
 "PO-Revision-Date: 2020-05-05 11:59+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -17,38 +17,36 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 19.12.3\n"
 
-#: kioworker/filestash.cpp:192
-#, kde-format
-msgid "The file either does not exist or has not been stashed yet."
-msgstr "Faili kas ei ole olemas või ei ole seda veel lattu pandud."
-
-#: kioworker/filestash.cpp:200
+#: kioworker/filestash.cpp:215
 #, kde-format
 msgid "The UDS Entry could not be created."
 msgstr "UDS-kirje loomine ei ole võimalik."
 
-#: kioworker/filestash.cpp:217
+#: kioworker/filestash.cpp:232
 #, kde-format
 msgid "Could not create a directory"
 msgstr "Kataloogi loomine nurjus"
 
-#: kioworker/filestash.cpp:314 kioworker/filestash.cpp:320
-#: kioworker/filestash.cpp:326
+#: kioworker/filestash.cpp:329 kioworker/filestash.cpp:335
+#: kioworker/filestash.cpp:341
 #, kde-format
 msgid "Could not copy."
 msgstr "Kopeerimine nurjus."
 
-#: kioworker/filestash.cpp:329
+#: kioworker/filestash.cpp:344
 #, fuzzy, kde-format
 #| msgid "Copying to mtp slaves is still under development!"
 msgid "Copying to mtp workers is still under development!"
 msgstr "MTP moodulite kopeerimise võimalus on alles arendusjärgus!"
 
-#: kioworker/filestash.cpp:374 kioworker/filestash.cpp:380
-#: kioworker/filestash.cpp:388
+#: kioworker/filestash.cpp:389 kioworker/filestash.cpp:395
+#: kioworker/filestash.cpp:403
 #, kde-format
 msgid "Could not rename."
 msgstr "Nime muutmine nurjus."
+
+#~ msgid "The file either does not exist or has not been stashed yet."
+#~ msgstr "Faili kas ei ole olemas või ei ole seda veel lattu pandud."
 
 #~ msgid "Could not stat."
 #~ msgstr "stat nurjus."
