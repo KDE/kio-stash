@@ -45,6 +45,3 @@ msgstr "Støtte for kopiering av MTP-arbeidarar er framleis under utvikling."
 #, kde-format
 msgid "Could not rename."
 msgstr "Klarte ikkje endra namn."
-
-#~ msgid "The file either does not exist or has not been stashed yet."
-#~ msgstr "Fila finst ikkje eller er ikkje lagd på hylla enno."
